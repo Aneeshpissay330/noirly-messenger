@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { List, useTheme, Text } from 'react-native-paper';
-import { useDispatch, useSelector } from 'react-redux';
 import auth from '@react-native-firebase/auth';
+import React, { useEffect, useMemo } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { List, Text, useTheme } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../../../app/store';
 import {
-  openDmChat,
-  startSubscriptions,
   clearChatState,
+  openDmChat,
   selectChatIdByOther,
   selectMessagesByOther,
+  startSubscriptions,
 } from '../../../features/messages';
 import { MONO } from '../../../theme';
 

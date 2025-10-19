@@ -1,7 +1,8 @@
 // screens/Settings/EditProfile/index.tsx
+import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { ScrollView, View, Alert } from 'react-native';
+import { Alert, ScrollView, View } from 'react-native';
 import {
   Avatar,
   Button,
@@ -14,15 +15,14 @@ import {
   TextInput,
   useTheme,
 } from 'react-native-paper';
-import auth from '@react-native-firebase/auth';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useUserDoc } from '../../../hooks/useUserDoc';
-import { updateUserProfile } from '../../../services/user';
 import {
   pickAvatarFromGallery,
   takeAvatarPhoto,
   uploadAvatar,
 } from '../../../services/avatar';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { updateUserProfile } from '../../../services/user';
 
 const MAX_BIO = 150;
 

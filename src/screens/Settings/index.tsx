@@ -1,4 +1,4 @@
-import { getAuth, signOut } from '@react-native-firebase/auth';
+import auth, { getAuth, signOut } from '@react-native-firebase/auth';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -6,14 +6,11 @@ import {
   Avatar,
   Divider,
   List,
-  RadioButton,
-  Switch,
   Text,
-  useTheme,
+  useTheme
 } from 'react-native-paper';
 import { useGoogleAuth } from '../../hooks/useGoogleSignIn';
 import { useUserDoc } from '../../hooks/useUserDoc';
-import auth from '@react-native-firebase/auth';
 
 export type RootNavigationParamList = {
   EditProfile: undefined;

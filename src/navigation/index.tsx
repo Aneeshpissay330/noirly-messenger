@@ -1,11 +1,11 @@
 import React from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import { useAppSelector } from '../app/hooks';
 import { useFirebaseAuth } from '../hooks/useFirebaseAuth';
-import PhoneLoginScreen from '../screens/PhoneLoginScreen';
-import Stacks from './stacks';
-import { View, ActivityIndicator } from 'react-native';
-import { useTheme } from '../theme';
 import GoogleLoginScreen from '../screens/GoogleLoginScreen';
+import PhoneLoginScreen from '../screens/PhoneLoginScreen';
+import { useTheme } from '../theme';
+import Stacks from './stacks';
 import OnboardingStack from './stacks/Onboarding';
 
 const Navigation = () => {

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { useTheme, Text, Button, IconButton } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Button, IconButton, Text, useTheme } from 'react-native-paper';
 
 type Props = {
   inviteLink: string;
@@ -9,20 +9,35 @@ type Props = {
   onShowQr: () => void;
 };
 
-export default function GroupInvite({ inviteLink, onCopyLink, onResetLink, onShowQr }: Props) {
+export default function GroupInvite({
+  inviteLink,
+  onCopyLink,
+  onResetLink,
+  onShowQr,
+}: Props) {
   const theme = useTheme();
 
   // light/dark friendly “pill” background (like bg-gray-50 / dark:bg-gray-800)
-  const pillBg =
-    theme.dark
-      ? theme.colors.elevation?.level2 ?? '#1f1f1f'
-      : theme.colors.surfaceVariant ?? '#f3f3f3';
+  const pillBg = theme.dark
+    ? theme.colors.elevation?.level2 ?? '#1f1f1f'
+    : theme.colors.surfaceVariant ?? '#f3f3f3';
 
   return (
-    <View style={[styles.section, { backgroundColor: theme.colors.background, borderTopColor: theme.colors.outlineVariant, borderBottomColor: theme.colors.outlineVariant }]}>
+    <View
+      style={[
+        styles.section,
+        {
+          backgroundColor: theme.colors.background,
+          borderTopColor: theme.colors.outlineVariant,
+          borderBottomColor: theme.colors.outlineVariant,
+        },
+      ]}
+    >
       {/* Header row: title + Reset */}
       <View style={styles.headerRow}>
-        <Text variant="titleMedium" style={{ fontWeight: '600' }}>Invite Link</Text>
+        <Text variant="titleMedium" style={{ fontWeight: '600' }}>
+          Invite Link
+        </Text>
         <Button mode="text" compact onPress={onResetLink}>
           Reset
         </Button>
@@ -43,12 +58,7 @@ export default function GroupInvite({ inviteLink, onCopyLink, onResetLink, onSho
 
       {/* Centered QR action */}
       <View style={styles.qrWrap}>
-        <Button
-          icon="qrcode"
-          mode="text"
-          onPress={onShowQr}
-          compact
-        >
+        <Button icon="qrcode" mode="text" onPress={onShowQr} compact>
           Join via QR Code
         </Button>
       </View>

@@ -12,6 +12,7 @@ import React, {
   useState,
 } from 'react';
 import { StyleSheet, View } from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   useCameraDevice,
@@ -19,18 +20,17 @@ import {
   type PhotoFile,
   type VideoFile,
 } from 'react-native-vision-camera';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import CameraHeader from '../../../components/CameraHeader';
 import CaptureBar from '../../../components/CaptureBar';
 import ModeSwitcher from '../../../components/ModeSwitcher';
+import { openDmChat, selectChatIdByOther, sendImageNow, sendVideoNow } from '../../../features/messages';
 import { useCameraLifecycle } from '../../../hooks/useCameraLifecycle';
 import { useCameraPermissions } from '../../../hooks/useCameraPermissions';
 import { useRecordingControls } from '../../../hooks/useRecordingControls';
 import { useRecordingTimer } from '../../../hooks/useRecordingTimer';
 import { useTorch } from '../../../hooks/useTorch';
 import { Mode } from '../../../types/camera';
-import ImagePicker from 'react-native-image-crop-picker';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { openDmChat, selectChatIdByOther, sendImageNow, sendVideoNow } from '../../../features/messages';
 
 export type RootTabParamList = {
   Gallery: undefined;

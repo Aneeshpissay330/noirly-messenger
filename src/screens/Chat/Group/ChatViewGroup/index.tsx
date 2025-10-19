@@ -1,3 +1,6 @@
+import { useHeaderHeight } from '@react-navigation/elements';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import React, {
   useCallback,
   useLayoutEffect,
@@ -6,26 +9,23 @@ import React, {
   useState,
 } from 'react';
 import {
-  View,
-  FlatList,
-  ListRenderItem,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
   Dimensions,
+  FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
+  ListRenderItem,
+  Platform,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 import { Appbar, Avatar, List, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useHeaderHeight } from '@react-navigation/elements';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import type { StackNavigationProp } from '@react-navigation/stack';
 
 import ChatBubble from '../../../../components/ChatBubble';
 import ChatInput from '../../../../components/ChatInput';
-import type { Message, SendPayload } from '../../../../types/chat';
 import { useKeyboardStatus } from '../../../../hooks/useKeyboardStatus';
+import type { Message } from '../../../../types/chat';
 
 type RootStackParamList = {
   ChatViewGroup: { id: string };

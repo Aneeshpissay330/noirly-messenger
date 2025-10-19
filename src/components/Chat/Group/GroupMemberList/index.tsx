@@ -1,6 +1,13 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { Avatar, List, Text, useTheme, Menu, IconButton } from 'react-native-paper';
+import {
+  Avatar,
+  IconButton,
+  List,
+  Menu,
+  Text,
+  useTheme,
+} from 'react-native-paper';
 
 export type Member = {
   id: string;
@@ -17,7 +24,12 @@ type Props = {
   onRemove?: (id: string) => void;
 };
 
-export default function GroupMemberList({ members, onPromote, onDemote, onRemove }: Props) {
+export default function GroupMemberList({
+  members,
+  onPromote,
+  onDemote,
+  onRemove,
+}: Props) {
   const theme = useTheme();
   const [openFor, setOpenFor] = React.useState<string | null>(null);
 
@@ -26,7 +38,16 @@ export default function GroupMemberList({ members, onPromote, onDemote, onRemove
     const label = role === 'admin' ? 'Admin' : 'Moderator';
     const bg = role === 'admin' ? theme.colors.primary : theme.colors.secondary;
     return (
-      <Text style={{ backgroundColor: bg, color: 'white', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 999, fontSize: 12 }}>
+      <Text
+        style={{
+          backgroundColor: bg,
+          color: 'white',
+          paddingHorizontal: 8,
+          paddingVertical: 2,
+          borderRadius: 999,
+          fontSize: 12,
+        }}
+      >
         {label}
       </Text>
     );
@@ -38,20 +59,65 @@ export default function GroupMemberList({ members, onPromote, onDemote, onRemove
         <List.Item
           key={m.id}
           title={m.name}
-          description={`${m.role ? m.role[0].toUpperCase() + m.role.slice(1) : 'Member'} • ${m.presence ?? ''}`.trim()}
+          description={`${
+            m.role ? m.role[0].toUpperCase() + m.role.slice(1) : 'Member'
+          } • ${m.presence ?? ''}`.trim()}
           left={() =>
-            m.avatar ? <Avatar.Image size={48} source={{ uri: m.avatar }} /> : <Avatar.Text size={48} label={m.name.split(' ').map(n => n[0]).join('').slice(0, 2)} />
+            m.avatar ? (
+              <Avatar.Image size={48} source={{ uri: m.avatar }} />
+            ) : (
+              <Avatar.Text
+                size={48}
+                label={m.name
+                  .split(' ')
+                  .map(n => n[0])
+                  .join('')
+                  .slice(0, 2)}
+              />
+            )
           }
           right={() => (
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <View
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}
+            >
               <RoleBadge role={m.role} />
               <Menu
                 visible={openFor === m.id}
                 onDismiss={() => setOpenFor(null)}
-                anchor={<IconButton icon="dots-vertical" onPress={() => setOpenFor(m.id)} />}>
-                {onPromote && <Menu.Item onPress={() => { setOpenFor(null); onPromote(m.id); }} title="Make Admin" />}
-                {onDemote && <Menu.Item onPress={() => { setOpenFor(null); onDemote(m.id); }} title="Remove Admin" />}
-                {onRemove && <Menu.Item onPress={() => { setOpenFor(null); onRemove(m.id); }} title="Remove from Group" />}
+                anchor={
+                  <IconButton
+                    icon="dots-vertical"
+                    onPress={() => setOpenFor(m.id)}
+                  />
+                }
+              >
+                {onPromote && (
+                  <Menu.Item
+                    onPress={() => {
+                      setOpenFor(null);
+                      onPromote(m.id);
+                    }}
+                    title="Make Admin"
+                  />
+                )}
+                {onDemote && (
+                  <Menu.Item
+                    onPress={() => {
+                      setOpenFor(null);
+                      onDemote(m.id);
+                    }}
+                    title="Remove Admin"
+                  />
+                )}
+                {onRemove && (
+                  <Menu.Item
+                    onPress={() => {
+                      setOpenFor(null);
+                      onRemove(m.id);
+                    }}
+                    title="Remove from Group"
+                  />
+                )}
               </Menu>
             </View>
           )}

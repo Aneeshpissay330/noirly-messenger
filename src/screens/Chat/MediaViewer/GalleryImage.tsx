@@ -1,7 +1,7 @@
 import React from 'react';
-import { Image, StyleSheet, Dimensions } from 'react-native';
-import { ResumableZoom } from 'react-native-zoom-toolkit';
+import { Dimensions, Image, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ResumableZoom } from 'react-native-zoom-toolkit';
 
 interface GalleryImageProps {
   uri: string;
@@ -12,10 +12,10 @@ const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const GalleryImage: React.FC<GalleryImageProps> = ({ uri, index }) => {
   const insets = useSafeAreaInsets();
-  
+
   // Calculate available height accounting for header (~56px) and safe areas
   const availableHeight = screenHeight - 56 - insets.top - insets.bottom;
-  
+
   return (
     <ResumableZoom>
       <Image

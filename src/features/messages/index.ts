@@ -1,23 +1,23 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Platform } from 'react-native';
 import type { RootState } from '../../app/store';
 import {
+  batchDeleteMessages,
+  deleteMessage,
   ensureDMChat,
-  subscribeMessages,
-  subscribePresence,
   markChatRead,
-  setTyping,
-  sendText,
-  sendImage,
-  sendVideo,
   sendAudio,
   sendFile,
-  deleteMessage,
-  batchDeleteMessages,
+  sendImage,
+  sendText,
+  sendVideo,
+  setTyping,
+  subscribeMessages,
+  subscribePresence,
 } from '../../services/chat';
-import { Platform } from 'react-native';
+import { Message } from '../../types/chat';
 import { formatLastSeen } from '../../utils/date';
 import { downloadFileToCache } from '../../utils/download'; // <- new import
-import { Message } from '../../types/chat';
 
 type ChatState = {
   chatId?: string;

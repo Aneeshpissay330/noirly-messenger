@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useTheme, IconButton } from 'react-native-paper';
+import React, { useCallback, useEffect } from 'react';
+import { IconButton, useTheme } from 'react-native-paper';
 
 interface UseHeaderConfigProps {
   title: string;

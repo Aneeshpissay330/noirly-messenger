@@ -1,9 +1,9 @@
-import { Dimensions, PermissionsAndroid, Platform } from 'react-native';
-import { CameraRoll } from '@react-native-camera-roll/camera-roll';
 import type {
   Include,
   PhotoIdentifier,
 } from '@react-native-camera-roll/camera-roll';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import { Dimensions, PermissionsAndroid, Platform } from 'react-native';
 
 export const SPACING = 8;
 export const NUM_COLUMNS = 3;

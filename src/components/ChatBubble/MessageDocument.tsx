@@ -1,19 +1,19 @@
 // src/components/ChatBubble/MessageDocument.tsx
+import { viewDocument } from '@react-native-documents/viewer';
 import React, { useState } from 'react';
 import {
-  View,
-  TouchableOpacity,
   ActivityIndicator,
-  StyleSheet,
   Alert,
+  StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import Pdf from 'react-native-pdf';
-import { viewDocument } from '@react-native-documents/viewer';
-import { downloadFileToCache } from '../../utils/download';
 import { useUserDoc } from '../../hooks/useUserDoc';
 import { MONO } from '../../theme';
 import type { Message } from '../../types/chat';
+import { downloadFileToCache } from '../../utils/download';
 
 type Props = {
   message: Message;
@@ -60,27 +60,24 @@ function isDocLike(mime?: string) {
   return true;
 }
 
-export default function MessageDocument({ 
-  message, 
-  mediaUri, 
-  isDownloading, 
-  isFailed, 
-  isMe, 
-  textColor, 
-  onRetry 
+export default function MessageDocument({
+  message,
+  mediaUri,
+  isDownloading,
+  isFailed,
+  isMe,
+  textColor,
+  onRetry,
 }: Props) {
   const theme = useTheme();
   const { userDoc } = useUserDoc();
   const [isOpening, setIsOpening] = useState(false);
 
-  const shouldShowDocument = (mediaUri &&
-    (isDocLike(message.mime) ||
-      message.type === 'file' ||
-      message.name)) ||
+  const shouldShowDocument =
+    (mediaUri &&
+      (isDocLike(message.mime) || message.type === 'file' || message.name)) ||
     (!mediaUri &&
-      (isDocLike(message.mime) ||
-        message.type === 'file' ||
-        message.name) &&
+      (isDocLike(message.mime) || message.type === 'file' || message.name) &&
       isDownloading);
 
   if (!shouldShowDocument) return null;
@@ -121,26 +118,37 @@ export default function MessageDocument({
         style={[
           styles.documentCard,
           {
-            backgroundColor: isMe ? 
-              (theme.dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)') : 
-              theme.colors.surfaceVariant,
-            borderColor: isMe ? 
-              (theme.dark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)') : 
-              theme.colors.outline,
+            backgroundColor: isMe
+              ? theme.dark
+                ? 'rgba(255,255,255,0.1)'
+                : 'rgba(0,0,0,0.05)'
+              : theme.colors.surfaceVariant,
+            borderColor: isMe
+              ? theme.dark
+                ? 'rgba(255,255,255,0.2)'
+                : 'rgba(0,0,0,0.1)'
+              : theme.colors.outline,
             borderWidth: 1,
-          }
+          },
         ]}
       >
-        <View style={[
-          styles.documentThumbnail,
-          { backgroundColor: isMe ? 
-              (theme.dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)') : 
-              theme.colors.surface 
-          }
-        ]}>
+        <View
+          style={[
+            styles.documentThumbnail,
+            {
+              backgroundColor: isMe
+                ? theme.dark
+                  ? 'rgba(255,255,255,0.05)'
+                  : 'rgba(0,0,0,0.03)'
+                : theme.colors.surface,
+            },
+          ]}
+        >
           <View style={styles.documentPreview}>
             {/* PDF Preview */}
-            {mediaUri && (message.mime?.includes('pdf') || message.name?.toLowerCase().endsWith('.pdf')) ? (
+            {mediaUri &&
+            (message.mime?.includes('pdf') ||
+              message.name?.toLowerCase().endsWith('.pdf')) ? (
               <Pdf
                 source={{ uri: mediaUri, cache: true }}
                 style={{
@@ -164,98 +172,190 @@ export default function MessageDocument({
                 onError={() => {}}
                 renderActivityIndicator={() => (
                   <View style={styles.pdfLoader}>
-                    <ActivityIndicator size={20} color={theme.colors.secondary} />
+                    <ActivityIndicator
+                      size={20}
+                      color={theme.colors.secondary}
+                    />
                   </View>
                 )}
               />
-            ) : mediaUri && (message.mime?.startsWith('text/') || message.name?.toLowerCase().match(/\.(txt|doc|docx)$/)) ? (
-              <View style={[styles.textDocPreview, { backgroundColor: isMe ? (theme.dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)') : theme.colors.surface }]}>
+            ) : mediaUri &&
+              (message.mime?.startsWith('text/') ||
+                message.name?.toLowerCase().match(/\.(txt|doc|docx)$/)) ? (
+              <View
+                style={[
+                  styles.textDocPreview,
+                  {
+                    backgroundColor: isMe
+                      ? theme.dark
+                        ? 'rgba(255,255,255,0.1)'
+                        : 'rgba(0,0,0,0.05)'
+                      : theme.colors.surface,
+                  },
+                ]}
+              >
                 <Text style={{ fontSize: 28, color: theme.colors.secondary }}>
                   {getDocumentIcon(message.mime)}
                 </Text>
-                <Text style={{ fontSize: 10, color: theme.colors.secondary, marginTop: 4 }}>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    color: theme.colors.secondary,
+                    marginTop: 4,
+                  }}
+                >
                   {getFileType(message.mime)}
                 </Text>
               </View>
             ) : (
-              <View style={[styles.defaultDocPreview, { backgroundColor: isMe ? (theme.dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)') : theme.colors.surface }]}>
+              <View
+                style={[
+                  styles.defaultDocPreview,
+                  {
+                    backgroundColor: isMe
+                      ? theme.dark
+                        ? 'rgba(255,255,255,0.1)'
+                        : 'rgba(0,0,0,0.05)'
+                      : theme.colors.surface,
+                  },
+                ]}
+              >
                 <View>
-                  <View style={[styles.headerBar, { backgroundColor: theme.colors.primary }]} />
-                  <View style={[styles.contentLine, { backgroundColor: theme.colors.outline }]} />
-                  <View style={[styles.contentLine, { backgroundColor: theme.colors.outline, width: '80%' }]} />
-                  <View style={[styles.contentLine, { backgroundColor: theme.colors.outline, width: '70%' }]} />
+                  <View
+                    style={[
+                      styles.headerBar,
+                      { backgroundColor: theme.colors.primary },
+                    ]}
+                  />
+                  <View
+                    style={[
+                      styles.contentLine,
+                      { backgroundColor: theme.colors.outline },
+                    ]}
+                  />
+                  <View
+                    style={[
+                      styles.contentLine,
+                      { backgroundColor: theme.colors.outline, width: '80%' },
+                    ]}
+                  />
+                  <View
+                    style={[
+                      styles.contentLine,
+                      { backgroundColor: theme.colors.outline, width: '70%' },
+                    ]}
+                  />
                 </View>
-                
+
                 <View style={{ flex: 1, justifyContent: 'center', gap: 2 }}>
                   {[...Array(4)].map((_, i) => (
-                    <View key={i} style={[
-                      styles.bodyLine,
-                      { 
-                        backgroundColor: theme.colors.outline,
-                        width: i === 3 ? '50%' : '100%',
-                      }
-                    ]} />
+                    <View
+                      key={i}
+                      style={[
+                        styles.bodyLine,
+                        {
+                          backgroundColor: theme.colors.outline,
+                          width: i === 3 ? '50%' : '100%',
+                        },
+                      ]}
+                    />
                   ))}
                 </View>
-                
-                <View style={[styles.footerBar, { backgroundColor: theme.colors.secondary }]} />
+
+                <View
+                  style={[
+                    styles.footerBar,
+                    { backgroundColor: theme.colors.secondary },
+                  ]}
+                />
               </View>
             )}
           </View>
         </View>
-        
-        <View style={[
-          styles.documentInfo,
-          { backgroundColor: isMe ? 'transparent' : theme.colors.surface }
-        ]}>
+
+        <View
+          style={[
+            styles.documentInfo,
+            { backgroundColor: isMe ? 'transparent' : theme.colors.surface },
+          ]}
+        >
           <Text
             numberOfLines={1}
             ellipsizeMode="tail"
             style={[
               styles.documentTitle,
-              { color: isMe ? textColor : theme.colors.onSurface }
+              { color: isMe ? textColor : theme.colors.onSurface },
             ]}
           >
             {message.name ?? 'Attachment'}
           </Text>
           {isOpening && (
             <View style={styles.loadingIndicator}>
-              <ActivityIndicator size={14} color={isMe ? textColor : theme.colors.secondary} />
+              <ActivityIndicator
+                size={14}
+                color={isMe ? textColor : theme.colors.secondary}
+              />
             </View>
           )}
-          
+
           <View style={styles.documentMeta}>
-            <Text style={[
-              styles.documentMetaText,
-              { color: isMe ? (theme.dark ? MONO.gray300 : 'rgba(255,255,255,0.9)') : theme.colors.secondary }
-            ]}>
+            <Text
+              style={[
+                styles.documentMetaText,
+                {
+                  color: isMe
+                    ? theme.dark
+                      ? MONO.gray300
+                      : 'rgba(255,255,255,0.9)'
+                    : theme.colors.secondary,
+                },
+              ]}
+            >
               {formatFileSize(message.size)} • {getFileType(message.mime)}
             </Text>
           </View>
-          
+
           {isDownloading && (
             <View style={styles.downloadingIndicator}>
-              <ActivityIndicator size={12} color={isMe ? textColor : theme.colors.secondary} />
-              <Text style={[
-                styles.downloadingText,
-                { color: isMe ? (theme.dark ? MONO.gray300 : 'rgba(255,255,255,0.9)') : theme.colors.secondary }
-              ]}>
+              <ActivityIndicator
+                size={12}
+                color={isMe ? textColor : theme.colors.secondary}
+              />
+              <Text
+                style={[
+                  styles.downloadingText,
+                  {
+                    color: isMe
+                      ? theme.dark
+                        ? MONO.gray300
+                        : 'rgba(255,255,255,0.9)'
+                      : theme.colors.secondary,
+                  },
+                ]}
+              >
                 Downloading...
               </Text>
             </View>
           )}
-          
+
           {isFailed && (
             <TouchableOpacity
               onPress={() => onRetry?.(message.id)}
-              style={[styles.retryButton, {
-                backgroundColor: isMe ? 'rgba(255,255,255,0.2)' : 'rgba(239,68,68,0.12)',
-              }]}
+              style={[
+                styles.retryButton,
+                {
+                  backgroundColor: isMe
+                    ? 'rgba(255,255,255,0.2)'
+                    : 'rgba(239,68,68,0.12)',
+                },
+              ]}
             >
-              <Text style={[
-                styles.retryButtonText,
-                { color: isMe ? textColor : MONO.accentRed }
-              ]}>
+              <Text
+                style={[
+                  styles.retryButtonText,
+                  { color: isMe ? textColor : MONO.accentRed },
+                ]}
+              >
                 Retry
               </Text>
             </TouchableOpacity>

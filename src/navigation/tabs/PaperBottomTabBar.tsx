@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { CommonActions } from '@react-navigation/native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { CommonActions } from '@react-navigation/native';
+import * as React from 'react';
 import {
   BottomNavigation,
   useTheme as usePaperTheme,
 } from 'react-native-paper';
-import { useTheme, MONO } from '../../theme';
+import { MONO, useTheme } from '../../theme';
 
 export default function PaperBottomTabBar({
   state,

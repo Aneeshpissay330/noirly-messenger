@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { List, IconButton, useTheme } from 'react-native-paper';
+import { View } from 'react-native';
+import { IconButton, List, useTheme } from 'react-native-paper';
 
 type Props = {
   phone: string;

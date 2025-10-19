@@ -1,11 +1,11 @@
+import { FlashList } from '@shopify/flash-list';
 import React, { useCallback, useEffect } from 'react';
 import { Text, View } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import AlbumCard from '../../../components/AlbumCard';
 import {
   AlbumWithPhotos,
   getAlbumsGroupedMinimal,
 } from '../../../utils/camera-roll';
-import AlbumCard from '../../../components/AlbumCard';
 import { styles } from './styles';
 
 const Gallery = () => {

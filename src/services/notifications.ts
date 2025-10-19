@@ -1,4 +1,8 @@
-import notifee, { AndroidImportance, AuthorizationStatus, EventType } from '@notifee/react-native';
+import notifee, {
+  AndroidImportance,
+  AuthorizationStatus,
+  EventType,
+} from '@notifee/react-native';
 import type { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 import { navigationRef } from '../navigation/navigationRef';
 import { shouldHandleNotificationNav } from '../utils/notificationNav';
@@ -26,7 +30,7 @@ export async function ensureNotificationPermission(): Promise<boolean> {
 // Convert an FCM RemoteMessage to a displayed local notification via Notifee
 export async function displayNotificationForRemoteMessage(
   remoteMessage: FirebaseMessagingTypes.RemoteMessage,
-  opts?: { force?: boolean }
+  opts?: { force?: boolean },
 ) {
   const pickString = (v: unknown, fallback = ''): string =>
     typeof v === 'string' ? v : fallback;

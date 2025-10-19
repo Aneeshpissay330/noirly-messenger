@@ -1,17 +1,19 @@
 import React from 'react';
 import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
   Dimensions,
+  GestureResponderEvent,
+  Image,
+  PanResponder,
+  PanResponderGestureState,
   Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import { ProgressBar } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { PanResponder, GestureResponderEvent, PanResponderGestureState } from 'react-native';
-import { ProgressBar, useTheme as usePaperTheme } from 'react-native-paper';
-import { useTheme, MONO } from '../theme';
+import { MONO, useTheme } from '../theme';
 
 const { width } = Dimensions.get('window');
 

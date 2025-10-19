@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Text, IconButton } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { IconButton } from 'react-native-paper';
 import type { Mode } from '../../types/camera';
 
 type Props = {

@@ -1,3 +1,4 @@
+import { RouteProp, useRoute } from '@react-navigation/native';
 import * as React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Divider, useTheme } from 'react-native-paper';
@@ -6,7 +7,6 @@ import ChatSettings from '../../../../../components/ChatSettings';
 import ContactDetails from '../../../../../components/ContactDetails';
 import ContactProfile from '../../../../../components/ContactProfile';
 import MediaPreviewRow from '../../../../../components/MediaPreviewRow';
-import { RouteProp, useRoute } from '@react-navigation/native';
 import { subscribeUserById, UserDoc } from '../../../../../services/user';
 
 type ChatRouteParams = {

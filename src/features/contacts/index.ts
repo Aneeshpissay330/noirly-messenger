@@ -1,9 +1,8 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../../app/store';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Contacts from 'react-native-contacts';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { findUsersByPhones } from '../../services/findUserByPhones'; // ensure this returns an array
+import type { RootState } from '../../app/store';
 import { handleContactPermission } from '../../permission'; // your helper from index.tsx
+import { findUsersByPhones } from '../../services/findUserByPhones'; // ensure this returns an array
 
 export type DeviceContact = {
   recordID: string;

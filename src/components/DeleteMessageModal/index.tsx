@@ -1,6 +1,6 @@
 import React from 'react';
-import { Modal, View, StyleSheet } from 'react-native';
-import { Text, Button, useTheme, Surface } from 'react-native-paper';
+import { Modal, StyleSheet, View } from 'react-native';
+import { Button, Surface, Text, useTheme } from 'react-native-paper';
 import type { Message } from '../../types/chat';
 
 type Props = {

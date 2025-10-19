@@ -1,6 +1,6 @@
-import { handleContactPermission } from "../permission";
 import { Alert, Linking } from "react-native";
 import Contacts from "react-native-contacts";
+import { handleContactPermission } from "../permission";
 
 export function useContactHook() {
   const requestPermissionAndFetchContacts = async () => {

@@ -1,7 +1,7 @@
-import React, { useEffect, useLayoutEffect, useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { FlashList } from '@shopify/flash-list';
+import React, { useEffect, useLayoutEffect, useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
   Avatar,
@@ -11,10 +11,10 @@ import {
 } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  syncContacts,
-  selectMatchedUsers,
-  selectContactsStatus,
   normalizeVariants,
+  selectContactsStatus,
+  selectMatchedUsers,
+  syncContacts,
 } from '../../features/contacts';
 import { useUserDoc } from '../../hooks/useUserDoc';
 

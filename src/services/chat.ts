@@ -198,7 +198,8 @@ export function subscribeMessages(
           batch.update(ref, {
             status: 'delivered',
             deliveredTo: firestore.FieldValue.arrayUnion(me),
-            [(`deliveredAt.${me}`) as any]: firestore.FieldValue.serverTimestamp(),
+            [`deliveredAt.${me}` as any]:
+              firestore.FieldValue.serverTimestamp(),
           } as any);
           hasWrites = true;
         }
@@ -248,7 +249,7 @@ export async function sendText(chatId: string, text: string) {
       {
         lastMessage: text,
         lastMessageAt: createdAt,
-        unread
+        unread,
       },
       { merge: true },
     );
@@ -388,7 +389,7 @@ export async function markChatRead(chatId: string) {
       batch.update(d.ref, {
         status: 'read',
         seenBy: firestore.FieldValue.arrayUnion(me),
-        [(`readAt.${me}`) as any]: firestore.FieldValue.serverTimestamp(),
+        [`readAt.${me}` as any]: firestore.FieldValue.serverTimestamp(),
       } as any);
     }
   });
@@ -406,7 +407,7 @@ export async function markChatRead(chatId: string) {
     tx.set(
       chatRef,
       {
-        unread,                    // write the whole map (Option A)
+        unread, // write the whole map (Option A)
         updatedAt: now,
         // optional but handy per-user read marker:
         lastReadAt: { ...(chat.lastReadAt || {}), [me]: now },
@@ -662,7 +663,7 @@ export function subscribeMyChats(
 export async function deleteMessage(
   chatId: string,
   messageId: string,
-  deleteForEveryone: boolean = false
+  deleteForEveryone: boolean = false,
 ) {
   const me = auth().currentUser?.uid;
   if (!me) throw new Error('Not authenticated');
@@ -677,7 +678,11 @@ export async function deleteMessage(
   }
 
   const message = msgSnap.data() as MessageDoc;
-  console.log('Deleting message:', { messageId, deleteForEveryone, messageType: message.type });
+  console.log('Deleting message:', {
+    messageId,
+    deleteForEveryone,
+    messageType: message.type,
+  });
 
   // Check permissions before starting transaction
   if (!deleteForEveryone && message.senderId !== me) {
@@ -698,10 +703,12 @@ export async function deleteMessage(
       const chatSnap = await tx.get(chatRef);
       if (chatSnap.exists()) {
         const chatData = chatSnap.data() as Chat;
-        if (chatData.lastMessage === message.text || 
-            (message.type !== 'text' && chatData.lastMessage?.startsWith('['))) {
+        if (
+          chatData.lastMessage === message.text ||
+          (message.type !== 'text' && chatData.lastMessage?.startsWith('['))
+        ) {
           // Find the previous message to update last message
-          // This is a simplified approach - in production you might want to 
+          // This is a simplified approach - in production you might want to
           // query for the next most recent message
           tx.update(chatRef, {
             lastMessage: 'Message deleted',
@@ -738,7 +745,7 @@ export async function deleteMessage(
 export async function batchDeleteMessages(
   chatId: string,
   messageIds: string[],
-  deleteForEveryone: boolean = false
+  deleteForEveryone: boolean = false,
 ) {
   const me = auth().currentUser?.uid;
   if (!me) throw new Error('Not authenticated');
@@ -747,31 +754,37 @@ export async function batchDeleteMessages(
 
   const chatRef = CHATS.doc(chatId);
   const messagesToDelete: MessageDoc[] = [];
-  
+
   // First get all messages to check ownership and get file URLs
   for (const messageId of messageIds) {
     const msgRef = CHATS.doc(chatId).collection('messages').doc(messageId);
     const msgSnap = await msgRef.get();
-    
+
     if (msgSnap.exists()) {
       const message = msgSnap.data() as MessageDoc;
-      
+
       // Check permissions
       if (deleteForEveryone && message.senderId !== me) {
-        throw new Error(`You can only delete your own messages for everyone (message: ${messageId})`);
+        throw new Error(
+          `You can only delete your own messages for everyone (message: ${messageId})`,
+        );
       }
-      
+
       messagesToDelete.push({ ...message, id: messageId });
     }
   }
 
-  console.log('Batch deleting messages:', { messageIds, deleteForEveryone, count: messagesToDelete.length });
+  console.log('Batch deleting messages:', {
+    messageIds,
+    deleteForEveryone,
+    count: messagesToDelete.length,
+  });
 
   // Run the database transaction for all messages
-  await firestore().runTransaction(async (tx) => {
+  await firestore().runTransaction(async tx => {
     for (const message of messagesToDelete) {
       const msgRef = CHATS.doc(chatId).collection('messages').doc(message.id);
-      
+
       if (deleteForEveryone) {
         // Delete the message document entirely
         tx.delete(msgRef);
@@ -785,7 +798,7 @@ export async function batchDeleteMessages(
         }
       }
     }
-    
+
     // Update chat metadata if deleting for everyone
     if (deleteForEveryone && messagesToDelete.length > 0) {
       const chatSnap = await tx.get(chatRef);
@@ -806,7 +819,11 @@ export async function batchDeleteMessages(
           await _deleteMessageFiles(message);
           console.log('Successfully deleted files for message:', message.id);
         } catch (error) {
-          console.warn('Failed to delete files for message:', message.id, error);
+          console.warn(
+            'Failed to delete files for message:',
+            message.id,
+            error,
+          );
         }
       }
     }
@@ -821,7 +838,7 @@ async function _deleteMessageFiles(message: MessageDoc) {
     if (message.url) {
       // Import Firebase Storage
       const storage = (await import('@react-native-firebase/storage')).default;
-      
+
       // Extract file path from URL and delete
       const fileRef = storage().refFromURL(message.url);
       await fileRef.delete();

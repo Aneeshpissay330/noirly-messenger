@@ -1,8 +1,8 @@
+import { useIsFocused } from '@react-navigation/native'; // 👈 added
 import { useEffect, useState } from 'react';
+import { getSelfChatMeta } from '../services/chat';
 import { ChatRow } from '../utils/chat';
 import { useUserDoc } from './useUserDoc';
-import { getSelfChatMeta } from '../services/chat';
-import { useIsFocused } from '@react-navigation/native'; // 👈 added
 
 export function useSelfChatRow(): ChatRow | null {
   const { userDoc } = useUserDoc();
@@ -33,7 +33,7 @@ export function useSelfChatRow(): ChatRow | null {
     // ⏱️ Fetch only when screen is focused and user is loaded
     if (isFocused) {
       getSelfChatMeta()
-        .then((meta) => {
+        .then(meta => {
           setSelfRow({
             ...baseRow,
             lastMessage: meta.lastMessage || baseRow.lastMessage,
@@ -41,7 +41,7 @@ export function useSelfChatRow(): ChatRow | null {
             unreadCount: meta.unread[userDoc.uid] ?? 0,
           });
         })
-        .catch((e) => {
+        .catch(e => {
           // No self chat found
         });
     }

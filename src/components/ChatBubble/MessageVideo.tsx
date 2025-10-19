@@ -1,15 +1,15 @@
 // src/components/ChatBubble/MessageVideo.tsx
+import Icon from '@react-native-vector-icons/material-design-icons';
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
-  View,
-  TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { Text, IconButton, useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { IconButton, Text, useTheme } from 'react-native-paper';
 import Video from 'react-native-video';
-import Icon from '@react-native-vector-icons/material-design-icons';
 import { MONO } from '../../theme';
 import type { Message } from '../../types/chat';
 
@@ -18,7 +18,10 @@ type Props = {
   mediaUri?: string;
   isDownloading: boolean;
   isFailed: boolean;
-  onOpenMedia?: (items: { src: string; type: 'image' | 'video' }[], index: number) => void;
+  onOpenMedia?: (
+    items: { src: string; type: 'image' | 'video' }[],
+    index: number,
+  ) => void;
   onRetry?: (messageId: string) => void;
 };
 
@@ -33,13 +36,13 @@ function fitDims(
   return { width: Math.round(w * scale), height: Math.round(h * scale) };
 }
 
-export default function MessageVideo({ 
-  message, 
-  mediaUri, 
-  isDownloading, 
-  isFailed, 
-  onOpenMedia, 
-  onRetry 
+export default function MessageVideo({
+  message,
+  mediaUri,
+  isDownloading,
+  isFailed,
+  onOpenMedia,
+  onRetry,
 }: Props) {
   const theme = useTheme();
   const navigation = useNavigation<any>();
@@ -66,10 +69,10 @@ export default function MessageVideo({
         }}
         style={[
           styles.mediaBox,
-          { 
-            width, 
-            height, 
-            backgroundColor: theme.dark ? MONO.gray900 : MONO.gray800 
+          {
+            width,
+            height,
+            backgroundColor: theme.dark ? MONO.gray900 : MONO.gray800,
           },
         ]}
       >
@@ -82,21 +85,25 @@ export default function MessageVideo({
               resizeMode="cover"
             />
             {/* Play button overlay */}
-            <View style={[
-              styles.mediaOverlay,
-              { backgroundColor: 'rgba(0,0,0,0.3)' }
-            ]}>
-              <View style={[
-                styles.playButton,
-                {
-                  backgroundColor: theme.colors.surface,
-                  borderColor: theme.colors.outline,
-                  borderWidth: 2,
-                }
-              ]}>
-                <Icon 
-                  name="play" 
-                  size={24} 
+            <View
+              style={[
+                styles.mediaOverlay,
+                { backgroundColor: 'rgba(0,0,0,0.3)' },
+              ]}
+            >
+              <View
+                style={[
+                  styles.playButton,
+                  {
+                    backgroundColor: theme.colors.surface,
+                    borderColor: theme.colors.outline,
+                    borderWidth: 2,
+                  },
+                ]}
+              >
+                <Icon
+                  name="play"
+                  size={24}
                   color={theme.colors.primary}
                   style={{ marginLeft: 2 }}
                 />
@@ -104,10 +111,12 @@ export default function MessageVideo({
             </View>
           </View>
         ) : (
-          <View style={[
-            styles.mediaPlaceholderDark, 
-            { backgroundColor: theme.dark ? MONO.gray800 : MONO.gray700 }
-          ]}>
+          <View
+            style={[
+              styles.mediaPlaceholderDark,
+              { backgroundColor: theme.dark ? MONO.gray800 : MONO.gray700 },
+            ]}
+          >
             <ActivityIndicator size={32} color={theme.colors.onSurface} />
             <Text
               variant="labelSmall"

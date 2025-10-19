@@ -29,7 +29,7 @@ import {
   View,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import { Avatar, IconButton, List, useTheme, Chip } from 'react-native-paper';
+import { Avatar, Chip, IconButton, List, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ChatBubble from '../../../../components/ChatBubble';
 import ChatInput from '../../../../components/ChatInput';
@@ -58,8 +58,7 @@ import {
   sendVideoNow,
   setTypingNow,
   startSubscriptions,
-  updateMessage,
-  toggleStarred,
+  toggleStarred
 } from '../../../../features/messages';
 import { useAudioRecorder } from '../../../../hooks/useAudioRecorder';
 import { useUserDoc } from '../../../../hooks/useUserDoc';

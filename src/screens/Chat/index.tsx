@@ -1,9 +1,8 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React from 'react';
-import { useTheme } from '../../theme';
-import Group from './Group';
-import Personal from './Personal';
 import { View } from 'react-native';
+import { useTheme } from '../../theme';
+import Personal from './Personal';
 
 const Tab = createMaterialTopTabNavigator();
 

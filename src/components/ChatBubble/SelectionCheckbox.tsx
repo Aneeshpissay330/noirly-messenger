@@ -1,7 +1,7 @@
 // src/components/ChatBubble/SelectionCheckbox.tsx
-import React from 'react';
-import { View, StyleSheet } from 'react-native';
 import Icon from '@react-native-vector-icons/material-design-icons';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
 type Props = {
   isSelectionMode: boolean;

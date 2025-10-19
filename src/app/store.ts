@@ -1,16 +1,16 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { persistReducer, persistStore } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import contactsReducer from '../features/contacts';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { persistReducer, persistStore } from 'redux-persist';
 import chatReducer from '../features/chat';
+import contactsReducer from '../features/contacts';
 import messageReducer from '../features/messages';
 import onboardingReducer from '../features/onboarding';
 
 const rootReducer = combineReducers({
   contacts: contactsReducer,
   chats: chatReducer,
-  messages: messageReducer
-  , onboarding: onboardingReducer
+  messages: messageReducer,
+  onboarding: onboardingReducer,
   // add more slices here (e.g., auth)
 });
 
@@ -24,7 +24,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
+  middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false, // required for redux-persist
     }),

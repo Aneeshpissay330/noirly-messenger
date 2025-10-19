@@ -1,4 +1,5 @@
 
+import { Buffer } from '@craftzdog/react-native-buffer';
 import { useEffect, useRef, useState } from 'react';
 import {
   AnalyserNode,
@@ -15,7 +16,6 @@ import {
   float32ToInt16,
   mixToMono,
 } from '../utils/audio';
-import { Buffer } from '@craftzdog/react-native-buffer';
 
 const DEFAULT_FFT = 512;
 

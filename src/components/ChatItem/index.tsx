@@ -1,4 +1,3 @@
-import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import React from 'react';
 import {
   GestureResponderEvent,
@@ -95,7 +94,11 @@ export default function ChatItem({
       </Pressable>
 
       {/* Paper Divider below the item */}
-      {showDivider && <Divider style={{ backgroundColor: theme.colors.primary, opacity: 0.2 }} />}
+      {showDivider && (
+        <Divider
+          style={{ backgroundColor: theme.colors.primary, opacity: 0.2 }}
+        />
+      )}
     </>
   );
 }

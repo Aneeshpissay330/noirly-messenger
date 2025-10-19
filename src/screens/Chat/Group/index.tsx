@@ -1,7 +1,7 @@
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { FlatList } from 'react-native';
 import ChatItem from '../../../components/ChatItem';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 type GroupListItem = {
   id: string;

@@ -1,7 +1,7 @@
-import { Platform } from 'react-native';
 import { MutableRefObject, useCallback, useState } from 'react';
-import type { Mode } from '../types/camera';
+import { Platform } from 'react-native';
 import type { Camera, PhotoFile, VideoFile } from 'react-native-vision-camera';
+import type { Mode } from '../types/camera';
 
 export function useRecordingControls(
   cameraRef: MutableRefObject<Camera | null>,

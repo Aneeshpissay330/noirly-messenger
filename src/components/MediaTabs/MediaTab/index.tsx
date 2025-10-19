@@ -1,15 +1,14 @@
 import React, { useEffect, useMemo } from 'react';
-import { View, StyleSheet, Image, Dimensions, ScrollView } from 'react-native';
+import { Dimensions, Image, ScrollView, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRoute, RouteProp } from '@react-navigation/native';
 import type { RootState } from '../../../app/store'; // adjust path to your store
 
 import {
-  openDmChat,
-  startSubscriptions,
   clearChatState,
+  openDmChat,
   selectChatIdByOther,
   selectMessagesByOther,
+  startSubscriptions,
 } from '../../../features/messages'; // adjust path to your slice
 
 const { width } = Dimensions.get('window');

@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Appbar, Text, useTheme } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Appbar, useTheme } from 'react-native-paper';
 
 type Props = {
   visible: boolean;

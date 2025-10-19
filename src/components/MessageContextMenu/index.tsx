@@ -1,17 +1,17 @@
 // src/components/MessageContextMenu/index.tsx
+import Clipboard from '@react-native-clipboard/clipboard';
+import Icon from '@react-native-vector-icons/material-design-icons';
 import React from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
+  Dimensions,
   Modal,
   Pressable,
-  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import Clipboard from '@react-native-clipboard/clipboard';
 import { useTheme } from 'react-native-paper';
-import Icon from '@react-native-vector-icons/material-design-icons';
 import type { Message } from '../../types/chat';
 
 type Props = {

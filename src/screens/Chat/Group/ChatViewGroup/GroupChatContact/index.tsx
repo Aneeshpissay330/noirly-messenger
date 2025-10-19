@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
-import { Button, Divider, useTheme, List } from 'react-native-paper';
-import GroupProfile from '../../../../../components/Chat/Group/GroupProfile';
-import GroupInvite from '../../../../../components/Chat/Group/GroupInvite';
-import GroupTabs from '../../../../../components/Chat/Group/GroupTabs';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Button, Divider, useTheme } from 'react-native-paper';
 import GroupChatSettings from '../../../../../components/Chat/Group/GroupChatSettings';
+import GroupInvite from '../../../../../components/Chat/Group/GroupInvite';
 import GroupPolicies from '../../../../../components/Chat/Group/GroupPolicies';
+import GroupProfile from '../../../../../components/Chat/Group/GroupProfile';
+import GroupTabs from '../../../../../components/Chat/Group/GroupTabs';
 
 export default function GroupChatProfileScreen() {
   const theme = useTheme();

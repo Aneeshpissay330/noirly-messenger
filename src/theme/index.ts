@@ -1,8 +1,8 @@
 // /mnt/data/index.ts
 import { Platform } from 'react-native';
 import {
-  MD3LightTheme,
   MD3DarkTheme,
+  MD3LightTheme,
   configureFonts,
   useTheme as usePaperTheme,
 } from 'react-native-paper';

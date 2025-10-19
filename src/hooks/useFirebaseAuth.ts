@@ -1,8 +1,7 @@
 // hooks/useFirebaseAuth.ts
-import { useState, useEffect } from 'react';
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { getAuth, onIdTokenChanged } from '@react-native-firebase/auth';
+import { FirebaseAuthTypes, getAuth, onIdTokenChanged } from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { useEffect, useState } from 'react';
 import { registerFcmToken, subscribeFcmTokenRefresh, unsubscribeFcmTokenRefresh } from '../services/fcm';
 
 // Helper to normalize names

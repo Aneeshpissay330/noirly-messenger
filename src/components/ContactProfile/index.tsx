@@ -1,7 +1,6 @@
 import * as React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
-import { Avatar, Text, useTheme, FAB } from 'react-native-paper';
-import { MONO } from '../../theme';
+import { StyleSheet, View } from 'react-native';
+import { Avatar, FAB, Text, useTheme } from 'react-native-paper';
 
 type Props = {
   name: string;

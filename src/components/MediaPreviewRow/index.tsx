@@ -1,23 +1,23 @@
 // index.tsx
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useMemo } from 'react';
 import {
-  ScrollView,
-  View,
   Image,
+  ScrollView,
   StyleSheet,
+  View,
 } from 'react-native';
-import { NavigationProp, RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { List, useTheme } from 'react-native-paper';
 
 // from messages slice
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
-  openDmChat,
-  startSubscriptions,
   clearChatState,
+  openDmChat,
   selectChatIdByOther,
   selectMessagesByOther,
+  startSubscriptions,
 } from '../../features/messages'; // <- adjust path to your slice
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
 // ^ selectors & thunks come from your messages slice :contentReference[oaicite:3]{index=3}
 
 export type RootTabParamList = {

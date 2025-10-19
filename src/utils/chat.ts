@@ -31,15 +31,20 @@ export function ensureAvatar(avatar?: string | null): string {
 /** Sort chats: pinned first, then by most recent date (desc). */
 export function sortChats(rows: ChatRow[]): ChatRow[] {
   return [...rows].sort((a, b) => {
-    const ap = !!a.pinned, bp = !!b.pinned;
+    const ap = !!a.pinned,
+      bp = !!b.pinned;
     if (ap !== bp) return bp ? 1 : -1; // pinned rows first
-    const ad = Date.parse(a.date || ''), bd = Date.parse(b.date || '');
+    const ad = Date.parse(a.date || ''),
+      bd = Date.parse(b.date || '');
     return bd - ad; // newest first
   });
 }
 
 /** Merge self row (if present) with others and return sorted list. */
-export function mergeAndSort(self: ChatRow | null, others: ChatRow[]): ChatRow[] {
+export function mergeAndSort(
+  self: ChatRow | null,
+  others: ChatRow[],
+): ChatRow[] {
   const list = self ? [self, ...others] : [...others];
   return sortChats(list);
 }
@@ -49,7 +54,7 @@ export function mergeAndSort(self: ChatRow | null, others: ChatRow[]): ChatRow[]
  * Use this when building rows from Firestore timestamps or JS Dates.
  */
 export function toISODate(
-  input: string | number | Date | { toDate?: () => Date } | null | undefined
+  input: string | number | Date | { toDate?: () => Date } | null | undefined,
 ): string {
   if (!input) return new Date(0).toISOString();
   if (typeof input === 'string') return new Date(input).toISOString();

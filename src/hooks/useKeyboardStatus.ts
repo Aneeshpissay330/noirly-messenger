@@ -8,10 +8,10 @@ export function useKeyboardStatus(): boolean {
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () =>
-      setKeyboardVisible(true)
+      setKeyboardVisible(true),
     );
     const hideSubscription = Keyboard.addListener('keyboardDidHide', () =>
-      setKeyboardVisible(false)
+      setKeyboardVisible(false),
     );
 
     return () => {

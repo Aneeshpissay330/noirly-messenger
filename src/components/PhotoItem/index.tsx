@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleProp, ViewStyle, Image } from 'react-native';
+import { Image, StyleProp, View, ViewStyle } from 'react-native';
 import { MinimalPhoto } from '../../utils/camera-roll';
 
 type Props = {

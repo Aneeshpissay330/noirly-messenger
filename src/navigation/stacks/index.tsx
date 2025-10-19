@@ -1,18 +1,18 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import Tabs from '../tabs';
-import ChatView from '../../screens/Chat/Personal/ChatView';
-import Gallery from '../../screens/Chat/Gallery';
-import MediaViewer from '../../screens/Chat/MediaViewer';
-import CameraScreen from '../../screens/Chat/CameraScreen';
-import PersonalChatContact from '../../screens/Chat/Personal/ChatView/PersonalChatContact';
 import MediaTabs from '../../components/MediaTabs';
-import { useTheme } from '../../theme';
+import { usePresenceHeartbeat } from '../../hooks/usePresenceHeartbeat';
+import CameraScreen from '../../screens/Chat/CameraScreen';
+import Gallery from '../../screens/Chat/Gallery';
 import ChatViewGroup from '../../screens/Chat/Group/ChatViewGroup';
 import GroupChatContact from '../../screens/Chat/Group/ChatViewGroup/GroupChatContact';
-import EditProfile from '../../screens/Settings/EditProfile';
-import { usePresenceHeartbeat } from '../../hooks/usePresenceHeartbeat';
-import ContactScreen from '../../screens/ContactScreen';
+import MediaViewer from '../../screens/Chat/MediaViewer';
+import ChatView from '../../screens/Chat/Personal/ChatView';
+import PersonalChatContact from '../../screens/Chat/Personal/ChatView/PersonalChatContact';
 import StarredMessages from '../../screens/Chat/Personal/Starred';
+import ContactScreen from '../../screens/ContactScreen';
+import EditProfile from '../../screens/Settings/EditProfile';
+import { useTheme } from '../../theme';
+import Tabs from '../tabs';
 
 const Stack = createStackNavigator();
 
@@ -27,7 +27,8 @@ function Stacks() {
           shadowOpacity: 0,
           backgroundColor: theme.colors?.background,
         },
-        headerTintColor: (theme.colors as any)?.onSurface ?? theme.colors?.primary,
+        headerTintColor:
+          (theme.colors as any)?.onSurface ?? theme.colors?.primary,
         headerTitleStyle: {
           fontFamily: 'Lexend-Medium',
           fontSize: 18,
@@ -46,27 +47,36 @@ function Stacks() {
         component={PersonalChatContact}
         options={{ title: '' }}
       />
-       <Stack.Screen
-        name="GroupChatContact"
-        component={GroupChatContact}
-      />
+      <Stack.Screen name="GroupChatContact" component={GroupChatContact} />
       <Stack.Screen
         name="CameraScreen"
         component={CameraScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Gallery" component={Gallery} />
-  <Stack.Screen name="MediaViewer" component={MediaViewer} options={{ headerShown: false }} />
-      <Stack.Screen 
-        name="MediaTabsScreen" 
-        component={MediaTabs} 
+      <Stack.Screen
+        name="MediaViewer"
+        component={MediaViewer}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MediaTabsScreen"
+        component={MediaTabs}
         options={({ route }) => ({
           title: (route.params as any)?.name || 'User',
         })}
       />
-      <Stack.Screen name='EditProfile' component={EditProfile} />
-      <Stack.Screen name='ContactScreen' component={ContactScreen} options={{ title: 'Contacts' }} />
-      <Stack.Screen name='StarredMessages' component={StarredMessages} options={{ title: 'Starred' }} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen
+        name="ContactScreen"
+        component={ContactScreen}
+        options={{ title: 'Contacts' }}
+      />
+      <Stack.Screen
+        name="StarredMessages"
+        component={StarredMessages}
+        options={{ title: 'Starred' }}
+      />
     </Stack.Navigator>
   );
 }

@@ -1,22 +1,50 @@
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { Searchbar, IconButton, useTheme } from 'react-native-paper';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { IconButton, Searchbar, useTheme } from 'react-native-paper';
 import GroupMemberList, { Member } from '../../GroupMemberList';
 
 export default function Members() {
   const theme = useTheme();
   const [search, setSearch] = useState('');
-  
+
   const members: Member[] = [
-    { id: '1', name: 'Alex Chen', role: 'admin', presence: 'online', avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg' },
-    { id: '2', name: 'Emma Wilson', role: 'moderator', presence: 'online', avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg' },
-    { id: '3', name: 'Sarah Johnson', role: 'member', presence: '2h ago', avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg' },
-    { id: '4', name: 'Mike Torres', role: 'member', presence: 'offline', avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg' },
+    {
+      id: '1',
+      name: 'Alex Chen',
+      role: 'admin',
+      presence: 'online',
+      avatar:
+        'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg',
+    },
+    {
+      id: '2',
+      name: 'Emma Wilson',
+      role: 'moderator',
+      presence: 'online',
+      avatar:
+        'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg',
+    },
+    {
+      id: '3',
+      name: 'Sarah Johnson',
+      role: 'member',
+      presence: '2h ago',
+      avatar:
+        'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg',
+    },
+    {
+      id: '4',
+      name: 'Mike Torres',
+      role: 'member',
+      presence: 'offline',
+      avatar:
+        'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg',
+    },
   ];
 
   // Optional filtering logic based on search
   const filteredMembers = members.filter(member =>
-    member.name.toLowerCase().includes(search.toLowerCase())
+    member.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -44,9 +72,9 @@ export default function Members() {
       <ScrollView>
         <GroupMemberList
           members={filteredMembers}
-          onPromote={(id) => {}}
-          onDemote={(id) => {}}
-          onRemove={(id) => {}}
+          onPromote={id => {}}
+          onDemote={id => {}}
+          onRemove={id => {}}
         />
       </ScrollView>
     </View>

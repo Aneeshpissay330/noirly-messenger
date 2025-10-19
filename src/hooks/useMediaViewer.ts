@@ -1,11 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import { Alert } from 'react-native';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import { useNavigation } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
 import Share from 'react-native-share';
-import { Snackbar } from 'react-native-paper';
-import { convertToBase64 } from '../utils/download';
 import { handleStoragePermission } from '../permission';
+import { convertToBase64 } from '../utils/download';
 
 type MediaItem = { src: string; type: 'image' | 'video' };
 

@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import * as React from 'react';
 
-import PaperBottomTabBar from './PaperBottomTabBar';
 import Chat from '../../screens/Chat';
 import Settings from '../../screens/Settings';
 import { useTheme } from '../../theme';
+import PaperBottomTabBar from './PaperBottomTabBar';
 
 export type RootTabParamList = {
   Chat: undefined;

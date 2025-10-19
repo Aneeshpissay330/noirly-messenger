@@ -1,20 +1,16 @@
 // src/components/ChatBubble/index.tsx
 import React, { useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Pressable,
-} from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
-import type { Message } from '../../types/chat';
 import { MONO } from '../../theme';
+import type { Message } from '../../types/chat';
 import MessageContextMenu from '../MessageContextMenu';
 import MessageInfoSheet from '../MessageInfoSheet';
-import MessageImage from './MessageImage';
-import MessageVideo from './MessageVideo';
-import MessageDocument from './MessageDocument';
 import MessageAudio from './MessageAudio';
+import MessageDocument from './MessageDocument';
+import MessageImage from './MessageImage';
 import MessageMeta from './MessageMeta';
+import MessageVideo from './MessageVideo';
 import SelectionCheckbox from './SelectionCheckbox';
 
 type Props = {
@@ -24,7 +20,10 @@ type Props = {
   showName?: boolean;
   otherUid?: string; // for Info: whose delivery/read times to show
   onRetry?: (messageId: string) => void; // optional retry handler
-  onOpenMedia?: (items: { src: string; type: 'image' | 'video' }[], index: number) => void;
+  onOpenMedia?: (
+    items: { src: string; type: 'image' | 'video' }[],
+    index: number,
+  ) => void;
   onLongPress?: (message: Message) => void; // for delete functionality
   isSelectionMode?: boolean; // whether selection mode is active
   isSelected?: boolean; // whether this message is selected
@@ -49,15 +48,17 @@ export default function ChatBubble({
   isStarred = false,
 }: Props) {
   const theme = useTheme();
-  
+
   // Use monochrome theme colors
   const bubbleBg = isMe ? theme.colors.primary : theme.colors.surface;
   const textColor = isMe ? theme.colors.onPrimary : theme.colors.onSurface;
   const borderColor = theme.colors.outline;
-  const nameColor = isMe ? 
-    (theme.dark ? MONO.gray300 : MONO.white) : 
-    theme.colors.secondary;
-  
+  const nameColor = isMe
+    ? theme.dark
+      ? MONO.gray300
+      : MONO.white
+    : theme.colors.secondary;
+
   const [showContextMenu, setShowContextMenu] = useState(false);
   const [touchPosition, setTouchPosition] = useState({ x: 0, y: 0 });
   const [showInfo, setShowInfo] = useState(false);
@@ -72,12 +73,12 @@ export default function ChatBubble({
 
   return (
     <Pressable
-      onLongPress={(event) => {
+      onLongPress={event => {
         if (isSelectionMode) {
           onLongPress?.(message);
           return;
         }
-        
+
         const { pageX, pageY } = event.nativeEvent;
         setTouchPosition({ x: pageX, y: pageY });
         setShowContextMenu(true);
@@ -92,15 +93,16 @@ export default function ChatBubble({
       }}
       delayLongPress={400}
       style={[
-        styles.row, 
-        { 
+        styles.row,
+        {
           justifyContent: isMe ? 'flex-end' : 'flex-start',
-          backgroundColor: isSelectionMode && isSelected 
-            ? theme.colors.primaryContainer 
-            : isSelectionMode 
-            ? theme.colors.surfaceVariant 
-            : 'transparent'
-        }
+          backgroundColor:
+            isSelectionMode && isSelected
+              ? theme.colors.primaryContainer
+              : isSelectionMode
+              ? theme.colors.surfaceVariant
+              : 'transparent',
+        },
       ]}
     >
       {/* optional avatar placeholder */}
@@ -109,25 +111,25 @@ export default function ChatBubble({
       ) : null} */}
 
       <View style={{ maxWidth: '78%' }}>
-          <View
-            style={[
-              styles.bubble,
-              {
-                backgroundColor: bubbleBg,
-                borderColor: isMe ? 'transparent' : borderColor,
-                borderWidth: isMe ? 0 : 1,
-                borderBottomLeftRadius: isMe ? 16 : 6,
-                borderBottomRightRadius: isMe ? 6 : 16,
-                opacity: isSelectionMode && !isSelected ? 0.8 : 1,
-              },
-            ]}
-          >
-            {/* Selection checkbox */}
-            <SelectionCheckbox 
-              isSelectionMode={isSelectionMode}
-              isSelected={isSelected}
-              theme={theme}
-            />
+        <View
+          style={[
+            styles.bubble,
+            {
+              backgroundColor: bubbleBg,
+              borderColor: isMe ? 'transparent' : borderColor,
+              borderWidth: isMe ? 0 : 1,
+              borderBottomLeftRadius: isMe ? 16 : 6,
+              borderBottomRightRadius: isMe ? 6 : 16,
+              opacity: isSelectionMode && !isSelected ? 0.8 : 1,
+            },
+          ]}
+        >
+          {/* Selection checkbox */}
+          <SelectionCheckbox
+            isSelectionMode={isSelectionMode}
+            isSelected={isSelected}
+            theme={theme}
+          />
           {/* Sender name (group chats) */}
           {showName ? (
             <Text
@@ -139,14 +141,14 @@ export default function ChatBubble({
           ) : null}
 
           {/* Media Components */}
-          <MessageImage 
+          <MessageImage
             message={message}
             mediaUri={mediaUri}
             isDownloading={isDownloading}
             onOpenMedia={onOpenMedia}
           />
 
-          <MessageVideo 
+          <MessageVideo
             message={message}
             mediaUri={mediaUri}
             isDownloading={isDownloading}
@@ -156,7 +158,7 @@ export default function ChatBubble({
           />
 
           {/* Document Component */}
-          <MessageDocument 
+          <MessageDocument
             message={message}
             mediaUri={mediaUri}
             isDownloading={isDownloading}
@@ -167,10 +169,7 @@ export default function ChatBubble({
           />
 
           {/* Audio Component */}
-          <MessageAudio 
-            message={message}
-            mediaUri={mediaUri}
-          />
+          <MessageAudio message={message} mediaUri={mediaUri} />
 
           {/* Text */}
           {message.text ? (
@@ -180,7 +179,7 @@ export default function ChatBubble({
           ) : null}
 
           {/* Meta Component */}
-          <MessageMeta 
+          <MessageMeta
             message={message}
             isMe={isMe}
             theme={theme}
@@ -190,22 +189,27 @@ export default function ChatBubble({
       </View>
 
       {isMe ? <View style={{ width: 24 }} /> : null}
-      
+
       <MessageContextMenu
         visible={showContextMenu}
         onClose={() => setShowContextMenu(false)}
         message={message}
         position={touchPosition}
         isMe={isMe}
-        onDelete={(msg) => {
+        onDelete={msg => {
           onLongPress?.(msg); // This will trigger the existing delete flow
         }}
         onInfo={() => setShowInfo(true)}
-        onStar={(msg) => onToggleStar?.(msg)}
-        onUnstar={(msg) => onToggleStar?.(msg)}
+        onStar={msg => onToggleStar?.(msg)}
+        onUnstar={msg => onToggleStar?.(msg)}
         isStarred={isStarred}
       />
-      <MessageInfoSheet visible={showInfo} onDismiss={() => setShowInfo(false)} message={message} otherUid={otherUid} />
+      <MessageInfoSheet
+        visible={showInfo}
+        onDismiss={() => setShowInfo(false)}
+        message={message}
+        otherUid={otherUid}
+      />
     </Pressable>
   );
 }

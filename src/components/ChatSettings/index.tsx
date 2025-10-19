@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, Alert, StyleSheet } from 'react-native';
-import { List, Switch, useTheme, Text, IconButton } from 'react-native-paper';
+import { Alert, StyleSheet, View } from 'react-native';
+import { IconButton, List, Switch, useTheme } from 'react-native-paper';
 
 type Props = {
   notificationsEnabled: boolean;

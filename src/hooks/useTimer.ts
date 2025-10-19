@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 export type UseTimerOptions = {
   autoStart?: boolean;
   startFrom?: number; // in seconds
-  tickMs?: number;    // default 1000
+  tickMs?: number; // default 1000
 };
 
 export function useTimer(options: UseTimerOptions = {}) {
@@ -17,7 +17,7 @@ export function useTimer(options: UseTimerOptions = {}) {
     if (runningRef.current) return;
     runningRef.current = true;
     intervalRef.current = setInterval(() => {
-      setSeconds((s) => s + 1);
+      setSeconds(s => s + 1);
     }, tickMs);
   }, [tickMs]);
 
@@ -40,7 +40,14 @@ export function useTimer(options: UseTimerOptions = {}) {
 
   const formatted = formatHMS(seconds);
 
-  return { seconds, formatted, start, stop, reset, running: runningRef.current };
+  return {
+    seconds,
+    formatted,
+    start,
+    stop,
+    reset,
+    running: runningRef.current,
+  };
 }
 
 function formatHMS(total: number) {

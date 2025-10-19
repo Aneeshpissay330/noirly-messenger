@@ -3,7 +3,9 @@ import { createNavigationContainerRef } from '@react-navigation/native';
 // We keep it untyped for simplicity across JS/TS boundaries
 export const navigationRef = createNavigationContainerRef<any>();
 
-export async function waitForNavigationReady(timeoutMs = 10000): Promise<boolean> {
+export async function waitForNavigationReady(
+  timeoutMs = 10000,
+): Promise<boolean> {
   const start = Date.now();
   return new Promise(resolve => {
     const tick = () => {

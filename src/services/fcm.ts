@@ -1,9 +1,9 @@
 // services/fcm.ts
-import { Platform } from 'react-native';
-import messaging from '@react-native-firebase/messaging';
-import firestore from '@react-native-firebase/firestore';
 import notifee, { AuthorizationStatus } from '@notifee/react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
+import messaging from '@react-native-firebase/messaging';
+import { Platform } from 'react-native';
 
 const INSTALLATION_ID_KEY = 'app.installationId';
 const lastTokenKey = (installationId: string) => `fcm.lastToken.${installationId}`;

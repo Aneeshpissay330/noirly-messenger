@@ -1,7 +1,7 @@
 // hooks/useUserDoc.ts
-import { useEffect, useState } from 'react';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import { useEffect, useState } from 'react';
 
 export type UserDoc = {
   uid: string;

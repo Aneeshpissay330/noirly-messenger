@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Portal, Modal, List, useTheme, Divider } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { Divider, List, Modal, Portal, useTheme } from 'react-native-paper';
 
 type Props = {
   visible: boolean;
@@ -27,20 +27,43 @@ export default function AttachmentSheet({
       <Modal
         visible={visible}
         onDismiss={onDismiss}
-        contentContainerStyle={[styles.container, { backgroundColor: theme.colors.surface }]}
+        contentContainerStyle={[
+          styles.container,
+          { backgroundColor: theme.colors.surface },
+        ]}
       >
         <List.Section>
-          <List.Item title="Camera" left={(p) => <List.Icon {...p} icon="camera" />} onPress={onOpenCamera} />
-          <List.Item title="Gallery" left={(p) => <List.Icon {...p} icon="image-multiple" />} onPress={onOpenGallery} />
-          <List.Item title="Document" left={(p) => <List.Icon {...p} icon="file" />} onPress={onPickDocument} />
+          <List.Item
+            title="Camera"
+            left={p => <List.Icon {...p} icon="camera" />}
+            onPress={onOpenCamera}
+          />
+          <List.Item
+            title="Gallery"
+            left={p => <List.Icon {...p} icon="image-multiple" />}
+            onPress={onOpenGallery}
+          />
+          <List.Item
+            title="Document"
+            left={p => <List.Icon {...p} icon="file" />}
+            onPress={onPickDocument}
+          />
           {onShareLocation && (
             <>
               <Divider />
-              <List.Item title="Location" left={(p) => <List.Icon {...p} icon="map-marker" />} onPress={onShareLocation} />
+              <List.Item
+                title="Location"
+                left={p => <List.Icon {...p} icon="map-marker" />}
+                onPress={onShareLocation}
+              />
             </>
           )}
           {onPickContact && (
-            <List.Item title="Contact" left={(p) => <List.Icon {...p} icon="account-box" />} onPress={onPickContact} />
+            <List.Item
+              title="Contact"
+              left={p => <List.Icon {...p} icon="account-box" />}
+              onPress={onPickContact}
+            />
           )}
         </List.Section>
       </Modal>

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Avatar, Text, useTheme, FAB } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Avatar, FAB, Text, useTheme } from 'react-native-paper';
 
 type Props = {
   name: string;
@@ -22,7 +22,9 @@ export default function GroupProfile({
   const theme = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <View style={styles.avatarWrap}>
         {photoUri ? (
           <Avatar.Image size={96} source={{ uri: photoUri }} />
@@ -40,13 +42,18 @@ export default function GroupProfile({
         )}
       </View>
 
-      <Text variant="headlineSmall" style={styles.name}>{name}</Text>
+      <Text variant="headlineSmall" style={styles.name}>
+        {name}
+      </Text>
       {!!description && (
-        <Text style={[styles.desc, { color: theme.colors.onSurfaceVariant }]}>{description}</Text>
+        <Text style={[styles.desc, { color: theme.colors.onSurfaceVariant }]}>
+          {description}
+        </Text>
       )}
       {(createdAt || typeof membersCount === 'number') && (
         <Text style={styles.meta}>
-          {createdAt ? `Created ${createdAt}` : ''}{createdAt && typeof membersCount === 'number' ? ' • ' : ''}
+          {createdAt ? `Created ${createdAt}` : ''}
+          {createdAt && typeof membersCount === 'number' ? ' • ' : ''}
           {typeof membersCount === 'number' ? `${membersCount} members` : ''}
         </Text>
       )}

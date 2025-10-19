@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SegmentedButtons, useTheme } from 'react-native-paper';
-import Members from './Members';
 import Media from './Media';
+import Members from './Members';
 
 export default function GroupTabs() {
   const theme = useTheme();
   const [activeTab, setActiveTab] = useState<'members' | 'media'>('members');
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    >
       <SegmentedButtons
         value={activeTab}
-        onValueChange={(val) => setActiveTab(val as 'members' | 'media')}
+        onValueChange={val => setActiveTab(val as 'members' | 'media')}
         buttons={[
           { value: 'members', label: 'Members' },
           { value: 'media', label: 'Media' },

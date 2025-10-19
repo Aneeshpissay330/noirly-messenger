@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export type UsePhoneAuthReturn = {
   phoneNumber: string;

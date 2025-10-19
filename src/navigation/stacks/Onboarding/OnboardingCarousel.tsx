@@ -1,22 +1,22 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  StyleSheet,
   Dimensions,
-  NativeSyntheticEvent,
+  Image,
   NativeScrollEvent,
+  NativeSyntheticEvent,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { useTheme } from '../../../theme';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { setStep, completeOnboarding } from '../../../features/onboarding';
-import cards from './data';
 import { ProgressBar } from 'react-native-paper';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { completeOnboarding, setStep } from '../../../features/onboarding';
+import { useTheme } from '../../../theme';
+import cards from './data';
 
 const { width } = Dimensions.get('window');
 

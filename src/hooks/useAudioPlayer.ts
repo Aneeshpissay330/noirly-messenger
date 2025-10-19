@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
 import {
   AudioBuffer,
@@ -30,7 +29,7 @@ export function useAudioPlayer({ audioUrl }: { audioUrl: string }) {
   const sourceRef = useRef<AudioBufferSourceNode | null>(null);
 
   const startTimeRef = useRef(0); // contextTime when current node started (sec)
-  const pauseMsRef = useRef(0);   // accumulated paused offset (ms)
+  const pauseMsRef = useRef(0); // accumulated paused offset (ms)
   const rafRef = useRef<number | null>(null);
 
   // ensure context exists
@@ -43,7 +42,9 @@ export function useAudioPlayer({ audioUrl }: { audioUrl: string }) {
 
   const loadFromLocal = async (urlOrPath: string) => {
     // strip scheme
-    const path = urlOrPath.startsWith('file://') ? urlOrPath.replace('file://', '') : urlOrPath;
+    const path = urlOrPath.startsWith('file://')
+      ? urlOrPath.replace('file://', '')
+      : urlOrPath;
     const base64 = await RNFS.readFile(path, 'base64');
     const arr = Buffer.from(base64, 'base64');
     return arr.buffer.slice(arr.byteOffset, arr.byteOffset + arr.byteLength);
@@ -57,7 +58,11 @@ export function useAudioPlayer({ audioUrl }: { audioUrl: string }) {
 
     // Decide how to read
     const lower = audioUrl.toLowerCase();
-    const isLocal = lower.startsWith('file://') || (!lower.startsWith('http://') && !lower.startsWith('https://') && !lower.startsWith('content://'));
+    const isLocal =
+      lower.startsWith('file://') ||
+      (!lower.startsWith('http://') &&
+        !lower.startsWith('https://') &&
+        !lower.startsWith('content://'));
 
     if (isLocal) {
       arrayBuffer = await loadFromLocal(audioUrl);
@@ -95,15 +100,20 @@ export function useAudioPlayer({ audioUrl }: { audioUrl: string }) {
     const buf = bufferRef.current;
     if (!ctx || !buf) return;
 
-    const elapsedMs = (ctx.currentTime - startTimeRef.current) * 1000 + pauseMsRef.current;
+    const elapsedMs =
+      (ctx.currentTime - startTimeRef.current) * 1000 + pauseMsRef.current;
     const next = Math.min(elapsedMs, buf.duration * 1000);
     setProgress(next);
 
     if (next >= buf.duration * 1000) {
       // natural end
       if (sourceRef.current) {
-        try { sourceRef.current.stop(); } catch {}
-        try { sourceRef.current.disconnect(); } catch {}
+        try {
+          sourceRef.current.stop();
+        } catch {}
+        try {
+          sourceRef.current.disconnect();
+        } catch {}
         sourceRef.current = null;
       }
       setIsPlaying(false);
@@ -115,24 +125,29 @@ export function useAudioPlayer({ audioUrl }: { audioUrl: string }) {
     rafRef.current = requestAnimationFrame(tick);
   }, []);
 
-  const startNode = useCallback(async (offsetMs: number) => {
-    const ctx = ensureContext();
-    try { await ctx.resume(); } catch {}
-    const buf = bufferRef.current;
-    if (!buf) return;
+  const startNode = useCallback(
+    async (offsetMs: number) => {
+      const ctx = ensureContext();
+      try {
+        await ctx.resume();
+      } catch {}
+      const buf = bufferRef.current;
+      if (!buf) return;
 
-    // fresh node every time
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    src.connect(ctx.destination);
-    src.start(0, Math.max(0, offsetMs) / 1000);
+      // fresh node every time
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.connect(ctx.destination);
+      src.start(0, Math.max(0, offsetMs) / 1000);
 
-    sourceRef.current = src;
-    startTimeRef.current = ctx.currentTime;
-    stopRaf();
-    rafRef.current = requestAnimationFrame(tick);
-    setIsPlaying(true);
-  }, [tick]);
+      sourceRef.current = src;
+      startTimeRef.current = ctx.currentTime;
+      stopRaf();
+      rafRef.current = requestAnimationFrame(tick);
+      setIsPlaying(true);
+    },
+    [tick],
+  );
 
   const play = useCallback(() => {
     if (!bufferRef.current) return;
@@ -142,12 +157,17 @@ export function useAudioPlayer({ audioUrl }: { audioUrl: string }) {
   const pause = useCallback(() => {
     const ctx = ctxRef.current;
     if (ctx) {
-      const elapsedMs = (ctx.currentTime - startTimeRef.current) * 1000 + pauseMsRef.current;
+      const elapsedMs =
+        (ctx.currentTime - startTimeRef.current) * 1000 + pauseMsRef.current;
       pauseMsRef.current = elapsedMs;
     }
     if (sourceRef.current) {
-      try { sourceRef.current.stop(); } catch {}
-      try { sourceRef.current.disconnect(); } catch {}
+      try {
+        sourceRef.current.stop();
+      } catch {}
+      try {
+        sourceRef.current.disconnect();
+      } catch {}
       sourceRef.current = null;
     }
     stopRaf();
@@ -156,8 +176,12 @@ export function useAudioPlayer({ audioUrl }: { audioUrl: string }) {
 
   const stop = useCallback(() => {
     if (sourceRef.current) {
-      try { sourceRef.current.stop(); } catch {}
-      try { sourceRef.current.disconnect(); } catch {}
+      try {
+        sourceRef.current.stop();
+      } catch {}
+      try {
+        sourceRef.current.disconnect();
+      } catch {}
       sourceRef.current = null;
     }
     stopRaf();
@@ -174,21 +198,28 @@ export function useAudioPlayer({ audioUrl }: { audioUrl: string }) {
     }
   }, [isPlaying, pause, play]);
 
-  const seekTo = useCallback((ms: number) => {
-    // clamp and restart
-    const buf = bufferRef.current;
-    if (!buf) return;
-    const clamped = Math.max(0, Math.min(ms, buf.duration * 1000));
-    pauseMsRef.current = clamped;
-    setProgress(clamped);
-    if (sourceRef.current) {
-      try { sourceRef.current.stop(); } catch {}
-      try { sourceRef.current.disconnect(); } catch {}
-      sourceRef.current = null;
-    }
-    startNode(clamped);
-    setIsPlaying(true);
-  }, [startNode]);
+  const seekTo = useCallback(
+    (ms: number) => {
+      // clamp and restart
+      const buf = bufferRef.current;
+      if (!buf) return;
+      const clamped = Math.max(0, Math.min(ms, buf.duration * 1000));
+      pauseMsRef.current = clamped;
+      setProgress(clamped);
+      if (sourceRef.current) {
+        try {
+          sourceRef.current.stop();
+        } catch {}
+        try {
+          sourceRef.current.disconnect();
+        } catch {}
+        sourceRef.current = null;
+      }
+      startNode(clamped);
+      setIsPlaying(true);
+    },
+    [startNode],
+  );
 
   // load on URL change
   useEffect(() => {
@@ -202,7 +233,9 @@ export function useAudioPlayer({ audioUrl }: { audioUrl: string }) {
     });
     return () => {
       stop();
-      try { ctxRef.current?.close(); } catch {}
+      try {
+        ctxRef.current?.close();
+      } catch {}
       ctxRef.current = null;
       bufferRef.current = null;
     };

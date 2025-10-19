@@ -39,7 +39,10 @@ export function formatChatDate(dateString: string) {
  * - Older -> "Last seen on Oct 08, 2024 at 9:05 PM"
  */
 export function formatLastSeen(lastActive: Date | string | number) {
-  const date = typeof lastActive === 'string' || typeof lastActive === 'number' ? new Date(lastActive) : lastActive;
+  const date =
+    typeof lastActive === 'string' || typeof lastActive === 'number'
+      ? new Date(lastActive)
+      : lastActive;
   if (!date || Number.isNaN(date.getTime())) return 'Offline';
   const now = new Date();
 

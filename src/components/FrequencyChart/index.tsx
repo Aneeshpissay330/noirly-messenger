@@ -1,9 +1,8 @@
 import { RoundedRect, Canvas as SKCanvas } from '@shopify/react-native-skia';
-import React, { useMemo, useState } from 'react';
-import { LayoutChangeEvent } from 'react-native';
-import { FFT_SIZE, GROUP_QUANTITY, PLAYER_WIDTH } from '../../utils/audio';
-import { useTheme } from '../../theme';
+import React, { useMemo } from 'react';
 import { useSharedValue } from 'react-native-reanimated';
+import { useTheme } from '../../theme';
+import { FFT_SIZE, GROUP_QUANTITY, PLAYER_WIDTH } from '../../utils/audio';
 
 interface Point {
   x1: number;

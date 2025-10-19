@@ -1,6 +1,6 @@
 // screens/PhoneLoginScreen.tsx
 import React, { useState } from 'react';
-import { Dimensions, Image, KeyboardAvoidingView, useColorScheme, View } from 'react-native';
+import { Dimensions, Image, KeyboardAvoidingView, useColorScheme } from 'react-native';
 import {
   Button,
   Card,

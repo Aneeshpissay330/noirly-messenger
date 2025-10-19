@@ -1,39 +1,39 @@
-
+import Slider from '@react-native-community/slider';
+import Slider from '@react-native-community/slider';
+import Icon from '@react-native-vector-icons/material-design-icons';
 import React, { useMemo, useState } from 'react';
 import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
   Alert,
-  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View
 } from 'react-native';
-import Slider from '@react-native-community/slider';
 import RNFS from 'react-native-fs';
 import { Text, useTheme } from 'react-native-paper';
-import Icon from '@react-native-vector-icons/material-design-icons';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
-import { MONO } from '../../theme';
-
-type Props = {
-  filePath: string; // absolute path to the audio file
-  onDeleted?: (path: string) => void;
-  autoPlay?: boolean;
-};
 
 const fmt = (ms: number) => {
   const sec = Math.max(0, Math.floor(ms / 1000));
-  const m = Math.floor(sec / 60).toString().padStart(2, '0');
-  const s = Math.floor(sec % 60).toString().padStart(2, '0');
+  const m = Math.floor(sec / 60)
+    .toString()
+    .padStart(2, '0');
+  const s = Math.floor(sec % 60)
+    .toString()
+    .padStart(2, '0');
   return `${m}:${s}`;
 };
 
-export default function AudioFilePlayer({ filePath, onDeleted, autoPlay }: Props) {
+export default function AudioFilePlayer({
+  filePath,
+  onDeleted,
+  autoPlay,
+}: Props) {
   const theme = useTheme();
-  
+
   // ensure a proper file:// url for decode
   const sourceUrl = useMemo(() => {
     if (!filePath) return '';
-    if(filePath.startsWith('https')) return filePath;
+    if (filePath.startsWith('https')) return filePath;
     if (filePath.startsWith('content://')) return filePath; // leave content:// as-is
     return filePath.startsWith('file://') ? filePath : `file://${filePath}`;
   }, [filePath]);
@@ -66,7 +66,9 @@ export default function AudioFilePlayer({ filePath, onDeleted, autoPlay }: Props
           return;
         }
         // strip file:// for RNFS.exists on Android/iOS which accepts both
-        const path = sourceUrl.startsWith('file://') ? sourceUrl.replace('file://', '') : sourceUrl;
+        const path = sourceUrl.startsWith('file://')
+          ? sourceUrl.replace('file://', '')
+          : sourceUrl;
         // Checking if audio file exists
         const ok = await RNFS.exists(path);
         if (mounted) setExists(ok);
@@ -77,7 +79,9 @@ export default function AudioFilePlayer({ filePath, onDeleted, autoPlay }: Props
         setDiagnostic(e?.message ?? String(e));
       }
     })();
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, [sourceUrl]);
 
   React.useEffect(() => {
@@ -88,7 +92,9 @@ export default function AudioFilePlayer({ filePath, onDeleted, autoPlay }: Props
   const value = drag ?? progress;
 
   const deleteFile = async () => {
-    try { await stop(); } catch {}
+    try {
+      await stop();
+    } catch {}
     try {
       const exists = await RNFS.exists(filePath);
       if (exists) await RNFS.unlink(filePath);
@@ -99,40 +105,47 @@ export default function AudioFilePlayer({ filePath, onDeleted, autoPlay }: Props
   };
 
   return (
-    <View style={[
-      styles.bubble, 
-      { 
-        backgroundColor: theme.colors.background,
-        borderColor: theme.colors.outline,
-        borderWidth: 1,
-      }
-    ]}>
+    <View
+      style={[
+        styles.bubble,
+        {
+          backgroundColor: theme.colors.background,
+          borderColor: theme.colors.outline,
+          borderWidth: 1,
+        },
+      ]}
+    >
       <View style={styles.row}>
         <TouchableOpacity
           onPress={togglePlayPause}
           style={[
-            styles.btn, 
-            { 
+            styles.btn,
+            {
               backgroundColor: theme.colors.surfaceVariant,
               borderColor: theme.colors.outline,
               borderWidth: 1,
             },
-            isPlaying && { backgroundColor: theme.colors.primary }
+            isPlaying && { backgroundColor: theme.colors.primary },
           ]}
           disabled={isLoading || !duration}
           accessibilityLabel={isPlaying ? 'Pause' : 'Play'}
         >
-          <Icon 
-            name={isPlaying ? 'pause' : 'play'} 
-            size={22} 
-            color={isPlaying ? theme.colors.onPrimary : theme.colors.onSurface} 
+          <Icon
+            name={isPlaying ? 'pause' : 'play'}
+            size={22}
+            color={isPlaying ? theme.colors.onPrimary : theme.colors.onSurface}
           />
         </TouchableOpacity>
 
         <View style={styles.sliderWrap}>
-            {diagnostic ? (
-              <Text variant="labelSmall" style={{ color: theme.colors.onSurface, marginBottom: 6 }}>{diagnostic}</Text>
-            ) : null}
+          {diagnostic ? (
+            <Text
+              variant="labelSmall"
+              style={{ color: theme.colors.onSurface, marginBottom: 6 }}
+            >
+              {diagnostic}
+            </Text>
+          ) : null}
           <Slider
             style={styles.slider}
             minimumValue={0}
@@ -149,8 +162,18 @@ export default function AudioFilePlayer({ filePath, onDeleted, autoPlay }: Props
             thumbTintColor={theme.colors.primary}
           />
           <View style={styles.timeRow}>
-            <Text variant="labelSmall" style={[styles.timeText, { color: theme.colors.onSurface }]}>{fmt(value)}</Text>
-            <Text variant="labelSmall" style={[styles.timeText, { color: theme.colors.onSurface }]}>{fmt(duration)}</Text>
+            <Text
+              variant="labelSmall"
+              style={[styles.timeText, { color: theme.colors.onSurface }]}
+            >
+              {fmt(value)}
+            </Text>
+            <Text
+              variant="labelSmall"
+              style={[styles.timeText, { color: theme.colors.onSurface }]}
+            >
+              {fmt(duration)}
+            </Text>
           </View>
         </View>
       </View>

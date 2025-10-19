@@ -1,12 +1,12 @@
+import { RouteProp, useRoute } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { SegmentedButtons } from 'react-native-paper';
 import { useTheme } from '../../theme';
-import MediaTab from './MediaTab';
 import AudioTab from './AudioTab/index';
 import DocsTab from './DocsTab';
 import LinksTab from './LinksTab';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import MediaTab from './MediaTab';
 
 type MediaTabsRouteParams = {
   MediaTabs: { id: string };

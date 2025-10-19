@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
-import { ResumableZoom } from 'react-native-zoom-toolkit';
-import Video from 'react-native-video';
+import { Dimensions, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Video from 'react-native-video';
+import { ResumableZoom } from 'react-native-zoom-toolkit';
 
 interface GalleryVideoProps {
   uri: string;

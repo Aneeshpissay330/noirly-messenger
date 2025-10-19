@@ -6,15 +6,15 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { Menu, useTheme, Snackbar } from 'react-native-paper';
+import { Menu, Snackbar, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Gallery,
   type GalleryRefType,
 } from 'react-native-zoom-toolkit';
-import { useMediaViewer } from '../../../hooks/useMediaViewer';
-import { useHeaderConfig } from '../../../hooks/useHeaderConfig';
 import { useGalleryCallbacks } from '../../../hooks/useGalleryCallbacks';
+import { useHeaderConfig } from '../../../hooks/useHeaderConfig';
+import { useMediaViewer } from '../../../hooks/useMediaViewer';
 import { mediaViewerStyles } from '../../../styles/mediaViewerStyles';
 import GalleryImage from './GalleryImage';
 import GalleryVideo from './GalleryVideo';

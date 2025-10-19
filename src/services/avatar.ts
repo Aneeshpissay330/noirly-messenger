@@ -1,8 +1,8 @@
 // services/avatar.ts
-import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
-import ImageCropPicker, { Image as PickerImage } from 'react-native-image-crop-picker';
+import storage from '@react-native-firebase/storage';
 import { Platform } from 'react-native';
+import ImageCropPicker, { Image as PickerImage } from 'react-native-image-crop-picker';
 
 /** Launch gallery with a circle cropper and return a local path */
 export async function pickAvatarFromGallery(): Promise<PickerImage> {

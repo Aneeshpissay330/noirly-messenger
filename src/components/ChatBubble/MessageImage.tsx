@@ -1,21 +1,24 @@
 // src/components/ChatBubble/MessageImage.tsx
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
-  View,
-  Image,
-  TouchableOpacity,
   ActivityIndicator,
+  Image,
   StyleSheet,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 import type { Message } from '../../types/chat';
 
 type Props = {
   message: Message;
   mediaUri?: string;
   isDownloading: boolean;
-  onOpenMedia?: (items: { src: string; type: 'image' | 'video' }[], index: number) => void;
+  onOpenMedia?: (
+    items: { src: string; type: 'image' | 'video' }[],
+    index: number,
+  ) => void;
 };
 
 function fitDims(
@@ -29,7 +32,12 @@ function fitDims(
   return { width: Math.round(w * scale), height: Math.round(h * scale) };
 }
 
-export default function MessageImage({ message, mediaUri, isDownloading, onOpenMedia }: Props) {
+export default function MessageImage({
+  message,
+  mediaUri,
+  isDownloading,
+  onOpenMedia,
+}: Props) {
   const theme = useTheme();
   const navigation = useNavigation<any>();
 
@@ -62,7 +70,12 @@ export default function MessageImage({ message, mediaUri, isDownloading, onOpenM
             resizeMode="cover"
           />
         ) : (
-          <View style={[styles.mediaPlaceholder, { backgroundColor: theme.colors.surfaceVariant }]}>
+          <View
+            style={[
+              styles.mediaPlaceholder,
+              { backgroundColor: theme.colors.surfaceVariant },
+            ]}
+          >
             <ActivityIndicator size={32} color={theme.colors.primary} />
           </View>
         )}

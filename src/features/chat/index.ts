@@ -16,13 +16,13 @@ export const syncMyChats = createAsyncThunk<void, void, { state: RootState }>(
   'chats/syncMyChats',
   async (_, thunkApi) => {
     if (unsub) unsub();
-    return new Promise<void>((resolve) => {
-      unsub = subscribeMyChats((rows) => {
+    return new Promise<void>(resolve => {
+      unsub = subscribeMyChats(rows => {
         thunkApi.dispatch(setChats(rows));
         resolve(); // first emission resolves
       });
     });
-  }
+  },
 );
 
 const slice = createSlice({
@@ -42,9 +42,15 @@ const slice = createSlice({
       unsub = null;
     },
   },
-  extraReducers: (b) => {
-    b.addCase(syncMyChats.pending, (s) => { s.status = 'loading'; s.error = null; });
-    b.addCase(syncMyChats.rejected, (s, a) => { s.status = 'failed'; s.error = a.error.message ?? 'Failed'; });
+  extraReducers: b => {
+    b.addCase(syncMyChats.pending, s => {
+      s.status = 'loading';
+      s.error = null;
+    });
+    b.addCase(syncMyChats.rejected, (s, a) => {
+      s.status = 'failed';
+      s.error = a.error.message ?? 'Failed';
+    });
   },
 });
 

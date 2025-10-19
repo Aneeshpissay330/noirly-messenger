@@ -1,15 +1,15 @@
-import { useCallback, useState } from 'react';
 import {
   GoogleAuthProvider,
   getAuth,
-  signInWithCredential,
   linkWithCredential,
+  signInWithCredential,
 } from '@react-native-firebase/auth';
 import {
   GoogleSignin,
   isErrorWithCode,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
+import { useCallback, useState } from 'react';
 
 GoogleSignin.configure({
   webClientId: '887990739707-stk01khp9kks417j9i3htbahaekul5ug.apps.googleusercontent.com',

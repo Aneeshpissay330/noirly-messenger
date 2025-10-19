@@ -17,7 +17,7 @@ export function useRecordingTimer(mode: Mode, isRecording: boolean) {
 
   const timerText = useMemo(
     () => (mode === 'video' && isRecording ? formatted : undefined),
-    [mode, isRecording, formatted]
+    [mode, isRecording, formatted],
   );
 
   return timerText;

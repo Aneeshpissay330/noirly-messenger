@@ -1,7 +1,7 @@
-import { View, Text } from 'react-native';
-import React, { use } from 'react';
-import { styles } from './styles';
+import React from 'react';
+import { View } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { styles } from './styles';
 
 const Loading = () => {
   const theme = useTheme();

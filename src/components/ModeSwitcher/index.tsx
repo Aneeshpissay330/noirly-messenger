@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from 'react';
 import { View } from 'react-native';
-import { SegmentedButtons, Text, useTheme } from 'react-native-paper';
+import { SegmentedButtons, useTheme } from 'react-native-paper';
 import { Mode } from '../../types/camera';
 
 type Props = {

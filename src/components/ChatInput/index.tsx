@@ -19,7 +19,7 @@ export default function ChatInput({
   onOpenCamera,
   onOpenGallery,
   onRecordAudio,
-  onTyping
+  onTyping,
 }: Props) {
   const theme = useTheme();
   const [text, setText] = useState('');

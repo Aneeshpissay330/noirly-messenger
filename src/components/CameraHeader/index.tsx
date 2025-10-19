@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { IconButton, Chip } from 'react-native-paper';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
+import React, { memo } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Chip, IconButton } from 'react-native-paper';
 
 type Props = {
   onClose: () => void;
@@ -12,7 +12,12 @@ type Props = {
 
 const SIDE_WIDTH = 56; // matches IconButton touch size nicely
 
-const CameraHeader: React.FC<Props> = ({ onClose, flashOn, onToggleFlash, timerText }) => {
+const CameraHeader: React.FC<Props> = ({
+  onClose,
+  flashOn,
+  onToggleFlash,
+  timerText,
+}) => {
   return (
     <View style={styles.row}>
       {/* Left: Close */}
@@ -36,7 +41,11 @@ const CameraHeader: React.FC<Props> = ({ onClose, flashOn, onToggleFlash, timerT
             style={styles.timerChip}
             textStyle={styles.timerText}
             icon={() => (
-              <MaterialCommunityIcons name="record-circle" size={14} color="#ff3b30" />
+              <MaterialCommunityIcons
+                name="record-circle"
+                size={14}
+                color="#ff3b30"
+              />
             )}
           >
             {timerText}

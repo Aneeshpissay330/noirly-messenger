@@ -1,14 +1,14 @@
 // app/(tabs)/personal/index.tsx
-import React, { useEffect } from 'react';
-import { FlatList, StyleSheet, View, Pressable } from 'react-native';
-import { useTheme } from 'react-native-paper';
 import MaterialCommunityIcons from '@react-native-vector-icons/material-design-icons';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import ChatItem from '../../../components/ChatItem';
-import { ensureAvatar } from '../../../utils/chat';
-import { useSelfChatRow } from '../../../hooks/useSelfChat';
+import React, { useEffect } from 'react';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectChatRows, syncMyChats, clearChats } from '../../../features/chat';
+import ChatItem from '../../../components/ChatItem';
+import { clearChats, selectChatRows, syncMyChats } from '../../../features/chat';
+import { useSelfChatRow } from '../../../hooks/useSelfChat';
+import { ensureAvatar } from '../../../utils/chat';
 
 type RootNavigation = { ChatView: { id: string; type?: 'group'; name?: string; avatar?: string }; ContactScreen: undefined };
 

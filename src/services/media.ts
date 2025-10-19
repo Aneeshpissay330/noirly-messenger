@@ -1,6 +1,6 @@
 // services/media.ts
-import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
 import { Platform } from 'react-native';
 
 export type UploadedFile = {

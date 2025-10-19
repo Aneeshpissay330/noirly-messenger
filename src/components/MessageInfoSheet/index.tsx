@@ -1,7 +1,7 @@
 // src/components/MessageInfoSheet/index.tsx
 import React, { useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Modal, Portal, Card, Text, Divider, useTheme, IconButton } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Card, Divider, IconButton, Modal, Portal, Text, useTheme } from 'react-native-paper';
 import type { Message } from '../../types/chat';
 
 type Props = {
