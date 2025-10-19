@@ -8,12 +8,13 @@ import type {
 export const SPACING = 8;
 export const NUM_COLUMNS = 3;
 export const SCREEN_WIDTH = Dimensions.get('window').width;
-export const ITEM_SIZE = useMemoItemSize();
 
-export function useMemoItemSize() {
+function calculateItemSize() {
   const w = SCREEN_WIDTH - SPACING * (NUM_COLUMNS + 1);
   return Math.floor(w / NUM_COLUMNS);
 }
+
+export const ITEM_SIZE = calculateItemSize();
 
 /**
  * Check or request necessary permissions for accessing media on Android.
