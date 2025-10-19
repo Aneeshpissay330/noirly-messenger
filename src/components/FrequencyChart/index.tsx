@@ -2,7 +2,7 @@ import { RoundedRect, Canvas as SKCanvas } from '@shopify/react-native-skia';
 import React, { useMemo, useState } from 'react';
 import { LayoutChangeEvent } from 'react-native';
 import { FFT_SIZE, GROUP_QUANTITY, PLAYER_WIDTH } from '../../utils/audio';
-import { colors } from '../../theme';
+import { useTheme } from '../../theme';
 import { useSharedValue } from 'react-native-reanimated';
 
 interface Point {
@@ -24,6 +24,7 @@ interface Size {
 }
 
 export const FrequencyChart: React.FC<ChartProps> = props => {
+  const theme = useTheme();
   const size = useSharedValue<Size>({ width: 0, height: 0 });
   const { data, dataSize } = props;
   const { width, height } = size.value;
@@ -45,12 +46,12 @@ export const FrequencyChart: React.FC<ChartProps> = props => {
       const y1 = height;
       const y2 = height - height * (avg / FFT_SIZE / 2);
 
-      const color = colors.primary;
+      const color = theme.colors?.primary || '#000000';
       p.push({ x1: x, y1, x2: x, y2, color });
       runningTotal = 0;
     }
     return p;
-  }, [size, data, dataSize]);
+  }, [size, data, dataSize, theme.colors?.primary]);
 
   return (
     <SKCanvas
