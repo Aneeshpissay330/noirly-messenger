@@ -15,7 +15,7 @@ type ChatItemProps = {
   lastMessage: string;
   date: string;
   unreadCount: number;
-  pinned?: boolean; // deprecated: chat-level pin (unused)
+  _pinned?: boolean; // deprecated: chat-level pin (unused)
   online?: boolean;
   showDivider?: boolean;
   onPress?: (event: GestureResponderEvent) => void;
@@ -27,7 +27,7 @@ export default function ChatItem({
   lastMessage,
   date,
   unreadCount,
-  pinned = false, // deprecated: chat-level pin (unused)
+  _pinned = false, // deprecated: chat-level pin (unused)
   online = false,
   showDivider = true,
   onPress,

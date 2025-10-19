@@ -1,7 +1,6 @@
 import React from 'react';
-import { PaperProvider, Text } from 'react-native-paper';
+import { PaperProvider } from 'react-native-paper';
 import { lightTheme, darkTheme } from './src/theme';
-import Auth from './src/screens/PhoneLoginScreen';
 import Navigation from './src/navigation';
 import { NavigationContainer } from '@react-navigation/native';
 import { navigationRef } from './src/navigation/navigationRef';

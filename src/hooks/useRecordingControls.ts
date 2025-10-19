@@ -47,7 +47,7 @@ export function useRecordingControls(
         }
       }
     }
-  }, [mode, flashOn, isRecording, onPhoto, onVideo]);
+  }, [cameraRef, mode, flashOn, isRecording, onPhoto, onVideo]);
 
   return { isRecording, onShoot };
 }

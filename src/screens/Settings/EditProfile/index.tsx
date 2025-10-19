@@ -1,7 +1,7 @@
 // screens/Settings/EditProfile/index.tsx
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { Alert, ScrollView, View } from 'react-native';
 import {
   Avatar,
@@ -37,7 +37,7 @@ const EditProfile = () => {
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
   const [photoActionsVisible, setPhotoActionsVisible] = useState(false);
-  const [qrVisible, setQrVisible] = useState(false);
+  const [_qrVisible, _setQrVisible] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const authUser = auth().currentUser;
@@ -71,7 +71,7 @@ const EditProfile = () => {
   const normalizeUsername = (val: string) =>
     val.toLowerCase().replace(/[^a-z0-9_]/g, '');
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     try {
       setSaving(true);
       await updateUserProfile({
@@ -86,7 +86,7 @@ const EditProfile = () => {
     } finally {
       setSaving(false);
     }
-  };
+  }, [displayName, username, bio, photoUri, navigation]);
 
   const changeAvatarFromGallery = async () => {
     try {

@@ -61,7 +61,7 @@ export default function PersonalChatContact() {
         <Divider />
         <ChatSettings
           notificationsEnabled
-          onToggleNotifications={v => {}}
+          onToggleNotifications={_v => {}}
           onClearChat={() => {}}
         />
       </ScrollView>

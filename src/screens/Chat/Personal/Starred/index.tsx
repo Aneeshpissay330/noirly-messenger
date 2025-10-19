@@ -1,13 +1,13 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { FlatList, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useAppDispatch, useAppSelector } from '../../../../app/hooks';
 import ChatBubble from '../../../../components/ChatBubble';
 import {
+  selectStarredMessagesByOther,
   toggleStarred,
 } from '../../../../features/messages';
-import ChatBubble from '../../../../components/ChatBubble';
 import type { Message } from '../../../../types/chat';
 
 // Route params for Starred screen
@@ -51,13 +51,23 @@ export default function StarredMessages() {
     [dispatch, otherUid],
   );
 
+  const containerStyle = useMemo(
+    () => ({ flex: 1, backgroundColor: theme.colors.background }),
+    [theme.colors.background],
+  );
+
+  const contentContainerStyle = useMemo(
+    () => ({ paddingVertical: 8 }),
+    [],
+  );
+
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+    <View style={containerStyle}>
       <FlatList
         data={messages}
         keyExtractor={m => m.id}
         renderItem={renderItem}
-        contentContainerStyle={{ paddingVertical: 8 }}
+        contentContainerStyle={contentContainerStyle}
       />
     </View>
   );

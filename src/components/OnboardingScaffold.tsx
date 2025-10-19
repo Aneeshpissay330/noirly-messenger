@@ -55,7 +55,7 @@ export default function OnboardingScaffold({
         return Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy);
       },
       onPanResponderRelease: (_e: GestureResponderEvent, gestureState: PanResponderGestureState) => {
-        const { dx, dy, vx } = gestureState;
+        const { dx, vx } = gestureState;
         // threshold for swipe
         const SWIPE_DISTANCE = 60;
         const SWIPE_VELOCITY = 0.2;

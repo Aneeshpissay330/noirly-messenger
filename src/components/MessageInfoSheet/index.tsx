@@ -8,7 +8,7 @@ type Props = {
   visible: boolean;
   onDismiss: () => void;
   message: Message | null;
-  meUid?: string | null;
+  _meUid?: string | null;
   otherUid?: string | null;
 };
 
@@ -32,7 +32,7 @@ function formatTime(iso?: string) {
   }
 }
 
-export default function MessageInfoSheet({ visible, onDismiss, message, meUid, otherUid }: Props) {
+export default function MessageInfoSheet({ visible, onDismiss, message,   _meUid, otherUid }: Props) {
   const theme = useTheme();
 
   const sentAt = useMemo(() => (message ? formatTime(message.createdAt) : '—'), [message]);

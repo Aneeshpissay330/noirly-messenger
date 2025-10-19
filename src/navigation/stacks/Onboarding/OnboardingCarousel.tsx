@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import {
   Dimensions,
@@ -22,7 +21,6 @@ const { width } = Dimensions.get('window');
 
 export default function OnboardingCarousel() {
   const insets = useSafeAreaInsets();
-  const nav = useNavigation() as any;
   const theme = useTheme();
   const colors = (theme as any)?.colors ?? {};
   const scrollRef = React.useRef<ScrollView | null>(null);
@@ -94,13 +92,13 @@ export default function OnboardingCarousel() {
         scrollEventThrottle={16}
         contentContainerStyle={{ width: cards.length * width }}
       >
-        {cards.map((c, i) => (
+        {cards.map((c, _i) => (
           <View key={c.id} style={[styles.slide, { width }]}>            
             <Image source={{ uri: c.image }} style={styles.image} resizeMode="contain" />
             <View style={styles.slideText}>
               <Text style={[styles.title, { color: colors.onSurface ?? '#1E1E28' }]}>{c.title}</Text>
-              {c.lines.map((l, j) => (
-                <Text key={j} style={[styles.subtitle, { color: colors.onSurfaceVariant ?? '#8A8A9E' }]}>{l}</Text>
+              {c.lines.map((l, _j) => (
+                <Text key={_j} style={[styles.subtitle, { color: colors.onSurfaceVariant ?? '#8A8A9E' }]}>{l}</Text>
               ))}
             </View>
           </View>

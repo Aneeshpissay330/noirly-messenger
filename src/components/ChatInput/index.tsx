@@ -24,14 +24,14 @@ export default function ChatInput({
   const theme = useTheme();
   const [text, setText] = useState('');
   const [attachOpen, setAttachOpen] = useState(false);
-  const [showEmojiPopup, setShowEmojiPopup] = useState(false);
+  const [_showEmojiPopup, _setShowEmojiPopup] = useState(false);
   const inputRef = useRef<any>(null);
 
   const handleSend = () => {
     if (!text.trim()) return;
     onSend(text.trim());
     setText('');
-    setShowEmojiPopup(false);
+    _setShowEmojiPopup(false);
   };
 
   const insertEmoji = (emoji: string) => {
@@ -52,7 +52,7 @@ export default function ChatInput({
     }, 3000); // Stop typing after inactivity
 
     return () => clearTimeout(timeout);
-  }, [text]);
+  }, [text, onTyping]);
   return (
     <View
       style={[styles.wrap, { borderTopColor: theme.colors.outlineVariant }]}

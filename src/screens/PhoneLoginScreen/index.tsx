@@ -12,7 +12,7 @@ import {
 } from 'react-native-paper';
 import { usePhoneAuth } from '../../hooks/usePhoneSignIn';
 
-const HERO_IMAGE_URL =
+// const HERO_IMAGE_URL =
   'https://img.freepik.com/free-vector/sign-page-abstract-concept-illustration_335657-2249.jpg'; // example from Freepik "Login illustration" gallery
 
 export default function PhoneLoginScreen() {

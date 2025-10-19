@@ -1,9 +1,7 @@
 import Slider from '@react-native-community/slider';
-import Slider from '@react-native-community/slider';
 import Icon from '@react-native-vector-icons/material-design-icons';
 import React, { useMemo, useState } from 'react';
 import {
-  Alert,
   StyleSheet,
   TouchableOpacity,
   View
@@ -11,6 +9,12 @@ import {
 import RNFS from 'react-native-fs';
 import { Text, useTheme } from 'react-native-paper';
 import { useAudioPlayer } from '../../hooks/useAudioPlayer';
+
+type Props = {
+  filePath: string;
+  _onDeleted?: (filePath: string) => void;
+  _autoPlay?: boolean;
+};
 
 const fmt = (ms: number) => {
   const sec = Math.max(0, Math.floor(ms / 1000));
@@ -25,8 +29,8 @@ const fmt = (ms: number) => {
 
 export default function AudioFilePlayer({
   filePath,
-  onDeleted,
-  autoPlay,
+  _onDeleted,
+  _autoPlay,
 }: Props) {
   const theme = useTheme();
 
@@ -44,7 +48,7 @@ export default function AudioFilePlayer({
     progress,
     togglePlayPause,
     seekTo,
-    stop,
+    // stop,
     loadError,
   } = useAudioPlayer({ audioUrl: sourceUrl });
 
@@ -91,18 +95,18 @@ export default function AudioFilePlayer({
   const [drag, setDrag] = useState<number | null>(null);
   const value = drag ?? progress;
 
-  const deleteFile = async () => {
-    try {
-      await stop();
-    } catch {}
-    try {
-      const exists = await RNFS.exists(filePath);
-      if (exists) await RNFS.unlink(filePath);
-      onDeleted?.(filePath);
-    } catch (e: any) {
-      Alert.alert('Delete failed', e?.message ?? 'Could not delete the file.');
-    }
-  };
+  // const _deleteFile = async () => {
+  //   try {
+  //     await stop();
+  //   } catch {}
+  //   try {
+  //     const exists = await RNFS.exists(filePath);
+  //     if (exists) await RNFS.unlink(filePath);
+  //     onDeleted?.(filePath);
+  //   } catch (e: any) {
+  //     Alert.alert('Delete failed', e?.message ?? 'Could not delete the file.');
+  //   }
+  // };
 
   return (
     <View

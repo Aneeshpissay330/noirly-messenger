@@ -5,7 +5,7 @@ import { Dimensions, Image, View } from 'react-native';
 import { Card, Snackbar, Text, useTheme } from 'react-native-paper';
 import { useGoogleAuth } from '../../hooks/useGoogleSignIn';
 
-export default function GoogleLoginScreen({ navigation }: any) {
+export default function GoogleLoginScreen({ _navigation }: any) {
   const theme = useTheme();
   const { signInOrLink, loading } = useGoogleAuth();
   const [snack, setSnack] = useState({ visible: false, message: '' });

@@ -1,5 +1,6 @@
 import { RoundedRect, Canvas as SKCanvas } from '@shopify/react-native-skia';
 import React, { useMemo } from 'react';
+import { StyleSheet } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 import { useTheme } from '../../theme';
 import { FFT_SIZE, GROUP_QUANTITY, PLAYER_WIDTH } from '../../utils/audio';
@@ -25,7 +26,7 @@ interface Size {
 export const FrequencyChart: React.FC<ChartProps> = props => {
   const theme = useTheme();
   const size = useSharedValue<Size>({ width: 0, height: 0 });
-  const { data, dataSize } = props;
+  const { data } = props;
   const { width, height } = size.value;
 
   const barWidth = width / (FFT_SIZE / 2 / GROUP_QUANTITY) - 5;
@@ -50,15 +51,11 @@ export const FrequencyChart: React.FC<ChartProps> = props => {
       runningTotal = 0;
     }
     return p;
-  }, [size, data, dataSize, theme.colors?.primary]);
+  }, [data, height, theme.colors?.primary]);
 
   return (
     <SKCanvas
-      style={{
-        flex: 2,
-        width: PLAYER_WIDTH,
-        alignSelf: 'center',
-      }}
+      style={styles.canvas}
       onSize={size}
     >
       {points.map((point, index) => (
@@ -75,3 +72,11 @@ export const FrequencyChart: React.FC<ChartProps> = props => {
     </SKCanvas>
   );
 };
+
+const styles = StyleSheet.create({
+  canvas: {
+    flex: 2,
+    width: PLAYER_WIDTH,
+    alignSelf: 'center',
+  },
+});

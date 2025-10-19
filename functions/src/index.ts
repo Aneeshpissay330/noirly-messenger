@@ -48,7 +48,8 @@ async function sendNotificationToRecipients(opts: {
   recipients: string[];
   chatType: 'dm' | 'group';
 }) {
-  const { chatId, messageId, senderId, messageType, messageText, recipients, chatType } = opts;
+  const { chatId, messageId, senderId, messageType, recipients, chatType } = opts;
+  // const messageText = opts.messageText; // unused in current implementation
 
   const senderName = (await getUserDisplayName(senderId)) || 'New message';
   // Use a single, consistent message body for all message types

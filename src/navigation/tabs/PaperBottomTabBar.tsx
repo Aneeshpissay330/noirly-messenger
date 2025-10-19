@@ -3,7 +3,6 @@ import { CommonActions } from '@react-navigation/native';
 import * as React from 'react';
 import {
   BottomNavigation,
-  useTheme as usePaperTheme,
 } from 'react-native-paper';
 import { MONO, useTheme } from '../../theme';
 
@@ -14,7 +13,6 @@ export default function PaperBottomTabBar({
   insets,
 }: BottomTabBarProps) {
   const theme = useTheme();
-  const paperTheme = usePaperTheme();
 
   return (
     <BottomNavigation.Bar

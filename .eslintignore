@@ -1,0 +1,16 @@
+# Compiled output
+functions/lib/
+
+# Node modules
+node_modules/
+
+# Build outputs
+build/
+dist/
+lib/
+
+# Generated files
+*.generated.*
+
+# Coverage reports
+coverage/

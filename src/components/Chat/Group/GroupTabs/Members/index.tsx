@@ -72,9 +72,9 @@ export default function Members() {
       <ScrollView>
         <GroupMemberList
           members={filteredMembers}
-          onPromote={id => {}}
-          onDemote={id => {}}
-          onRemove={id => {}}
+          onPromote={_id => {}}
+          onDemote={_id => {}}
+          onRemove={_id => {}}
         />
       </ScrollView>
     </View>

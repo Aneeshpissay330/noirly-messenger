@@ -1,10 +1,9 @@
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React from 'react';
 import { View } from 'react-native';
 import { useTheme } from '../../theme';
 import Personal from './Personal';
 
-const Tab = createMaterialTopTabNavigator();
+// const Tab = createMaterialTopTabNavigator();
 
 const Chat = () => {
   const theme = useTheme();

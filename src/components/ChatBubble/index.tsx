@@ -16,7 +16,7 @@ import SelectionCheckbox from './SelectionCheckbox';
 type Props = {
   message: Message;
   isMe: boolean;
-  showAvatar?: boolean;
+  _showAvatar?: boolean;
   showName?: boolean;
   otherUid?: string; // for Info: whose delivery/read times to show
   onRetry?: (messageId: string) => void; // optional retry handler
@@ -35,7 +35,7 @@ type Props = {
 export default function ChatBubble({
   message,
   isMe,
-  showAvatar = !isMe,
+  _showAvatar = !isMe,
   showName = false,
   onRetry,
   onOpenMedia,

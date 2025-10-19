@@ -421,7 +421,6 @@ export const deleteMessageNow = createAsyncThunk<
   } else {
     // For "delete for me", just mark as deleted in local state
     // The selector will filter it out
-    const state = thunkApi.getState() as any;
     const currentUserId = (await import('@react-native-firebase/auth')).default().currentUser?.uid;
     
     if (currentUserId) {

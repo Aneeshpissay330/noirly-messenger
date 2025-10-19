@@ -50,7 +50,6 @@ import {
   openDmChat,
   selectChatIdByOther,
   selectMessagesByOther,
-  selectMsgStatusByOther,
   selectPresenceByOther,
   sendFileNow,
   sendImageNow,
@@ -98,16 +97,12 @@ export default function ChatView() {
   const messages = useAppSelector(s => selectMessagesByOther(s, otherUid, me));
   const chatId = useAppSelector(s => selectChatIdByOther(s, otherUid));
   const presenceText = useAppSelector(s => selectPresenceByOther(s, otherUid));
-  const msgStatus = useAppSelector(s => selectMsgStatusByOther(s, otherUid));
   const starredIds = useAppSelector(s => (s.messages.byOtherUid[otherUid]?.starredIds ?? []));
   const starredCount = starredIds.length;
 
   // UI env (for header offsets if you later add KeyboardAvoidingView)
   const isKeyboardOpen = useKeyboardStatus();
   const headerHeight = useHeaderHeight();
-  const keyboardOffset = !isKeyboardOpen
-    ? headerHeight
-    : headerHeight - Dimensions.get('window').height * 0.04;
 
   // Derived
   const isSelf = useMemo(
@@ -188,7 +183,7 @@ export default function ChatView() {
         const id2 = chatIdRef.current;
         if (id2) dispatch(setTypingNow({ chatId: id2, typing: false }));
       };
-    }, [dispatch, chatIdRef.current]),
+    }, [dispatch]),
   );
 
   // We'll build a flattened list mixing date-separator "items" with messages.
@@ -227,11 +222,11 @@ export default function ChatView() {
     return out;
   }, [messages]);
 
-  const isDateItem = (i: ChatListItem): i is DateItem => (i as any).kind === 'date';
+  const isDateItem = useCallback((i: ChatListItem): i is DateItem => (i as any).kind === 'date', []);
 
   const keyExtractor = useCallback((item: ChatListItem) => {
     return isDateItem(item) ? item.id : item.id;
-  }, []);
+  }, [isDateItem]);
 
   const renderItem: ListRenderItem<ChatListItem> = useCallback(
     ({ item, index }) => {
@@ -278,10 +273,29 @@ export default function ChatView() {
           showAvatar={showAvatar}
           showName={isGroup && !isMe}
           onOpenMedia={onOpenMedia}
-          onLongPress={handleLongPress}
+          onLongPress={(message: Message) => {
+            console.log('Long press on message:', { id: message.id, type: message.type, userId: message.userId, senderId: message.senderId });
+            if (!isSelectionMode) {
+              // Enter selection mode and select this message
+              setIsSelectionMode(true);
+              setSelectedMessages(new Set([message.id]));
+            }
+          }}
           isSelectionMode={isSelectionMode}
           isSelected={selectedMessages.has(message.id)}
-          onToggleSelect={handleMessageToggle}
+          onToggleSelect={(messageId: string) => {
+            if (!isSelectionMode) return;
+            
+            setSelectedMessages(prev => {
+              const newSet = new Set(prev);
+              if (newSet.has(messageId)) {
+                newSet.delete(messageId);
+              } else {
+                newSet.add(messageId);
+              }
+              return newSet;
+            });
+          }}
           onToggleStar={(msg) => {
             dispatch(toggleStarred({ otherUid, id: msg.id }));
           }}
@@ -289,17 +303,8 @@ export default function ChatView() {
         />
       );
     },
-    [listData, me, isGroup, mediaItems, nav, otherName, isSelectionMode, selectedMessages],
+    [listData, me, isGroup, mediaItems, nav, otherName, isSelectionMode, selectedMessages, dispatch, isDateItem, otherUid, starredIds],
   );
-
-  const handleLongPress = useCallback((message: Message) => {
-    console.log('Long press on message:', { id: message.id, type: message.type, userId: message.userId, senderId: message.senderId });
-    if (!isSelectionMode) {
-      // Enter selection mode and select this message
-      setIsSelectionMode(true);
-      setSelectedMessages(new Set([message.id]));
-    }
-  }, [isSelectionMode]);
 
   const handleDeleteForMe = useCallback(async () => {
     if ((!selectedMessage && selectedMessages.size === 0) || !chatId) return;
@@ -344,7 +349,7 @@ export default function ChatView() {
     setSelectedMessage(null);
     setIsSelectionMode(false);
     setSelectedMessages(new Set());
-  }, [selectedMessage, selectedMessages, chatId, otherUid, dispatch, messages]);
+  }, [selectedMessage, selectedMessages, chatId, otherUid, dispatch, messages, me]);
 
   const handleDeleteForEveryone = useCallback(async () => {
     if ((!selectedMessage && selectedMessages.size === 0) || !chatId) return;
@@ -403,26 +408,6 @@ export default function ChatView() {
     setDeleteModalVisible(false);
     setSelectedMessage(null);
   }, []);
-
-  const handleMessageToggle = useCallback((messageId: string) => {
-    if (!isSelectionMode) return;
-    
-    setSelectedMessages(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(messageId)) {
-        newSet.delete(messageId);
-      } else {
-        newSet.add(messageId);
-      }
-      
-      // Exit selection mode if no messages selected
-      if (newSet.size === 0) {
-        setIsSelectionMode(false);
-      }
-      
-      return newSet;
-    });
-  }, [isSelectionMode]);
 
   const handleExitSelectionMode = useCallback(() => {
     setIsSelectionMode(false);

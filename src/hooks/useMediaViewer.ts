@@ -14,7 +14,7 @@ interface UseMediaViewerProps {
   title: string;
 }
 
-export const useMediaViewer = ({ items, initialIndex, title }: UseMediaViewerProps) => {
+export const useMediaViewer = ({ items, initialIndex, title: _title }: UseMediaViewerProps) => {
   const navigation = useNavigation();
   const [index, setIndex] = useState(
     Math.min(Math.max(0, initialIndex), Math.max(0, items.length - 1)),
@@ -108,7 +108,7 @@ export const useMediaViewer = ({ items, initialIndex, title }: UseMediaViewerPro
     setIndex(newIndex);
   }, []);
 
-  const onTap = useCallback((_: any, itemIndex: number) => {
+  const onTap = useCallback((_: any, _itemIndex: number) => {
     // Handle tap event
   }, []);
 

@@ -1,6 +1,6 @@
 import auth, { getAuth, signOut } from '@react-native-firebase/auth';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { ScrollView, View } from 'react-native';
 import {
   Avatar,
@@ -21,15 +21,6 @@ const Settings = () => {
   const { signOutGoogle } = useGoogleAuth();
   const { userDoc } = useUserDoc();
   const authUser = auth().currentUser;
-  // Local UI state mirroring the toggles/choices in settings.txt
-  const [themeChoice, setThemeChoice] = useState<'system' | 'light' | 'dark'>(
-    'system',
-  );
-  const [msgNotifs, setMsgNotifs] = useState(true);
-  const [vibrate, setVibrate] = useState(true);
-  const [mentions, setMentions] = useState(true);
-  const [readReceipts, setReadReceipts] = useState(true);
-  const [autoSync, setAutoSync] = useState(true);
 
   const navigation = useNavigation<NavigationProp<RootNavigationParamList>>();
   const sectionTitleStyle = useMemo(
@@ -51,14 +42,49 @@ const Settings = () => {
     }
   };
 
-  const open = (what: string) => () => {}; // Placeholder for opening different sections
-
   const title = userDoc?.displayName ?? authUser?.displayName ?? 'Your profile';
   const description =
     userDoc?.email ?? authUser?.email ?? authUser?.phoneNumber ?? '';
   const avatarUri = userDoc?.photoURL ?? authUser?.photoURL ?? undefined;
+
+  const containerStyle = useMemo(
+    () => ({ flex: 1, backgroundColor: theme.colors.background }),
+    [theme.colors.background],
+  );
+
+  const logoutTitleStyle = useMemo(
+    () => ({ color: theme.colors.error }),
+    [theme.colors.error],
+  );
+
+  const AvatarComponent = useMemo(
+    () => (props: any) =>
+      avatarUri ? (
+        <Avatar.Image
+          size={48}
+          source={{ uri: avatarUri }}
+          {...props}
+        />
+      ) : (
+        <Avatar.Icon size={48} icon="account" {...props} />
+      ),
+    [avatarUri],
+  );
+
+  const ChevronRightIcon = useMemo(
+    () => (props: any) => <List.Icon {...props} icon="chevron-right" />,
+    [],
+  );
+
+  const LogoutIcon = useMemo(
+    () => (props: any) => (
+      <List.Icon {...props} icon="logout" color={theme.colors.error} />
+    ),
+    [theme.colors.error],
+  );
+
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+    <View style={containerStyle}>
       <ScrollView>
         <Text variant="labelSmall" style={sectionTitleStyle}>
           ACCOUNT
@@ -68,18 +94,8 @@ const Settings = () => {
             onPress={() => navigation.navigate('EditProfile')}
             title={title}
             description={description}
-            left={props =>
-              avatarUri ? (
-                <Avatar.Image
-                  size={48}
-                  source={{ uri: avatarUri }}
-                  {...props}
-                />
-              ) : (
-                <Avatar.Icon size={48} icon="account" {...props} />
-              )
-            }
-            right={props => <List.Icon {...props} icon="chevron-right" />}
+            left={AvatarComponent}
+            right={ChevronRightIcon}
           />
         </List.Section>
 
@@ -252,10 +268,8 @@ const Settings = () => {
         <List.Section>
           <List.Item
             title="Logout"
-            titleStyle={{ color: theme.colors.error }}
-            left={props => (
-              <List.Icon {...props} icon="logout" color={theme.colors.error} />
-            )}
+            titleStyle={logoutTitleStyle}
+            left={LogoutIcon}
             onPress={handleLogout}
           />
         </List.Section>

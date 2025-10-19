@@ -15,13 +15,6 @@ export default function GroupChatProfileScreen() {
   const [sendPolicy, setSendPolicy] = React.useState<'all' | 'admins'>('all');
   const [editPolicy, setEditPolicy] = React.useState<'admins' | 'all'>('admins');
 
-  const members = [
-    { id: '1', name: 'Alex Chen', role: 'admin', presence: 'online', avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-3.jpg' },
-    { id: '2', name: 'Emma Wilson', role: 'moderator', presence: 'online', avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg' },
-    { id: '3', name: 'Sarah Johnson', role: 'member', presence: '2h ago', avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg' },
-    { id: '4', name: 'Mike Torres', role: 'member', presence: 'offline', avatar: 'https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-4.jpg' },
-  ];
-
   return (
     <ScrollView style={{ backgroundColor: theme.colors.background }} contentContainerStyle={styles.container}>
       {/* Header/Profile (mirrors personal ContactProfile composition) */}

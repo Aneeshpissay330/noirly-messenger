@@ -41,7 +41,7 @@ export function useSelfChatRow(): ChatRow | null {
             unreadCount: meta.unread[userDoc.uid] ?? 0,
           });
         })
-        .catch(e => {
+        .catch(_e => {
           // No self chat found
         });
     }
