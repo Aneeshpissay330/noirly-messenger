@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { SegmentedButtons, useTheme } from 'react-native-paper';
 import { Mode } from '../../types/camera';
 
@@ -7,6 +7,13 @@ type Props = {
   mode: Mode;
   onChangeMode: (m: Mode) => void;
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: '70%',
+    alignSelf: 'center',
+  },
+});
 
 const ModeSwitcher: React.FC<Props> = ({ mode, onChangeMode }) => {
   const theme = useTheme();
@@ -19,7 +26,7 @@ const ModeSwitcher: React.FC<Props> = ({ mode, onChangeMode }) => {
   );
 
   return (
-    <View style={{ width: '70%', alignSelf: 'center' }}>
+    <View style={styles.container}>
       <SegmentedButtons
         value={mode}
         onValueChange={(val) => onChangeMode(val as Mode)}

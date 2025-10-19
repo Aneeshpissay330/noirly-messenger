@@ -1,11 +1,17 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import MediaPreviewRow from '../../../../MediaPreviewRow';
 
 export default function Media() {
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <MediaPreviewRow />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

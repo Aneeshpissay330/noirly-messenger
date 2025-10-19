@@ -12,6 +12,13 @@ type Props = {
   onPickContact?: () => void;
 };
 
+// Define components outside of render function
+const CameraIcon = (props: any) => <List.Icon {...props} icon="camera" />;
+const GalleryIcon = (props: any) => <List.Icon {...props} icon="image-multiple" />;
+const DocumentIcon = (props: any) => <List.Icon {...props} icon="file" />;
+const LocationIcon = (props: any) => <List.Icon {...props} icon="map-marker" />;
+const ContactIcon = (props: any) => <List.Icon {...props} icon="account-box" />;
+
 export default function AttachmentSheet({
   visible,
   onDismiss,
@@ -35,17 +42,17 @@ export default function AttachmentSheet({
         <List.Section>
           <List.Item
             title="Camera"
-            left={p => <List.Icon {...p} icon="camera" />}
+            left={CameraIcon}
             onPress={onOpenCamera}
           />
           <List.Item
             title="Gallery"
-            left={p => <List.Icon {...p} icon="image-multiple" />}
+            left={GalleryIcon}
             onPress={onOpenGallery}
           />
           <List.Item
             title="Document"
-            left={p => <List.Icon {...p} icon="file" />}
+            left={DocumentIcon}
             onPress={onPickDocument}
           />
           {onShareLocation && (
@@ -53,7 +60,7 @@ export default function AttachmentSheet({
               <Divider />
               <List.Item
                 title="Location"
-                left={p => <List.Icon {...p} icon="map-marker" />}
+                left={LocationIcon}
                 onPress={onShareLocation}
               />
             </>
@@ -61,7 +68,7 @@ export default function AttachmentSheet({
           {onPickContact && (
             <List.Item
               title="Contact"
-              left={p => <List.Icon {...p} icon="account-box" />}
+              left={ContactIcon}
               onPress={onPickContact}
             />
           )}

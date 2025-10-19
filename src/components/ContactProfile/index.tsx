@@ -25,10 +25,10 @@ export default function ContactProfile(props: Props) {
         ) : (
           <Avatar.Text size={96} label={name.split(' ').map((n) => n[0]).join('').slice(0, 2)} />
         )}
-        {online && <View style={[styles.badge, { borderColor: theme.colors.surface, backgroundColor: '#4CAF50' }]} />}
+        {online && <View style={[styles.badge, styles.onlineBadge, { borderColor: theme.colors.surface }]} />}
       </View>
       <Text variant="headlineSmall" style={styles.name} numberOfLines={1}>{name}</Text>
-      <Text style={{ color: theme.colors.secondary, marginBottom: 12 }}>{status}</Text>
+      <Text style={[styles.statusText, { color: theme.colors.secondary }]}>{status}</Text>
 
       <View style={styles.actionsRow}>
         <FAB 
@@ -36,11 +36,11 @@ export default function ContactProfile(props: Props) {
           icon="phone" 
           onPress={onCall} 
           style={[
-            styles.fab, 
+            styles.fab,
+            styles.fabWithBorder,
             { 
               backgroundColor: theme.colors.surface,
               borderColor: theme.colors.outline,
-              borderWidth: 1,
             }
           ]}
           color={theme.colors.primary}
@@ -51,10 +51,10 @@ export default function ContactProfile(props: Props) {
           onPress={onVideoCall} 
           style={[
             styles.fab,
+            styles.fabWithBorder,
             { 
               backgroundColor: theme.colors.surface,
               borderColor: theme.colors.outline,
-              borderWidth: 1,
             }
           ]}
           color={theme.colors.primary}
@@ -65,10 +65,10 @@ export default function ContactProfile(props: Props) {
           onPress={onMute} 
           style={[
             styles.fab,
-            { 
+            styles.fabWithBorder,
+            {
               backgroundColor: theme.colors.surface,
               borderColor: theme.colors.outline,
-              borderWidth: 1,
             }
           ]}
           color={theme.colors.primary}
@@ -78,11 +78,11 @@ export default function ContactProfile(props: Props) {
           icon="account-cancel" 
           onPress={onBlock} 
           style={[
-            styles.fab, 
+            styles.fab,
+            styles.fabWithBorder,
             { 
               backgroundColor: theme.colors.surface,
               borderColor: theme.colors.error,
-              borderWidth: 1,
             }
           ]}
           color={theme.colors.error}
@@ -105,7 +105,16 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     // backgroundColor will be set dynamically in component
   },
+  onlineBadge: {
+    backgroundColor: '#4CAF50',
+  },
+  statusText: {
+    marginBottom: 12,
+  },
   name: { fontWeight: '700', textAlign: 'center' },
   actionsRow: { flexDirection: 'row', gap: 12, marginTop: 6 },
   fab: { marginHorizontal: 6 },
+  fabWithBorder: {
+    borderWidth: 1,
+  },
 });

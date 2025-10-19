@@ -96,7 +96,7 @@ export default function ChatItem({
       {/* Paper Divider below the item */}
       {showDivider && (
         <Divider
-          style={{ backgroundColor: theme.colors.primary, opacity: 0.2 }}
+          style={[styles.divider, { backgroundColor: theme.colors.primary }]}
         />
       )}
     </>
@@ -173,5 +173,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontWeight: '600',
+  },
+  divider: {
+    opacity: 0.2,
   },
 });

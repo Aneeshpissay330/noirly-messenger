@@ -79,7 +79,7 @@ export default function OnboardingCarousel() {
           <Text style={[styles.skipText, { color: colors.primary ?? '#7A6FF0' }]}>Skip</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Text style={{ color: colors.onSurfaceVariant ?? '#8A8A9E', fontSize: 20 }}>✕</Text>
+          <Text style={[styles.closeText, { color: colors.onSurfaceVariant ?? '#8A8A9E' }]}>✕</Text>
         </TouchableOpacity>
       </View>
 
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
   topNav: { height: 64, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20 },
   skipText: { fontSize: 16, fontWeight: '600' },
   closeButton: { width: 40, height: 40, alignItems: 'center', justifyContent: 'center' },
+  closeText: { fontSize: 20 },
   slide: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 },
   image: { width: Math.min(320, width - 80), height: Math.min(320, width - 80), marginBottom: 20 },
   slideText: { alignItems: 'center' },

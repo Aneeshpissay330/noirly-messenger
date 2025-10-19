@@ -19,7 +19,7 @@ export default function MessageMeta({
   isStarred,
 }: Props) {
   return (
-    <View style={[styles.metaRow, { justifyContent: 'flex-end' }]}>
+    <View style={[styles.metaRow, styles.metaRowEnd]}>
       {isStarred ? (
         <MaterialCommunityIcons
           name="star"
@@ -31,7 +31,7 @@ export default function MessageMeta({
                 : 'rgba(255,255,255,0.9)'
               : theme.colors.secondary
           }
-          style={{ marginRight: 6, opacity: 0.9 }}
+          style={[styles.starIcon, { color: isMe ? theme.dark ? MONO.gray300 : 'rgba(255,255,255,0.9)' : theme.colors.secondary }]}
         />
       ) : null}
       <Text
@@ -56,7 +56,7 @@ export default function MessageMeta({
         })()}
       </Text>
       {isMe ? (
-        <View style={{ marginLeft: 6 }}>
+        <View style={styles.checkContainer}>
           <Text>✓✓</Text>
         </View>
       ) : null}
@@ -70,7 +70,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 6,
   },
+  metaRowEnd: {
+    justifyContent: 'flex-end',
+  },
+  starIcon: {
+    marginRight: 6,
+    opacity: 0.9,
+  },
   timeText: {
     fontSize: 12,
+  },
+  checkContainer: {
+    marginLeft: 6,
   },
 });

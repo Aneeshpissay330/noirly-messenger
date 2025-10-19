@@ -7,7 +7,6 @@ import {
   ITEM_SIZE,
   MinimalPhoto,
   NUM_COLUMNS,
-  SPACING,
 } from '../../utils/camera-roll';
 import PhotoItem from '../PhotoItem';
 import { styles } from './styles';
@@ -23,11 +22,7 @@ const AlbumCard = React.memo(({ album }: { album: AlbumWithPhotos }) => {
 
       return (
         <View
-          style={{
-            width: ITEM_SIZE,
-            height: ITEM_SIZE,
-            marginRight: isLastCol ? 0 : SPACING,
-          }}
+          style={isLastCol ? styles.photoItemContainer : styles.photoItemContainerWithMargin}
         >
           <PhotoItem item={item} size={ITEM_SIZE * 0.8} />
         </View>

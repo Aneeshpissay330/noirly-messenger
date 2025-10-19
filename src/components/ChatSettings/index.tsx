@@ -8,6 +8,15 @@ type Props = {
   onClearChat: () => void;
 };
 
+// Move these components outside the render function
+const NotificationSwitch = ({ value, onValueChange }: { value: boolean; onValueChange: (value: boolean) => void }) => (
+  <Switch value={value} onValueChange={onValueChange} />
+);
+
+const EncryptionIcon = ({ iconColor }: { iconColor: string }) => (
+  <IconButton icon="lock" iconColor={iconColor} onPress={() => {}} />
+);
+
 export default function ChatSettings({ notificationsEnabled, onToggleNotifications, onClearChat }: Props) {
   const theme = useTheme();
 
@@ -18,26 +27,37 @@ export default function ChatSettings({ notificationsEnabled, onToggleNotificatio
     ]);
   };
 
+  const renderNotificationIcon = (props: any) => <List.Icon {...props} icon="bell" />;
+  const renderEncryptionIcon = (props: any) => <List.Icon {...props} icon="shield-lock" />;
+  const renderDeleteIcon = (props: any) => <List.Icon {...props} color={theme.colors.error} icon="trash-can" />;
+
+  // Define these functions to avoid nested components
+  const renderNotificationSwitch = () => (
+    <NotificationSwitch value={notificationsEnabled} onValueChange={onToggleNotifications} />
+  );
+
+  const renderEncryptionRightIcon = () => (
+    <EncryptionIcon iconColor={theme.colors.secondary} />
+  );
+
   return (
     <View style={[styles.wrap, { backgroundColor: theme.colors.background }]}>
       <List.Item
         title="Notifications"
-        left={(p) => <List.Icon {...p} icon="bell" />}
-        right={() => (
-          <Switch value={notificationsEnabled} onValueChange={onToggleNotifications} />
-        )}
+        left={renderNotificationIcon}
+        right={renderNotificationSwitch}
       />
 
       <List.Item
         title="Encryption"
         description="Messages are end-to-end encrypted"
-        left={(p) => <List.Icon {...p} icon="shield-lock" />}
-        right={() => <IconButton icon="lock" iconColor={theme.colors.secondary} onPress={() => {}} />}
+        left={renderEncryptionIcon}
+        right={renderEncryptionRightIcon}
       />
 
       <List.Item
         title="Clear Chat"
-        left={(p) => <List.Icon {...p} color={theme.colors.error} icon="trash-can" />}
+        left={renderDeleteIcon}
         titleStyle={{ color: theme.colors.error }}
         onPress={confirmClear}
       />

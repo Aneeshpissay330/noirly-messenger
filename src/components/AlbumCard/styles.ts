@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { SPACING } from '../../utils/camera-roll';
+import { SPACING, ITEM_SIZE } from '../../utils/camera-roll';
 
 export const styles = StyleSheet.create({
   albumCard: {
@@ -8,5 +8,14 @@ export const styles = StyleSheet.create({
   },
   gridContainer: {
     paddingHorizontal: 0,
+  },
+  photoItemContainer: {
+    width: ITEM_SIZE,
+    height: ITEM_SIZE,
+  },
+  photoItemContainerWithMargin: {
+    width: ITEM_SIZE,
+    height: ITEM_SIZE,
+    marginRight: SPACING,
   },
 });

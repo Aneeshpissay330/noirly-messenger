@@ -1,6 +1,6 @@
 // screens/PhoneLoginScreen.tsx
 import React, { useState } from 'react';
-import { Dimensions, Image, KeyboardAvoidingView, useColorScheme } from 'react-native';
+import { Dimensions, Image, KeyboardAvoidingView, StyleSheet, useColorScheme } from 'react-native';
 import {
   Button,
   Card,
@@ -48,38 +48,31 @@ export default function PhoneLoginScreen() {
 
   return (
     <KeyboardAvoidingView
-      style={{
-        flex: 1,
-        padding: 20,
-        justifyContent: 'center',
-        backgroundColor: theme.colors.background,
-      }}
+      style={[
+        styles.container,
+        { backgroundColor: theme.colors.background },
+      ]}
       behavior='padding'
     >
       <Image
         source={isDark ? require('../../assets/images/dark-illustration.png') : require('../../assets/images/light-illustration.png')}
         resizeMode="contain"
-        style={{
-          width: '100%',
-          height: Dimensions.get('screen').height * 0.4,
-          marginBottom: 16,
-          borderRadius: 16,
-        }}
+        style={styles.image}
       />
 
-      <Card mode="outlined" style={{ borderRadius: 20 }}>
-        <Card.Content style={{ gap: 14 }}>
+      <Card mode="outlined" style={styles.card}>
+        <Card.Content style={styles.cardContent}>
           <Text
             variant="titleMedium"
-            style={{ color: theme.colors.primary, fontWeight: '600' }}
+            style={[styles.welcomeText, { color: theme.colors.primary }]}
           >
             Welcome!
           </Text>
-          <Text variant="bodyMedium" style={{ opacity: 0.7, marginBottom: 8 }}>
-            Sign in or get started on your journey — we’re glad you’re here.
+          <Text variant="bodyMedium" style={styles.descriptionText}>
+            Sign in or get started on your journey — we're glad you're here.
           </Text>
 
-          <Text variant="headlineSmall" style={{ fontWeight: '700' }}>
+          <Text variant="headlineSmall" style={styles.headlineText}>
             Continue with phone
           </Text>
           {!confirmResult ? (
@@ -125,9 +118,9 @@ export default function PhoneLoginScreen() {
             </>
           )}
 
-          <Divider style={{ marginVertical: 8 }} />
-          <Text variant="bodyMedium" style={{ opacity: 0.7 }}>
-            We’ll never share your number.
+          <Divider style={styles.divider} />
+          <Text variant="bodyMedium" style={styles.privacyText}>
+            We'll never share your number.
           </Text>
         </Card.Content>
       </Card>
@@ -136,10 +129,49 @@ export default function PhoneLoginScreen() {
         visible={snack.visible || !!error}
         onDismiss={() => setSnack({ visible: false, message: '' })}
         duration={3000}
-        style={{ marginBottom: 24 }}
+        style={styles.snackbar}
       >
         {error || snack.message}
       </Snackbar>
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  image: {
+    width: '100%',
+    height: Dimensions.get('screen').height * 0.4,
+    marginBottom: 16,
+    borderRadius: 16,
+  },
+  card: {
+    borderRadius: 20,
+  },
+  cardContent: {
+    gap: 14,
+  },
+  welcomeText: {
+    fontWeight: '600',
+  },
+  descriptionText: {
+    opacity: 0.7,
+    marginBottom: 8,
+  },
+  headlineText: {
+    fontWeight: '700',
+  },
+  divider: {
+    marginVertical: 8,
+  },
+  privacyText: {
+    opacity: 0.7,
+  },
+  snackbar: {
+    marginBottom: 24,
+  },
+});

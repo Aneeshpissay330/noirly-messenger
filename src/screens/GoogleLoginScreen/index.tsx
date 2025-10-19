@@ -1,7 +1,7 @@
 // GoogleLoginScreen.tsx
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin';
 import React, { useState } from 'react';
-import { Dimensions, Image, View } from 'react-native';
+import { Dimensions, Image, StyleSheet, View } from 'react-native';
 import { Card, Snackbar, Text, useTheme } from 'react-native-paper';
 import { useGoogleAuth } from '../../hooks/useGoogleSignIn';
 
@@ -22,37 +22,30 @@ export default function GoogleLoginScreen({ _navigation }: any) {
 
   return (
     <View
-      style={{
-        flex: 1,
-        padding: 20,
-        justifyContent: 'center',
-        backgroundColor: theme.colors.background,
-      }}
+      style={[
+        styles.container,
+        { backgroundColor: theme.colors.background },
+      ]}
     >
       <Image
         source={require('../../assets/images/light-illustration.png')}
         resizeMode="contain"
-        style={{
-          width: Dimensions.get('screen').width,
-          height: Dimensions.get('screen').height * 0.4,
-          marginBottom: 16,
-          borderRadius: 16,
-        }}
+        style={styles.image}
       />
 
-      <Card mode="outlined" style={{ borderRadius: 20 }}>
-        <Card.Content style={{ gap: 14 }}>
+      <Card mode="outlined" style={styles.card}>
+        <Card.Content style={styles.cardContent}>
           <Text
             variant="titleMedium"
-            style={{ color: theme.colors.primary, fontWeight: '600' }}
+            style={[styles.welcomeText, { color: theme.colors.primary }]}
           >
             Welcome!
           </Text>
-          <Text variant="bodyMedium" style={{ opacity: 0.7, marginBottom: 8 }}>
-            Sign in or get started on your journey — we’re glad you’re here.
+          <Text variant="bodyMedium" style={styles.descriptionText}>
+            Sign in or get started on your journey — we're glad you're here.
           </Text>
 
-          <Text variant="headlineSmall" style={{ fontWeight: '700' }}>
+          <Text variant="headlineSmall" style={styles.headlineText}>
             Continue with Google
           </Text>
 
@@ -61,12 +54,7 @@ export default function GoogleLoginScreen({ _navigation }: any) {
             color={GoogleSigninButton.Color.Dark}
             onPress={onPress}
             disabled={loading}
-            style={{
-              alignSelf: 'center',
-              width: '100%',
-              height: 48,
-              marginTop: 8,
-            }}
+            style={styles.googleButton}
           />
         </Card.Content>
       </Card>
@@ -75,10 +63,49 @@ export default function GoogleLoginScreen({ _navigation }: any) {
         visible={snack.visible}
         onDismiss={() => setSnack(s => ({ ...s, visible: false }))}
         duration={3000}
-        style={{ marginBottom: 24 }}
+        style={styles.snackbar}
       >
         {snack.message}
       </Snackbar>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    justifyContent: 'center',
+  },
+  image: {
+    width: Dimensions.get('screen').width,
+    height: Dimensions.get('screen').height * 0.4,
+    marginBottom: 16,
+    borderRadius: 16,
+  },
+  card: {
+    borderRadius: 20,
+  },
+  cardContent: {
+    gap: 14,
+  },
+  welcomeText: {
+    fontWeight: '600',
+  },
+  descriptionText: {
+    opacity: 0.7,
+    marginBottom: 8,
+  },
+  headlineText: {
+    fontWeight: '700',
+  },
+  googleButton: {
+    alignSelf: 'center',
+    width: '100%',
+    height: 48,
+    marginTop: 8,
+  },
+  snackbar: {
+    marginBottom: 24,
+  },
+});

@@ -193,7 +193,6 @@ export const startSubscriptions = createAsyncThunk<
       thunkApi.dispatch(setMessages({ otherUid, messages: mapped }));
       // Debug: print mapping for receivers to help explain missing localPath
       try {
-        // eslint-disable-next-line no-console
         console.debug('messages mapped for', otherUid, mapped.map(m => ({ id: m.id, type: m.type, remoteUrl: m.remoteUrl, downloadStatus: m.downloadStatus, localPath: m.localPath })));
       } catch (e) {}
 
@@ -207,7 +206,6 @@ export const startSubscriptions = createAsyncThunk<
         );
         // Debug: list what we'll download
         try {
-          // eslint-disable-next-line no-console
           console.debug('toDownload list for', otherUid, toDownload.map(d => ({ id: d.id, remoteUrl: d.remoteUrl, name: d.name })));
         } catch (e) {}
 
@@ -243,7 +241,6 @@ export const startSubscriptions = createAsyncThunk<
               }),
             );
             try {
-              // eslint-disable-next-line no-console
               // Downloaded successfully
             } catch (e) {}
           } catch (err: any) {
@@ -256,13 +253,11 @@ export const startSubscriptions = createAsyncThunk<
               }),
             );
             try {
-              // eslint-disable-next-line no-console
               // Download failed logging
             } catch (e) {}
           }
 
           // small await to yield to the event loop / UI
-          // eslint-disable-next-line no-await-in-loop
           await Promise.resolve();
         }
       })();

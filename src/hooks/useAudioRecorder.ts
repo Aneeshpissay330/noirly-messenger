@@ -155,7 +155,7 @@ export function useAudioRecorder({
   setFilePath(path);
   return path;
     } catch (err) {
-      // eslint-disable-next-line no-console
+      console.error('Failed to finalize recording:', err);
       // Failed to finalize recording
     }
   };

@@ -25,7 +25,7 @@ export default function SelectionToolbar({
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
-      <Appbar.Header style={{ backgroundColor: 'transparent', elevation: 0 }}>
+      <Appbar.Header style={styles.header}>
         <Appbar.Action icon="close" onPress={onClose} />
         <Appbar.Content 
           title={`${selectedCount} selected`}
@@ -64,5 +64,9 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+  },
+  header: {
+    backgroundColor: 'transparent',
+    elevation: 0,
   },
 });

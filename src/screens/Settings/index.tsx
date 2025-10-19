@@ -16,6 +16,24 @@ export type RootNavigationParamList = {
   EditProfile: undefined;
 };
 
+// Move components outside of render to avoid nested component warnings
+const createAvatarComponent = (avatarUri?: string) => (props: any) =>
+  avatarUri ? (
+    <Avatar.Image
+      size={48}
+      source={{ uri: avatarUri }}
+      {...props}
+    />
+  ) : (
+    <Avatar.Icon size={48} icon="account" {...props} />
+  );
+
+const ChevronRightIcon = (props: any) => <List.Icon {...props} icon="chevron-right" />;
+
+const createLogoutIcon = (errorColor: string) => (props: any) => (
+  <List.Icon {...props} icon="logout" color={errorColor} />
+);
+
 const Settings = () => {
   const theme = useTheme();
   const { signOutGoogle } = useGoogleAuth();
@@ -57,31 +75,9 @@ const Settings = () => {
     [theme.colors.error],
   );
 
-  const AvatarComponent = useMemo(
-    () => (props: any) =>
-      avatarUri ? (
-        <Avatar.Image
-          size={48}
-          source={{ uri: avatarUri }}
-          {...props}
-        />
-      ) : (
-        <Avatar.Icon size={48} icon="account" {...props} />
-      ),
-    [avatarUri],
-  );
-
-  const ChevronRightIcon = useMemo(
-    () => (props: any) => <List.Icon {...props} icon="chevron-right" />,
-    [],
-  );
-
-  const LogoutIcon = useMemo(
-    () => (props: any) => (
-      <List.Icon {...props} icon="logout" color={theme.colors.error} />
-    ),
-    [theme.colors.error],
-  );
+  // Create component instances
+  const AvatarComponent = createAvatarComponent(avatarUri);
+  const LogoutIcon = createLogoutIcon(theme.colors.error);
 
   return (
     <View style={containerStyle}>

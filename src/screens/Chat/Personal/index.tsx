@@ -27,7 +27,7 @@ const Personal = () => {
   const data = selfChat ? [selfChat, ...chats] : chats;
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
@@ -54,16 +54,11 @@ const Personal = () => {
       <Pressable
         style={[
           styles.fab,
+          styles.fabStyle,
           {
             backgroundColor: theme.colors.surface,
             borderColor: theme.colors.primary,
-            borderWidth: 2,
-            borderRadius: 10,
-            width: 56,
-            height: 56,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }
+          },
         ]}
         onPress={() => navigation.navigate('ContactScreen')}
       >
@@ -77,5 +72,16 @@ const Personal = () => {
   );
 };
 
-const styles = StyleSheet.create({ fab: { position: 'absolute', margin: 16, right: 0, bottom: 0 } });
+const styles = StyleSheet.create({ 
+  container: { flex: 1 },
+  fab: { position: 'absolute', margin: 16, right: 0, bottom: 0 },
+  fabStyle: {
+    borderWidth: 2,
+    borderRadius: 10,
+    width: 56,
+    height: 56,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 export default Personal;

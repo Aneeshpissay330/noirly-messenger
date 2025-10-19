@@ -94,8 +94,8 @@ export default function ChatBubble({
       delayLongPress={400}
       style={[
         styles.row,
+        isMe ? styles.rowEnd : styles.rowStart,
         {
-          justifyContent: isMe ? 'flex-end' : 'flex-start',
           backgroundColor:
             isSelectionMode && isSelected
               ? theme.colors.primaryContainer
@@ -110,18 +110,14 @@ export default function ChatBubble({
         <View style={[styles.avatar, { backgroundColor: theme.colors.surfaceVariant }]} />
       ) : null} */}
 
-      <View style={{ maxWidth: '78%' }}>
+      <View style={styles.contentContainer}>
         <View
           style={[
             styles.bubble,
-            {
-              backgroundColor: bubbleBg,
-              borderColor: isMe ? 'transparent' : borderColor,
-              borderWidth: isMe ? 0 : 1,
-              borderBottomLeftRadius: isMe ? 16 : 6,
-              borderBottomRightRadius: isMe ? 6 : 16,
-              opacity: isSelectionMode && !isSelected ? 0.8 : 1,
-            },
+            isMe ? styles.bubbleMe : styles.bubbleOther,
+            { backgroundColor: bubbleBg },
+            !isMe && { borderColor: borderColor },
+            isSelectionMode && !isSelected && styles.dimmed,
           ]}
         >
           {/* Selection checkbox */}
@@ -134,7 +130,7 @@ export default function ChatBubble({
           {showName ? (
             <Text
               variant="labelSmall"
-              style={{ marginBottom: 2, color: nameColor }}
+              style={[styles.senderName, { color: nameColor }]}
             >
               {message.userId}
             </Text>
@@ -188,7 +184,7 @@ export default function ChatBubble({
         </View>
       </View>
 
-      {isMe ? <View style={{ width: 24 }} /> : null}
+      {isMe ? <View style={styles.spacer} /> : null}
 
       <MessageContextMenu
         visible={showContextMenu}
@@ -226,5 +222,37 @@ const styles = StyleSheet.create({
     gap: 8,
     minHeight: 44, // Ensure minimum touch target size
   },
-  bubble: { borderRadius: 16, paddingHorizontal: 12, paddingVertical: 10 },
+  rowStart: {
+    justifyContent: 'flex-start',
+  },
+  rowEnd: {
+    justifyContent: 'flex-end',
+  },
+  contentContainer: {
+    maxWidth: '78%',
+  },
+  bubble: { 
+    borderRadius: 16, 
+    paddingHorizontal: 12, 
+    paddingVertical: 10 
+  },
+  bubbleMe: {
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 6,
+    borderWidth: 0,
+  },
+  bubbleOther: {
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 16,
+    borderWidth: 1,
+  },
+  dimmed: {
+    opacity: 0.8,
+  },
+  senderName: {
+    marginBottom: 2,
+  },
+  spacer: {
+    width: 24,
+  },
 });

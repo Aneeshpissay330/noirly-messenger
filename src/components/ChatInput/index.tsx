@@ -13,6 +13,11 @@ type Props = {
   onTyping?: (typing: boolean) => void; // NEW
 };
 
+// Move CloseButton outside of render to avoid nested component warning
+const CloseButton = ({ close }: { close: () => void }) => (
+  <IconButton mode="contained-tonal" icon="close" onPress={close} />
+);
+
 export default function ChatInput({
   onSend,
   onPickDocument,
@@ -38,9 +43,6 @@ export default function ChatInput({
     setText(prev => prev + emoji);
     inputRef.current?.focus?.();
   };
-  const CloseButton = ({ close }: { close: () => void }) => (
-    <IconButton mode="contained-tonal" icon="close" onPress={close} />
-  );
 
   useEffect(() => {
     if (!onTyping) return;
@@ -60,10 +62,10 @@ export default function ChatInput({
       <EmojiPopup
         onEmojiSelected={insertEmoji}
         closeButton={CloseButton}
-        contentContainerStyle={{
-          backgroundColor: theme.colors.background,
-          alignItems: 'flex-end',
-        }}
+        contentContainerStyle={[
+          styles.emojiContentContainer,
+          { backgroundColor: theme.colors.background },
+        ]}
       >
         <IconButton mode="contained-tonal" icon="emoticon-outline" />
       </EmojiPopup>
@@ -80,14 +82,12 @@ export default function ChatInput({
         underlineColor="transparent"
         style={[
           styles.input,
+          styles.inputStyle,
           {
             backgroundColor: theme.colors.surfaceVariant,
-            borderRadius: 5,
-            minHeight: 0, // important on Android
-            maxHeight: 50, // don't let it grow too tall
           },
         ]}
-        contentStyle={{ paddingVertical: 8 }} // compact vertical padding
+        contentStyle={styles.inputContent} // compact vertical padding
         cursorColor={theme.colors.primary}
         right={
           <TextInput.Icon
@@ -142,7 +142,29 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderTopWidth: 1,
   },
-  input: { flex: 1, marginHorizontal: 6 },
-  emojiBox: { margin: 16, borderRadius: 16, padding: 8, maxHeight: 280 },
-  emojiGrid: { gap: 4, padding: 8 },
+  emojiContentContainer: {
+    alignItems: 'flex-end',
+  },
+  input: { 
+    flex: 1, 
+    marginHorizontal: 6 
+  },
+  inputStyle: {
+    borderRadius: 5,
+    minHeight: 0, // important on Android
+    maxHeight: 50, // don't let it grow too tall
+  },
+  inputContent: {
+    paddingVertical: 8, // compact vertical padding
+  },
+  emojiBox: { 
+    margin: 16, 
+    borderRadius: 16, 
+    padding: 8, 
+    maxHeight: 280 
+  },
+  emojiGrid: { 
+    gap: 4, 
+    padding: 8 
+  },
 });

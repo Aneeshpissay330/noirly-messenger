@@ -12,6 +12,15 @@ type Props = {
 
 const SIDE_WIDTH = 56; // matches IconButton touch size nicely
 
+// Define the record icon component outside render
+const RecordIcon = () => (
+  <MaterialCommunityIcons
+    name="record-circle"
+    size={14}
+    color="#ff3b30"
+  />
+);
+
 const CameraHeader: React.FC<Props> = ({
   onClose,
   flashOn,
@@ -40,13 +49,7 @@ const CameraHeader: React.FC<Props> = ({
             compact
             style={styles.timerChip}
             textStyle={styles.timerText}
-            icon={() => (
-              <MaterialCommunityIcons
-                name="record-circle"
-                size={14}
-                color="#ff3b30"
-              />
-            )}
+            icon={RecordIcon}
           >
             {timerText}
           </Chip>

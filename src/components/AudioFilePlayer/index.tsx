@@ -115,8 +115,8 @@ export default function AudioFilePlayer({
         {
           backgroundColor: theme.colors.background,
           borderColor: theme.colors.outline,
-          borderWidth: 1,
         },
+        styles.bubbleBorder,
       ]}
     >
       <View style={styles.row}>
@@ -127,8 +127,8 @@ export default function AudioFilePlayer({
             {
               backgroundColor: theme.colors.surfaceVariant,
               borderColor: theme.colors.outline,
-              borderWidth: 1,
             },
+            styles.btnBorder,
             isPlaying && { backgroundColor: theme.colors.primary },
           ]}
           disabled={isLoading || !duration}
@@ -145,7 +145,10 @@ export default function AudioFilePlayer({
           {diagnostic ? (
             <Text
               variant="labelSmall"
-              style={{ color: theme.colors.onSurface, marginBottom: 6 }}
+              style={[
+                { color: theme.colors.onSurface },
+                styles.diagnosticText,
+              ]}
             >
               {diagnostic}
             </Text>
@@ -221,6 +224,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 4,
   },
+  diagnosticText: {
+    marginBottom: 6,
+  },
   slider: {
     width: '100%',
     height: 36,
@@ -232,5 +238,11 @@ const styles = StyleSheet.create({
   },
   timeText: {
     // color will be set dynamically
+  },
+  bubbleBorder: {
+    borderWidth: 1,
+  },
+  btnBorder: {
+    borderWidth: 1,
   },
 });

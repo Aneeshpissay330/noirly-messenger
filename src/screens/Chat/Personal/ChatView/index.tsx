@@ -143,8 +143,8 @@ export default function ChatView() {
 
       (async () => {
         try {
-          const { chatId } = await dispatch(openDmChat({ otherUid })).unwrap();
-          await dispatch(startSubscriptions({ otherUid, chatId, isSelf }));
+          const { chatId: dmChatId } = await dispatch(openDmChat({ otherUid })).unwrap();
+          await dispatch(startSubscriptions({ otherUid, chatId: dmChatId, isSelf }));
         } catch (e: any) {
           Alert.alert('Chat error', e?.message ?? 'Failed to open chat');
         }
@@ -273,12 +273,12 @@ export default function ChatView() {
           showAvatar={showAvatar}
           showName={isGroup && !isMe}
           onOpenMedia={onOpenMedia}
-          onLongPress={(message: Message) => {
-            console.log('Long press on message:', { id: message.id, type: message.type, userId: message.userId, senderId: message.senderId });
+          onLongPress={(msg: Message) => {
+            console.log('Long press on message:', { id: msg.id, type: msg.type, userId: msg.userId, senderId: msg.senderId });
             if (!isSelectionMode) {
               // Enter selection mode and select this message
               setIsSelectionMode(true);
-              setSelectedMessages(new Set([message.id]));
+              setSelectedMessages(new Set([msg.id]));
             }
           }}
           isSelectionMode={isSelectionMode}
@@ -496,7 +496,7 @@ export default function ChatView() {
           // copyFile supports content:// URIs on some RNFS builds by using
           // Android's ContentResolver internally. Try this first.
           // dest is plain path (no file://) which our other code expects.
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+           
           // @ts-ignore
           await RNFS.copyFile(doc.uri, dest);
           localPath = dest;
@@ -504,7 +504,7 @@ export default function ChatView() {
           // Fallback: try reading as base64 and writing out. Some RNFS
           // versions support readFile for content URIs.
           try {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+             
             // @ts-ignore
             const data = await RNFS.readFile(doc.uri, 'base64');
             await RNFS.writeFile(dest, data, 'base64');

@@ -13,13 +13,13 @@ export default function SelectionCheckbox({ isSelectionMode, isSelected, theme }
   if (!isSelectionMode) return null;
 
   return (
-    <View style={[
-      styles.checkbox, 
-      { 
-        backgroundColor: isSelected ? theme.colors.primary : 'transparent', 
-        borderColor: theme.colors.primary 
-      }
-    ]}>
+    <View 
+      style={[
+        styles.checkbox,
+        { borderColor: theme.colors.primary },
+        isSelected && { backgroundColor: theme.colors.primary },
+      ]}
+    >
       {isSelected && (
         <Icon 
           name="check" 
@@ -43,5 +43,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 10,
+  },
+  checkboxSelected: {
+    // Can add specific styles for selected state if needed
+  },
+  checkboxUnselected: {
+    // Can add specific styles for unselected state if needed
   },
 });

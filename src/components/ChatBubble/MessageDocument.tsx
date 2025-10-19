@@ -110,7 +110,7 @@ export default function MessageDocument({
   }
 
   return (
-    <View style={{ marginBottom: message.text ? 8 : 0 }}>
+    <View style={[styles.container, message.text ? styles.containerWithText : styles.containerWithoutText]}>
       <TouchableOpacity
         activeOpacity={0.85}
         disabled={isOpening}
@@ -128,8 +128,8 @@ export default function MessageDocument({
                 ? 'rgba(255,255,255,0.2)'
                 : 'rgba(0,0,0,0.1)'
               : theme.colors.outline,
-            borderWidth: 1,
           },
+          styles.cardBorder,
         ]}
       >
         <View
@@ -151,11 +151,7 @@ export default function MessageDocument({
               message.name?.toLowerCase().endsWith('.pdf')) ? (
               <Pdf
                 source={{ uri: mediaUri, cache: true }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: 'transparent',
-                }}
+                style={styles.pdfContainer}
                 page={1}
                 scale={1}
                 minScale={0.5}
@@ -194,15 +190,14 @@ export default function MessageDocument({
                   },
                 ]}
               >
-                <Text style={{ fontSize: 28, color: theme.colors.secondary }}>
+                <Text style={[styles.documentIcon, { color: theme.colors.secondary }]}>
                   {getDocumentIcon(message.mime)}
                 </Text>
                 <Text
-                  style={{
-                    fontSize: 10,
-                    color: theme.colors.secondary,
-                    marginTop: 4,
-                  }}
+                  style={[
+                    styles.fileTypeText,
+                    { color: theme.colors.secondary },
+                  ]}
                 >
                   {getFileType(message.mime)}
                 </Text>
@@ -236,26 +231,28 @@ export default function MessageDocument({
                   <View
                     style={[
                       styles.contentLine,
-                      { backgroundColor: theme.colors.outline, width: '80%' },
+                      styles.contentLine80,
+                      { backgroundColor: theme.colors.outline },
                     ]}
                   />
                   <View
                     style={[
                       styles.contentLine,
-                      { backgroundColor: theme.colors.outline, width: '70%' },
+                      styles.contentLine70,
+                      { backgroundColor: theme.colors.outline },
                     ]}
                   />
                 </View>
 
-                <View style={{ flex: 1, justifyContent: 'center', gap: 2 }}>
+                <View style={styles.bodyContainer}>
                   {[...Array(4)].map((_, i) => (
                     <View
                       key={i}
                       style={[
                         styles.bodyLine,
+                        i === 3 ? styles.bodyLineShort : styles.bodyLineFull,
                         {
                           backgroundColor: theme.colors.outline,
-                          width: i === 3 ? '50%' : '100%',
                         },
                       ]}
                     />
@@ -276,7 +273,7 @@ export default function MessageDocument({
         <View
           style={[
             styles.documentInfo,
-            { backgroundColor: isMe ? 'transparent' : theme.colors.surface },
+            isMe ? styles.documentInfoTransparent : { backgroundColor: theme.colors.surface },
           ]}
         >
           <Text
@@ -343,11 +340,7 @@ export default function MessageDocument({
               onPress={() => onRetry?.(message.id)}
               style={[
                 styles.retryButton,
-                {
-                  backgroundColor: isMe
-                    ? 'rgba(255,255,255,0.2)'
-                    : 'rgba(239,68,68,0.12)',
-                },
+                isMe ? styles.retryButtonMe : styles.retryButtonOther,
               ]}
             >
               <Text
@@ -367,11 +360,23 @@ export default function MessageDocument({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    // Empty style for the root container
+  },
+  containerWithText: {
+    marginBottom: 8,
+  },
+  containerWithoutText: {
+    marginBottom: 0,
+  },
   documentCard: {
     borderRadius: 12,
     overflow: 'hidden',
-    maxWidth: 240,
+    maxWidth: 280,
     minWidth: 200,
+  },
+  cardBorder: {
+    borderWidth: 1,
   },
   documentThumbnail: {
     width: '100%',
@@ -386,12 +391,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  pdfContainer: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'transparent',
+  },
   textDocPreview: {
     width: '100%',
     height: '100%',
     borderRadius: 6,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  documentIcon: {
+    fontSize: 28,
+  },
+  fileTypeText: {
+    fontSize: 10,
+    marginTop: 4,
   },
   defaultDocPreview: {
     width: '85%',
@@ -411,9 +428,26 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     marginBottom: 2,
   },
+  contentLine80: {
+    width: '80%',
+  },
+  contentLine70: {
+    width: '70%',
+  },
+  bodyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    gap: 2,
+  },
   bodyLine: {
     height: 1.5,
     borderRadius: 1,
+  },
+  bodyLineFull: {
+    width: '100%',
+  },
+  bodyLineShort: {
+    width: '50%',
   },
   footerBar: {
     height: 4,
@@ -422,6 +456,9 @@ const styles = StyleSheet.create({
   },
   documentInfo: {
     padding: 12,
+  },
+  documentInfoTransparent: {
+    backgroundColor: 'transparent',
   },
   documentTitle: {
     fontWeight: '600',
@@ -457,6 +494,12 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 12,
     alignSelf: 'flex-end',
+  },
+  retryButtonMe: {
+    backgroundColor: 'rgba(255,255,255,0.2)',
+  },
+  retryButtonOther: {
+    backgroundColor: 'rgba(239,68,68,0.12)',
   },
   retryButtonText: {
     fontSize: 11,

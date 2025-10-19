@@ -9,6 +9,10 @@ type Props = {
   onToggleMute: (v: boolean) => void;
 };
 
+// Define icon components outside render
+const NotificationIcon = (props: any) => <List.Icon {...props} icon="bell" />;
+const MuteIcon = (props: any) => <List.Icon {...props} icon="volume-off" />;
+
 export default function GroupChatSettings({
   notificationsEnabled,
   muteGroup,
@@ -16,22 +20,30 @@ export default function GroupChatSettings({
   onToggleMute,
 }: Props) {
   const theme = useTheme();
+
+  // Define switch components to avoid nested components
+  const renderNotificationSwitch = () => (
+    <Switch
+      value={notificationsEnabled}
+      onValueChange={onToggleNotifications}
+    />
+  );
+
+  const renderMuteSwitch = () => (
+    <Switch value={muteGroup} onValueChange={onToggleMute} />
+  );
+
   return (
     <View style={[styles.wrap, { backgroundColor: theme.colors.background }]}>
       <List.Item
         title="Notifications"
-        left={p => <List.Icon {...p} icon="bell" />}
-        right={() => (
-          <Switch
-            value={notificationsEnabled}
-            onValueChange={onToggleNotifications}
-          />
-        )}
+        left={NotificationIcon}
+        right={renderNotificationSwitch}
       />
       <List.Item
         title="Mute Group"
-        left={p => <List.Icon {...p} icon="volume-off" />}
-        right={() => <Switch value={muteGroup} onValueChange={onToggleMute} />}
+        left={MuteIcon}
+        right={renderMuteSwitch}
       />
     </View>
   );

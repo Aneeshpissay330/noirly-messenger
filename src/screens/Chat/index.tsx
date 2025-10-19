@@ -1,14 +1,20 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from '../../theme';
 import Personal from './Personal';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
 
 // const Tab = createMaterialTopTabNavigator();
 
 const Chat = () => {
   const theme = useTheme();
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors?.background }}>
+    <View style={[styles.container, { backgroundColor: theme.colors?.background }]}>
       <Personal />
     </View>
   );

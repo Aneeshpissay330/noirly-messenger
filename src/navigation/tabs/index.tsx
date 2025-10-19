@@ -14,6 +14,18 @@ export type RootTabParamList = {
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
+// Move icon components outside to avoid nested component warnings
+const ChatIcon = ({ color, size = 26 }: { color: string; size?: number }) => (
+  <MaterialCommunityIcons name="home-outline" color={color} size={size} />
+);
+
+const SettingsIcon = ({ color, size = 26 }: { color: string; size?: number }) => (
+  <MaterialCommunityIcons name="cog-outline" color={color} size={size} />
+);
+
+// Extract the tabBar component to avoid inline function
+const TabBarComponent = (props: any) => <PaperBottomTabBar {...props} />;
+
 export default function Tabs() {
   const theme = useTheme();
   return (
@@ -27,15 +39,13 @@ export default function Tabs() {
           fontSize: 18,
         },
       }}
-      tabBar={(props) => <PaperBottomTabBar {...props} />}
+      tabBar={TabBarComponent}
     >
       <Tab.Screen
         name="Chat"
         component={Chat}
         options={{
-          tabBarIcon: ({ color, size = 26 }) => (
-            <MaterialCommunityIcons name="home-outline" color={color} size={size} />
-          ),
+          tabBarIcon: ChatIcon,
           title: 'Chat',
         }}
       />
@@ -43,9 +53,7 @@ export default function Tabs() {
         name="Settings"
         component={Settings}
         options={{
-          tabBarIcon: ({ color, size = 26 }) => (
-            <MaterialCommunityIcons name="cog-outline" color={color} size={size} />
-          ),
+          tabBarIcon: SettingsIcon,
           title: 'Settings',
         }}
       />

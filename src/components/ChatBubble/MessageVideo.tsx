@@ -52,7 +52,7 @@ export default function MessageVideo({
   const { width, height } = fitDims(message.width, message.height, 220, 300);
 
   return (
-    <View style={{ marginBottom: 8 }}>
+    <View style={styles.container}>
       <TouchableOpacity
         activeOpacity={0.95}
         onPress={() => {
@@ -77,19 +77,16 @@ export default function MessageVideo({
         ]}
       >
         {mediaUri ? (
-          <View style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <View style={styles.videoContainer}>
             <Video
               source={{ uri: mediaUri }}
-              style={{ width: '100%', height: '100%' }}
+              style={styles.videoPlayer}
               paused
               resizeMode="cover"
             />
             {/* Play button overlay */}
             <View
-              style={[
-                styles.mediaOverlay,
-                { backgroundColor: 'rgba(0,0,0,0.3)' },
-              ]}
+              style={[styles.mediaOverlay, styles.overlayBackground]}
             >
               <View
                 style={[
@@ -97,15 +94,15 @@ export default function MessageVideo({
                   {
                     backgroundColor: theme.colors.surface,
                     borderColor: theme.colors.outline,
-                    borderWidth: 2,
                   },
+                  styles.playButtonBorder,
                 ]}
               >
                 <Icon
                   name="play"
                   size={24}
                   color={theme.colors.primary}
-                  style={{ marginLeft: 2 }}
+                  style={styles.playIcon}
                 />
               </View>
             </View>
@@ -120,7 +117,7 @@ export default function MessageVideo({
             <ActivityIndicator size={32} color={theme.colors.onSurface} />
             <Text
               variant="labelSmall"
-              style={{ marginTop: 8, color: theme.colors.onSurface }}
+              style={[styles.loadingText, { color: theme.colors.onSurface }]}
             >
               {isDownloading ? 'Downloading…' : 'Loading…'}
             </Text>
@@ -138,7 +135,7 @@ export default function MessageVideo({
               style={styles.retryWrap}
             >
               <IconButton icon="refresh" size={18} />
-              <Text variant="labelSmall" style={{ marginLeft: 6 }}>
+              <Text variant="labelSmall" style={styles.retryText}>
                 Retry
               </Text>
             </TouchableOpacity>
@@ -150,11 +147,23 @@ export default function MessageVideo({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: 8,
+  },
   mediaBox: {
     borderRadius: 10,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  videoContainer: {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+  },
+  videoPlayer: {
+    width: '100%',
+    height: '100%',
   },
   mediaPlaceholderDark: {
     flex: 1,
@@ -170,12 +179,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  overlayBackground: {
+    backgroundColor: 'rgba(0,0,0,0.3)',
+  },
   playButton: {
     width: 48,
     height: 48,
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  playButtonBorder: {
+    borderWidth: 2,
+  },
+  playIcon: {
+    marginLeft: 2,
+  },
+  loadingText: {
+    marginTop: 8,
   },
   retryWrap: {
     flexDirection: 'row',
@@ -184,5 +205,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 18,
+  },
+  retryText: {
+    marginLeft: 6,
   },
 });

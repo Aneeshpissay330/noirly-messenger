@@ -61,10 +61,10 @@ const MediaTabs = () => {
               icon: 'link',
             },
           ]}
-          style={{
-            backgroundColor: theme.colors?.surface,
-            borderRadius: 8,
-          }}
+          style={[
+            styles.segmentedButtons,
+            { backgroundColor: theme.colors?.surface },
+          ]}
           theme={{
             colors: {
               primary: theme.colors?.primary,
@@ -91,6 +91,9 @@ const styles = StyleSheet.create({
   segmentedButtonsContainer: {
     paddingHorizontal: 16,
     paddingVertical: 12,
+  },
+  segmentedButtons: {
+    borderRadius: 8,
   },
   contentContainer: {
     flex: 1,

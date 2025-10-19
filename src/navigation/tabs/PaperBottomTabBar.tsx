@@ -2,9 +2,20 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { CommonActions } from '@react-navigation/native';
 import * as React from 'react';
 import {
+  StyleSheet,
+} from 'react-native';
+import {
   BottomNavigation,
 } from 'react-native-paper';
 import { MONO, useTheme } from '../../theme';
+
+const styles = StyleSheet.create({
+  activeIndicator: {
+    backgroundColor: 'transparent',
+    opacity: 0.1,
+    borderRadius: 16,
+  },
+});
 
 export default function PaperBottomTabBar({
   state,
@@ -22,11 +33,7 @@ export default function PaperBottomTabBar({
         backgroundColor: theme.colors?.background,
       }}
       activeColor={theme.colors?.primary ?? MONO.black}
-      activeIndicatorStyle={{ 
-        backgroundColor: 'transparent',
-        opacity: 0.1,
-        borderRadius: 16
-      }}
+      activeIndicatorStyle={styles.activeIndicator}
       inactiveColor={(theme.colors as any)?.secondary ?? MONO.gray500}
       onTabPress={({ route, preventDefault }) => {
         const event = navigation.emit({

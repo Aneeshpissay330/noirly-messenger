@@ -46,7 +46,7 @@ export default function MessageImage({
   const { width, height } = fitDims(message.width, message.height, 200, 200);
 
   return (
-    <View style={{ marginBottom: 8 }}>
+    <View style={styles.container}>
       <TouchableOpacity
         activeOpacity={0.95}
         onPress={() => {
@@ -66,7 +66,7 @@ export default function MessageImage({
         {mediaUri ? (
           <Image
             source={{ uri: mediaUri }}
-            style={{ width: '100%', height: '100%' }}
+            style={styles.fullImage}
             resizeMode="cover"
           />
         ) : (
@@ -90,11 +90,18 @@ export default function MessageImage({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: 8,
+  },
   mediaBox: {
     borderRadius: 10,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  fullImage: {
+    width: '100%',
+    height: '100%',
   },
   mediaPlaceholder: {
     position: 'absolute',

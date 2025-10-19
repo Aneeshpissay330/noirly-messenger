@@ -35,7 +35,7 @@ export default function GroupInvite({
     >
       {/* Header row: title + Reset */}
       <View style={styles.headerRow}>
-        <Text variant="titleMedium" style={{ fontWeight: '600' }}>
+        <Text variant="titleMedium" style={styles.headerText}>
           Invite Link
         </Text>
         <Button mode="text" compact onPress={onResetLink}>
@@ -77,6 +77,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 12,
+  },
+  headerText: {
+    fontWeight: '600',
   },
   pillRow: {
     flexDirection: 'row',
