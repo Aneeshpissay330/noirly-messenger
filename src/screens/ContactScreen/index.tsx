@@ -22,6 +22,12 @@ export type RootNavigationParamList = {
   ChatView: { id: string; name?: string; avatar?: string };
 };
 
+const EmptyComponent = () => (
+  <View style={styles.emptyContainer}>
+    <Text>No matches found.</Text>
+  </View>
+);
+
 const ContactScreen = () => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation<NavigationProp<RootNavigationParamList>>();
@@ -36,18 +42,20 @@ const ContactScreen = () => {
     );
   }, [dispatch, userDoc?.phoneNumber]);
 
+  const renderHeaderRight = React.useCallback(() => 
+    status === 'loading' ? (
+      <ActivityIndicator
+        size={20}
+        color={theme.colors.primary}
+        style={styles.headerLoader}
+      />
+    ) : null, [status, theme.colors.primary]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () =>
-        status === 'loading' ? (
-          <ActivityIndicator
-            size={20}
-            color={theme.colors.primary}
-            style={{ marginRight: 16 }}
-          />
-        ) : null,
+      headerRight: renderHeaderRight,
     });
-  }, [navigation, status, theme.colors.primary]);
+  }, [navigation, renderHeaderRight]);
 
   // Optional: keep "You" at the top
   const data = useMemo(() => {
@@ -84,12 +92,8 @@ const ContactScreen = () => {
       <FlashList
         data={data}
         keyExtractor={item => item.id}
-        contentContainerStyle={{ paddingBottom: 16 }}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text>No matches found.</Text>
-          </View>
-        }
+        contentContainerStyle={styles.listContainer}
+        ListEmptyComponent={EmptyComponent}
         renderItem={({ item }) => {
           const isYou =
             (!!userDoc && item.uid === userDoc.uid) ||
@@ -103,31 +107,16 @@ const ContactScreen = () => {
             ? 'You'
             : item.displayName ?? item.username ?? 'Unknown';
 
+          const renderContactAvatar = (props: any) => (
+            <ContactAvatar {...props} item={item} title={title} />
+          );
+
           return (
             <List.Item
               title={title}
               description={item.phoneNumber ?? undefined}
-              left={props =>
-                item.photoURL ? (
-                  <Avatar.Image
-                    {...props}
-                    size={40}
-                    source={{ uri: item.photoURL }}
-                  />
-                ) : (
-                  <Avatar.Text
-                    size={40}
-                    {...props}
-                    label={(title === 'You'
-                      ? 'YOU'
-                      : item.displayName ?? item.username ?? 'U'
-                    )
-                      .slice(0, 2)
-                      .toUpperCase()}
-                  />
-                )
-              }
-              right={props => <List.Icon {...props} icon="chevron-right" />}
+              left={renderContactAvatar}
+              right={ChevronRightIcon}
               // ContactScreen
               onPress={() => {
                 const rawName =
@@ -150,12 +139,46 @@ const ContactScreen = () => {
   );
 };
 
+const ContactAvatar = ({ item, title, ...props }: { item: any; title: string }) => {
+  if (item.photoURL) {
+    return (
+      <Avatar.Image
+        {...props}
+        size={40}
+        source={{ uri: item.photoURL }}
+      />
+    );
+  }
+  return (
+    <Avatar.Text
+      size={40}
+      {...props}
+      label={(title === 'You'
+        ? 'YOU'
+        : item.displayName ?? item.username ?? 'U'
+      )
+        .slice(0, 2)
+        .toUpperCase()}
+    />
+  );
+};
+
+const ChevronRightIcon = (props: any) => (
+  <List.Icon {...props} icon="chevron-right" />
+);
+
 const styles = StyleSheet.create({
   container: { flex: 1 },
   emptyContainer: {
     paddingHorizontal: 16,
     paddingVertical: 32,
     alignItems: 'center',
+  },
+  headerLoader: {
+    marginRight: 16,
+  },
+  listContainer: {
+    paddingBottom: 16,
   },
 });
 

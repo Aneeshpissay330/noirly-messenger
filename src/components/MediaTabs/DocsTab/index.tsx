@@ -87,31 +87,67 @@ export default function DocsTab({ otherUid }: DocsTabProps) {
 
   return (
     <ScrollView style={[styles.wrap, { backgroundColor: theme.colors.background }]}>
-      {documentMessages.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Text style={{ color: theme.colors.secondary, textAlign: 'center' }}>
-            No documents found
-          </Text>
-        </View>
-      ) : (
-        documentMessages.map((item) => (
-          <List.Item
-            key={item.id}
-            title={item.name || 'Document'}
-            description={`${formatFileSize(item.size)} • ${formatDate(item.createdAt)}`}
-            left={(p) => <List.Icon {...p} color={item.mime?.includes('pdf') ? MONO.accentRed : theme.colors.primary} icon={getFileIcon(item.mime)} />}
-            style={[styles.item, { backgroundColor: theme.colors.surface }]}
-            titleStyle={{ color: theme.colors.onSurface }}
-            descriptionStyle={{ color: theme.colors.secondary }}
-            onPress={() => {
-              // Handle document opening
-            }}
-          />
-        ))
-      )}
+      <DocsContent 
+        documentMessages={documentMessages}
+        theme={theme}
+        formatFileSize={formatFileSize}
+        formatDate={formatDate}
+        getFileIcon={getFileIcon}
+      />
     </ScrollView>
   );
 }
+
+const DocumentIcon = (props: any, item: any, theme: any, getFileIcon: (mime?: string) => string) => (
+  <List.Icon 
+    {...props} 
+    color={item.mime?.includes('pdf') ? MONO.accentRed : theme.colors.primary} 
+    icon={getFileIcon(item.mime)} 
+  />
+);
+
+const DocsContent = ({ 
+  documentMessages, 
+  theme, 
+  formatFileSize, 
+  formatDate, 
+  getFileIcon 
+}: {
+  documentMessages: any[];
+  theme: any;
+  formatFileSize: (bytes?: number) => string;
+  formatDate: (timestamp: any) => string;
+  getFileIcon: (mime?: string) => string;
+}) => {
+  if (documentMessages.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={[styles.emptyText, { color: theme.colors.secondary }]}>
+          No documents found
+        </Text>
+      </View>
+    );
+  }
+
+  return (
+    <>
+      {documentMessages.map((item) => (
+        <List.Item
+          key={item.id}
+          title={item.name || 'Document'}
+          description={`${formatFileSize(item.size)} • ${formatDate(item.createdAt)}`}
+          left={(p) => DocumentIcon(p, item, theme, getFileIcon)}
+          style={[styles.item, { backgroundColor: theme.colors.surface }]}
+          titleStyle={{ color: theme.colors.onSurface }}
+          descriptionStyle={{ color: theme.colors.secondary }}
+          onPress={() => {
+            // Handle document opening
+          }}
+        />
+      ))}
+    </>
+  );
+};
 
 const styles = StyleSheet.create({ 
   wrap: { 
@@ -127,5 +163,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 50,
+  },
+  emptyText: {
+    textAlign: 'center',
   },
 });

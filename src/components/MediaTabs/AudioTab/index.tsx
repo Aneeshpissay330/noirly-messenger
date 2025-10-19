@@ -69,29 +69,58 @@ const AudioTab: React.FC<AudioTabProps> = ({ otherUid }) => {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      {audioMessages.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Text style={{ color: theme.colors.secondary, textAlign: 'center' }}>
-            No audio messages found
-          </Text>
-        </View>
-      ) : (
-        audioMessages.map((item) => (
-          <List.Item
-            key={item.id}
-            title={item.name || 'Audio message'}
-            description={`${formatFileSize(item.size)} • ${formatDate(item.createdAt)}`}
-            left={(p) => <List.Icon {...p} color={theme.colors.primary} icon="music" />}
-            style={[styles.item, { backgroundColor: theme.colors.surface }]}
-            titleStyle={{ color: theme.colors.onSurface }}
-            descriptionStyle={{ color: theme.colors.secondary }}
-            onPress={() => {
-              // Handle audio playback
-            }}
-          />
-        ))
-      )}
+      <AudioContent 
+        audioMessages={audioMessages}
+        theme={theme}
+        formatFileSize={formatFileSize}
+        formatDate={formatDate}
+      />
     </ScrollView>
+  );
+};
+
+const AudioIcon = (props: any, theme: any) => (
+  <List.Icon {...props} color={theme.colors.primary} icon="music" />
+);
+
+const AudioContent = ({ 
+  audioMessages, 
+  theme, 
+  formatFileSize, 
+  formatDate 
+}: {
+  audioMessages: any[];
+  theme: any;
+  formatFileSize: (bytes?: number) => string;
+  formatDate: (timestamp: any) => string;
+}) => {
+  if (audioMessages.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={[styles.emptyText, { color: theme.colors.secondary }]}>
+          No audio messages found
+        </Text>
+      </View>
+    );
+  }
+
+  return (
+    <>
+      {audioMessages.map((item) => (
+        <List.Item
+          key={item.id}
+          title={item.name || 'Audio message'}
+          description={`${formatFileSize(item.size)} • ${formatDate(item.createdAt)}`}
+          left={(p) => AudioIcon(p, theme)}
+          style={[styles.item, { backgroundColor: theme.colors.surface }]}
+          titleStyle={{ color: theme.colors.onSurface }}
+          descriptionStyle={{ color: theme.colors.secondary }}
+          onPress={() => {
+            // Handle audio playback
+          }}
+        />
+      ))}
+    </>
   );
 };
 
@@ -109,6 +138,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 50,
+  },
+  emptyText: {
+    textAlign: 'center',
   },
 });
 

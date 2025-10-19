@@ -2,7 +2,7 @@
 import auth from '@react-native-firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { Alert, ScrollView, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import {
   Avatar,
   Button,
@@ -116,44 +116,134 @@ const EditProfile = () => {
     }
   };
 
+  const renderHeaderLeft = useCallback(() => (
+    <IconButton
+      icon="arrow-left"
+      size={20}
+      onPress={() => navigation.goBack()}
+    />
+  ), [navigation]);
+
+  const renderHeaderRight = useCallback(() => (
+    <Button
+      onPress={handleSave}
+      mode="text"
+      loading={saving}
+      disabled={saving}
+    >
+      Save
+    </Button>
+  ), [handleSave, saving]);
+
+  const renderDisplayNameInput = useCallback(() => (
+    <View style={styles.inputContainer}>
+      <TextInput
+        mode="outlined"
+        label="Display Name"
+        value={displayName}
+        onChangeText={setDisplayName}
+      />
+    </View>
+  ), [displayName]);
+
+  const renderUsernameInput = useCallback(() => (
+    <View style={styles.inputContainer}>
+      <TextInput
+        mode="outlined"
+        label="Username"
+        value={username}
+        onChangeText={t => setUsername(normalizeUsername(t))}
+        left={<TextInput.Affix text="@" />}
+      />
+      <Text variant="bodySmall" style={styles.hintText}>
+        Others can find you by this username
+      </Text>
+    </View>
+  ), [username]);
+
+  const renderBioInput = useCallback(() => (
+    <View style={styles.inputContainer}>
+      <TextInput
+        mode="outlined"
+        label="About"
+        value={bio}
+        multiline
+        numberOfLines={3}
+        onChangeText={t => setBio(t.slice(0, MAX_BIO))}
+      />
+      <View style={styles.bioHintContainer}>
+        <Text variant="bodySmall" style={styles.hintText}>
+          Write a few words about yourself
+        </Text>
+        <Text variant="bodySmall" style={styles.hintText}>
+          {bio.length}/{MAX_BIO}
+        </Text>
+      </View>
+    </View>
+  ), [bio]);
+
+  const renderEmailInput = useCallback(() => (
+    <View style={styles.inputContainer}>
+      <TextInput
+        mode="outlined"
+        label="Email"
+        value={email}
+        disabled
+      />
+      <Text variant="bodySmall" style={styles.hintText}>
+        Linked to account
+      </Text>
+    </View>
+  ), [email]);
+
+  const renderPhoneInput = useCallback(() => (
+    <View style={styles.inputContainer}>
+      <TextInput
+        mode="outlined"
+        label="Phone Number"
+        value={phone}
+        disabled
+      />
+      <Text variant="bodySmall" style={styles.hintText}>
+        Used for account verification
+      </Text>
+    </View>
+  ), [phone]);
+
+  const renderCameraIcon = useCallback((props: any) => (
+    <List.Icon {...props} icon="camera" />
+  ), []);
+
+  const renderGalleryIcon = useCallback((props: any) => (
+    <List.Icon {...props} icon="image" />
+  ), []);
+
+  const photoSectionStyle = useMemo(
+    () => [
+      styles.photoSection,
+      {
+        borderBottomColor: theme.dark
+          ? 'rgba(255,255,255,0.06)'
+          : 'rgba(0,0,0,0.05)',
+      },
+    ],
+    [theme.dark],
+  );
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: 'Edit Profile',
-      headerLeft: () => (
-        <IconButton
-          icon="arrow-left"
-          size={20}
-          onPress={() => navigation.goBack()}
-        />
-      ),
-      headerRight: () => (
-        <Button
-          onPress={handleSave}
-          mode="text"
-          loading={saving}
-          disabled={saving}
-        >
-          Save
-        </Button>
-      ),
+      headerLeft: renderHeaderLeft,
+      headerRight: renderHeaderRight,
     });
-  }, [navigation, handleSave, saving]);
+  }, [navigation, renderHeaderLeft, renderHeaderRight]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }}>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <ScrollView>
         {/* Photo section */}
-        <View
-          style={{
-            alignItems: 'center',
-            paddingVertical: 24,
-            borderBottomWidth: 1,
-            borderBottomColor: theme.dark
-              ? 'rgba(255,255,255,0.06)'
-              : 'rgba(0,0,0,0.05)',
-          }}
-        >
-          <View style={{ width: 96, height: 96 }}>
+        <View style={photoSectionStyle}>
+          <View style={styles.avatarContainer}>
             {photoUri ? (
               <Avatar.Image size={96} source={{ uri: photoUri }} />
             ) : (
@@ -163,16 +253,14 @@ const EditProfile = () => {
               icon="camera"
               size={16}
               onPress={() => setPhotoActionsVisible(true)}
-              style={{
-                position: 'absolute',
-                right: -6,
-                bottom: -6,
-                backgroundColor: theme.colors.primary,
-              }}
+              style={[
+                styles.cameraButton,
+                { backgroundColor: theme.colors.primary },
+              ]}
               iconColor="white"
             />
           </View>
-          <Text variant="bodySmall" style={{ marginTop: 8, opacity: 0.7 }}>
+          <Text variant="bodySmall" style={styles.photoHint}>
             Tap to change photo
           </Text>
         </View>
@@ -182,65 +270,9 @@ const EditProfile = () => {
           BASIC INFORMATION
         </Text>
         <List.Section>
-          <List.Item
-            title={() => (
-              <View style={{ width: '100%' }}>
-                <TextInput
-                  mode="outlined"
-                  label="Display Name"
-                  value={displayName}
-                  onChangeText={setDisplayName}
-                />
-              </View>
-            )}
-          />
-          <List.Item
-            title={() => (
-              <View style={{ width: '100%' }}>
-                <TextInput
-                  mode="outlined"
-                  label="Username"
-                  value={username}
-                  onChangeText={t => setUsername(normalizeUsername(t))}
-                  left={<TextInput.Affix text="@" />}
-                />
-                <Text
-                  variant="bodySmall"
-                  style={{ marginTop: 4, opacity: 0.6 }}
-                >
-                  Others can find you by this username
-                </Text>
-              </View>
-            )}
-          />
-          <List.Item
-            title={() => (
-              <View style={{ width: '100%' }}>
-                <TextInput
-                  mode="outlined"
-                  label="About"
-                  value={bio}
-                  multiline
-                  numberOfLines={3}
-                  onChangeText={t => setBio(t.slice(0, MAX_BIO))}
-                />
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginTop: 4,
-                  }}
-                >
-                  <Text variant="bodySmall" style={{ opacity: 0.6 }}>
-                    Write a few words about yourself
-                  </Text>
-                  <Text variant="bodySmall" style={{ opacity: 0.6 }}>
-                    {bio.length}/{MAX_BIO}
-                  </Text>
-                </View>
-              </View>
-            )}
-          />
+          <List.Item title={renderDisplayNameInput} />
+          <List.Item title={renderUsernameInput} />
+          <List.Item title={renderBioInput} />
         </List.Section>
 
         <Divider />
@@ -250,42 +282,8 @@ const EditProfile = () => {
           CONTACT INFORMATION
         </Text>
         <List.Section>
-          <List.Item
-            title={() => (
-              <View style={{ width: '100%' }}>
-                <TextInput
-                  mode="outlined"
-                  label="Email"
-                  value={email}
-                  disabled
-                />
-                <Text
-                  variant="bodySmall"
-                  style={{ marginTop: 4, opacity: 0.6 }}
-                >
-                  Linked to account
-                </Text>
-              </View>
-            )}
-          />
-          <List.Item
-            title={() => (
-              <View style={{ width: '100%' }}>
-                <TextInput
-                  mode="outlined"
-                  label="Phone Number"
-                  value={phone}
-                  disabled
-                />
-                <Text
-                  variant="bodySmall"
-                  style={{ marginTop: 4, opacity: 0.6 }}
-                >
-                  Used for account verification
-                </Text>
-              </View>
-            )}
-          />
+          <List.Item title={renderEmailInput} />
+          <List.Item title={renderPhoneInput} />
         </List.Section>
       </ScrollView>
 
@@ -294,24 +292,22 @@ const EditProfile = () => {
         <Modal
           visible={photoActionsVisible}
           onDismiss={() => setPhotoActionsVisible(false)}
-          contentContainerStyle={{
-            margin: 16,
-            borderRadius: 16,
-            backgroundColor: theme.colors.elevation.level2,
-            padding: 12,
-          }}
+          contentContainerStyle={[
+            styles.modal,
+            { backgroundColor: theme.colors.elevation.level2 },
+          ]}
         >
-          <Text variant="titleMedium" style={{ marginBottom: 12 }}>
+          <Text variant="titleMedium" style={styles.modalTitle}>
             Change Profile Photo
           </Text>
           <List.Item
             title="Take Photo"
-            left={props => <List.Icon {...props} icon="camera" />}
+            left={renderCameraIcon}
             onPress={changeAvatarFromCamera}
           />
           <List.Item
             title="Choose from Gallery"
-            left={props => <List.Icon {...props} icon="image" />}
+            left={renderGalleryIcon}
             onPress={changeAvatarFromGallery}
           />
           {/* <List.Item
@@ -333,7 +329,7 @@ const EditProfile = () => {
           <Button
             mode="outlined"
             onPress={() => setPhotoActionsVisible(false)}
-            style={{ marginTop: 8 }}
+            style={styles.cancelButton}
           >
             Cancel
           </Button>
@@ -344,5 +340,52 @@ const EditProfile = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  photoSection: {
+    alignItems: 'center',
+    paddingVertical: 24,
+    borderBottomWidth: 1,
+  },
+  avatarContainer: {
+    width: 96,
+    height: 96,
+  },
+  cameraButton: {
+    position: 'absolute',
+    right: -6,
+    bottom: -6,
+  },
+  photoHint: {
+    marginTop: 8,
+    opacity: 0.7,
+  },
+  inputContainer: {
+    width: '100%',
+  },
+  hintText: {
+    marginTop: 4,
+    opacity: 0.6,
+  },
+  bioHintContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 4,
+  },
+  modal: {
+    margin: 16,
+    borderRadius: 16,
+    padding: 12,
+  },
+  modalTitle: {
+    marginBottom: 12,
+  },
+  cancelButton: {
+    marginTop: 8,
+  },
+});
 
 export default EditProfile;

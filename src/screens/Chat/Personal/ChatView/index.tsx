@@ -232,7 +232,7 @@ export default function ChatView() {
     ({ item, index }) => {
       if (isDateItem(item)) {
         return (
-          <View style={{ alignItems: 'center', paddingVertical: 8 }}>
+          <View style={styles.dateContainer}>
             <Chip mode="outlined">{item.dateLabel}</Chip>
           </View>
         );
@@ -270,7 +270,7 @@ export default function ChatView() {
           message={message}
           isMe={isMe}
           otherUid={otherUid}
-          showAvatar={showAvatar}
+          _showAvatar={showAvatar}
           showName={isGroup && !isMe}
           onOpenMedia={onOpenMedia}
           onLongPress={(msg: Message) => {
@@ -641,49 +641,48 @@ export default function ChatView() {
     [isSelf, meDoc?.photoURL, otherAvatar],
   );
 
+  const renderHeaderAvatar = React.useCallback((props: any) => 
+    avatarUri ? (
+      <Avatar.Image {...props} size={40} source={{ uri: avatarUri }} />
+    ) : (
+      <Avatar.Text
+        {...props}
+        size={40}
+        label={(isSelf ? meDoc?.username ?? 'You' : otherName)
+          .slice(0, 2)
+          .toUpperCase()}
+      />
+    ), [avatarUri, isSelf, meDoc?.username, otherName]);
+
+  const renderHeaderTitle = React.useCallback(() => (
+    <List.Item
+      title={headerTitle}
+      description={headerSubtitle}
+      left={renderHeaderAvatar}
+      onPress={() => {
+        if (!isSelf)
+          navigation.navigate('PersonalChatContact', { id: otherUid });
+      }}
+    />
+  ), [headerTitle, headerSubtitle, renderHeaderAvatar, isSelf, navigation, otherUid]);
+
+  const renderHeaderRight = React.useCallback(() => (
+    <IconButton
+      icon={starredCount > 0 ? 'star' : 'star-outline'}
+      size={24}
+      onPress={() => (navigation as any).navigate('StarredMessages', { id: otherUid, name: otherName })}
+    />
+  ), [starredCount, navigation, otherUid, otherName]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: () => (
-        <List.Item
-          title={headerTitle}
-          description={headerSubtitle}
-          left={props =>
-            avatarUri ? (
-              <Avatar.Image {...props} size={40} source={{ uri: avatarUri }} />
-            ) : (
-              <Avatar.Text
-                {...props}
-                size={40}
-                label={(isSelf ? meDoc?.username ?? 'You' : otherName)
-                  .slice(0, 2)
-                  .toUpperCase()}
-              />
-            )
-          }
-          onPress={() => {
-            if (!isSelf)
-              navigation.navigate('PersonalChatContact', { id: otherUid });
-          }}
-        />
-      ),
-      headerRight: () => (
-        <IconButton
-          icon={starredCount > 0 ? 'star' : 'star-outline'}
-          size={24}
-          onPress={() => (navigation as any).navigate('StarredMessages', { id: otherUid, name: otherName })}
-        />
-      ),
+      headerTitle: renderHeaderTitle,
+      headerRight: renderHeaderRight,
     });
   }, [
     navigation,
-    headerTitle,
-    headerSubtitle,
-    avatarUri,
-    isSelf,
-    otherUid,
-    meDoc?.username,
-    otherName,
-    starredCount,
+    renderHeaderTitle,
+    renderHeaderRight,
   ]);
 
   return (
@@ -709,35 +708,31 @@ export default function ChatView() {
             : headerHeight - Dimensions.get('window').height * 0.04
         }
       >
-        <View style={{ flex: 1, marginTop: isSelectionMode ? 56 : 0 }}>
+        <View style={[
+          styles.messageListContainer,
+          isSelectionMode && styles.selectionModeMargin
+        ]}>
           <FlatList
             ref={listRef}
             data={listData}
             inverted
             keyExtractor={keyExtractor}
             renderItem={renderItem}
-            contentContainerStyle={{ paddingVertical: 8 }}
+            contentContainerStyle={styles.listContentContainer}
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="on-drag"
             onScrollBeginDrag={() => Keyboard.dismiss()}
-            style={{ flex: 1 }}
+            style={styles.container}
             maintainVisibleContentPosition={{
               minIndexForVisible: 0,
               autoscrollToTopThreshold: 10,
             }}
           />
           {isRecording ? (
-            <View style={{ flex: 1, maxHeight: 140 }}>
+            <View style={styles.recordingContainer}>
               <FrequencyChart data={freqs} dataSize={FFT_SIZE / 2} />
               <View
-                style={{
-                  justifyContent: 'space-between',
-                  columnGap: 8,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingHorizontal: 8,
-                  paddingVertical: 4,
-                }}
+                style={styles.recordingControls}
               >
                 <IconButton
                   icon="trash-can-outline"
@@ -796,4 +791,17 @@ export default function ChatView() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  dateContainer: { alignItems: 'center', paddingVertical: 8 },
+  messageListContainer: { flex: 1 },
+  listContentContainer: { paddingVertical: 8 },
+  recordingContainer: { flex: 1, maxHeight: 140 },
+  recordingControls: {
+    justifyContent: 'space-between',
+    columnGap: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  selectionModeMargin: { marginTop: 56 },
 });

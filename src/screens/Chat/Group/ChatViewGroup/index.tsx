@@ -156,33 +156,42 @@ export default function ChatViewGroup() {
     // Placeholder for audio recording functionality
   }, []);
 
+  const renderHeaderLeft = React.useCallback(() => (
+    <Appbar.BackAction onPress={() => navigation.goBack()} />
+  ), [navigation]);
+
+  const renderHeaderAvatar = React.useCallback((props: any) => 
+    groupMeta.avatar ? (
+      <Avatar.Image {...props} size={40} source={{ uri: groupMeta.avatar }} />
+    ) : (
+      <Avatar.Icon {...props} size={40} icon="account-group" />
+    ), [groupMeta.avatar]);
+
+  const renderHeaderTitle = React.useCallback(() => (
+    <List.Item
+      title={groupMeta.name}
+      description={`${groupMeta.members} members • ${groupMeta.online} online`}
+      titleNumberOfLines={1}
+      descriptionNumberOfLines={1}
+      left={renderHeaderAvatar}
+      style={styles.headerLeft}
+      onPress={() => navigation.navigate('GroupChatContact', { id: groupMeta.id })}
+    />
+  ), [groupMeta.name, groupMeta.members, groupMeta.online, groupMeta.id, renderHeaderAvatar, navigation]);
+
+  const renderHeaderRight = React.useCallback(() => (
+    <View style={styles.headerRightContainer}>
+      <Appbar.Action icon="dots-vertical" onPress={() => {/* open sheet/menu */}} />
+    </View>
+  ), []);
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => <Appbar.BackAction onPress={() => navigation.goBack()} />,
-      headerTitle: () => (
-        <List.Item
-          title={groupMeta.name}
-          description={`${groupMeta.members} members • ${groupMeta.online} online`}
-          titleNumberOfLines={1}
-          descriptionNumberOfLines={1}
-          left={props =>
-            groupMeta.avatar ? (
-              <Avatar.Image {...props} size={40} source={{ uri: groupMeta.avatar }} />
-            ) : (
-              <Avatar.Icon {...props} size={40} icon="account-group" />
-            )
-          }
-          style={{ paddingLeft: 0 }}
-          onPress={() => navigation.navigate('GroupChatContact', { id: groupMeta.id })}
-        />
-      ),
-      headerRight: () => (
-        <View style={{ flexDirection: 'row' }}>
-          <Appbar.Action icon="dots-vertical" onPress={() => {/* open sheet/menu */}} />
-        </View>
-      ),
+      headerLeft: renderHeaderLeft,
+      headerTitle: renderHeaderTitle,
+      headerRight: renderHeaderRight,
     });
-  }, [navigation, groupMeta]);
+  }, [navigation, renderHeaderLeft, renderHeaderTitle, renderHeaderRight]);
 
   return (
     <SafeAreaView
@@ -199,14 +208,14 @@ export default function ChatViewGroup() {
         }
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={{ flex: 1 }}>
+          <View style={styles.contentContainer}>
             <FlatList
               ref={listRef}
               data={messages}
               inverted
               keyExtractor={keyExtractor}
               renderItem={renderItem}
-              contentContainerStyle={{ paddingVertical: 8 }}
+              contentContainerStyle={styles.listContentContainer}
               keyboardShouldPersistTaps="handled"
             />
             <ChatInput
@@ -225,4 +234,8 @@ export default function ChatViewGroup() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  headerLeft: { paddingLeft: 0 },
+  headerRightContainer: { flexDirection: 'row' },
+  contentContainer: { flex: 1 },
+  listContentContainer: { paddingVertical: 8 },
 });

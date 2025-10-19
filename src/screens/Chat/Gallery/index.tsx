@@ -1,12 +1,12 @@
 import { FlashList } from '@shopify/flash-list';
 import React, { useCallback, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import AlbumCard from '../../../components/AlbumCard';
 import {
   AlbumWithPhotos,
   getAlbumsGroupedMinimal,
 } from '../../../utils/camera-roll';
-import { styles } from './styles';
+import { styles as galleryStyles } from './styles';
 
 const Gallery = () => {
   const [groupedPhotos, setGroupedPhotos] = React.useState<AlbumWithPhotos[]>([]);
@@ -43,23 +43,31 @@ const Gallery = () => {
       data={groupedPhotos}
       renderItem={renderAlbum}
       keyExtractor={keyExtractor}
-      contentContainerStyle={styles.listContent}
-      ListEmptyComponent={
-        loading ? (
-          <View style={{ padding: 24 }}>
-            <Text>Loading albums…</Text>
-          </View>
-        ) : (
-          <View style={{ padding: 24 }}>
-            <Text>No albums found</Text>
-          </View>
-        )
-      }
+      contentContainerStyle={galleryStyles.listContent}
+      ListEmptyComponent={loading ? <LoadingComponent /> : <EmptyComponent />}
       // FlashList v2 handles virtualization; FlatList-only props removed:
       // removeClippedSubviews, windowSize, maxToRenderPerBatch,
       // updateCellsBatchingPeriod, initialNumToRender
     />
   );
 };
+
+const LoadingComponent = () => (
+  <View style={styles.emptyContainer}>
+    <Text>Loading albums…</Text>
+  </View>
+);
+
+const EmptyComponent = () => (
+  <View style={styles.emptyContainer}>
+    <Text>No albums found</Text>
+  </View>
+);
+
+const styles = StyleSheet.create({
+  emptyContainer: {
+    padding: 24,
+  },
+});
 
 export default Gallery;

@@ -71,35 +71,64 @@ export default function LinksTab({ otherUid }: LinksTabProps) {
 
   return (
     <ScrollView style={[styles.wrap, { backgroundColor: theme.colors.background }]}>
-      {linkMessages.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Text style={{ color: theme.colors.secondary, textAlign: 'center' }}>
-            No links found
-          </Text>
-        </View>
-      ) : (
-        linkMessages.map((item) => {
-          const url = extractUrl(item.text || '');
-          const domain = url.replace(/^https?:\/\//, '').split('/')[0];
-          return (
-            <List.Item
-              key={item.id}
-              title={domain}
-              description={formatDate(item.createdAt)}
-              left={(p) => <List.Icon {...p} color={theme.colors.primary} icon="link-variant" />}
-              style={[styles.item, { backgroundColor: theme.colors.surface }]}
-              titleStyle={{ color: theme.colors.onSurface }}
-              descriptionStyle={{ color: theme.colors.secondary }}
-              onPress={() => {
-                // Handle link opening
-              }}
-            />
-          );
-        })
-      )}
+      <LinksContent 
+        linkMessages={linkMessages}
+        theme={theme}
+        extractUrl={extractUrl}
+        formatDate={formatDate}
+      />
     </ScrollView>
   );
 }
+
+const LinkIcon = (props: any, theme: any) => (
+  <List.Icon {...props} color={theme.colors.primary} icon="link-variant" />
+);
+
+const LinksContent = ({ 
+  linkMessages, 
+  theme, 
+  extractUrl, 
+  formatDate 
+}: {
+  linkMessages: any[];
+  theme: any;
+  extractUrl: (text: string) => string;
+  formatDate: (timestamp: any) => string;
+}) => {
+  if (linkMessages.length === 0) {
+    return (
+      <View style={styles.emptyContainer}>
+        <Text style={[styles.emptyText, { color: theme.colors.secondary }]}>
+          No links found
+        </Text>
+      </View>
+    );
+  }
+
+  return (
+    <>
+      {linkMessages.map((item) => {
+        const url = extractUrl(item.text || '');
+        const domain = url.replace(/^https?:\/\//, '').split('/')[0];
+        return (
+          <List.Item
+            key={item.id}
+            title={domain}
+            description={formatDate(item.createdAt)}
+            left={(p) => LinkIcon(p, theme)}
+            style={[styles.item, { backgroundColor: theme.colors.surface }]}
+            titleStyle={{ color: theme.colors.onSurface }}
+            descriptionStyle={{ color: theme.colors.secondary }}
+            onPress={() => {
+              // Handle link opening
+            }}
+          />
+        );
+      })}
+    </>
+  );
+};
 
 const styles = StyleSheet.create({ 
   wrap: { 
@@ -115,5 +144,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 50,
+  },
+  emptyText: {
+    textAlign: 'center',
   },
 });

@@ -23,75 +23,104 @@ export default function GroupPolicies({
     sendMessagesPolicy === 'all' ? 'All Members' : 'Admins Only';
   const editLabel = editInfoPolicy === 'admins' ? 'Admins Only' : 'All Members';
 
+  const renderSendMessagesMenu = React.useCallback(() => (
+    <SendMessagesMenu 
+      visible={menu1}
+      onDismiss={() => setMenu1(false)}
+      onShow={() => setMenu1(true)}
+      onChangeSendPolicy={onChangeSendPolicy}
+    />
+  ), [menu1, onChangeSendPolicy]);
+
+  const renderEditInfoMenu = React.useCallback(() => (
+    <EditInfoMenu 
+      visible={menu2}
+      onDismiss={() => setMenu2(false)}
+      onShow={() => setMenu2(true)}
+      onChangeEditPolicy={onChangeEditPolicy}
+    />
+  ), [menu2, onChangeEditPolicy]);
+
   return (
     <View
       style={[styles.section, { backgroundColor: theme.colors.background }]}
     >
-      <Text variant="titleMedium" style={{ marginBottom: 8 }}>
+      <Text variant="titleMedium" style={styles.title}>
         Group Policies
       </Text>
 
       <List.Item
         title="Send Messages"
         description={sendLabel}
-        right={() => (
-          <Menu
-            visible={menu1}
-            onDismiss={() => setMenu1(false)}
-            anchor={
-              <IconButton icon="chevron-down" onPress={() => setMenu1(true)} />
-            }
-          >
-            <Menu.Item
-              onPress={() => {
-                setMenu1(false);
-                onChangeSendPolicy('all');
-              }}
-              title="All Members"
-            />
-            <Menu.Item
-              onPress={() => {
-                setMenu1(false);
-                onChangeSendPolicy('admins');
-              }}
-              title="Admins Only"
-            />
-          </Menu>
-        )}
+        right={renderSendMessagesMenu}
       />
 
       <List.Item
         title="Edit Group Info"
         description={editLabel}
-        right={() => (
-          <Menu
-            visible={menu2}
-            onDismiss={() => setMenu2(false)}
-            anchor={
-              <IconButton icon="chevron-down" onPress={() => setMenu2(true)} />
-            }
-          >
-            <Menu.Item
-              onPress={() => {
-                setMenu2(false);
-                onChangeEditPolicy('admins');
-              }}
-              title="Admins Only"
-            />
-            <Menu.Item
-              onPress={() => {
-                setMenu2(false);
-                onChangeEditPolicy('all');
-              }}
-              title="All Members"
-            />
-          </Menu>
-        )}
+        right={renderEditInfoMenu}
       />
     </View>
   );
 }
 
+const SendMessagesMenu = ({ visible, onDismiss, onShow, onChangeSendPolicy }: {
+  visible: boolean;
+  onDismiss: () => void;
+  onShow: () => void;
+  onChangeSendPolicy: (v: 'all' | 'admins') => void;
+}) => (
+  <Menu
+    visible={visible}
+    onDismiss={onDismiss}
+    anchor={<IconButton icon="chevron-down" onPress={onShow} />}
+  >
+    <Menu.Item
+      onPress={() => {
+        onDismiss();
+        onChangeSendPolicy('all');
+      }}
+      title="All Members"
+    />
+    <Menu.Item
+      onPress={() => {
+        onDismiss();
+        onChangeSendPolicy('admins');
+      }}
+      title="Admins Only"
+    />
+  </Menu>
+);
+
+const EditInfoMenu = ({ visible, onDismiss, onShow, onChangeEditPolicy }: {
+  visible: boolean;
+  onDismiss: () => void;
+  onShow: () => void;
+  onChangeEditPolicy: (v: 'admins' | 'all') => void;
+}) => (
+  <Menu
+    visible={visible}
+    onDismiss={onDismiss}
+    anchor={<IconButton icon="chevron-down" onPress={onShow} />}
+  >
+    <Menu.Item
+      onPress={() => {
+        onDismiss();
+        onChangeEditPolicy('admins');
+      }}
+      title="Admins Only"
+    />
+    <Menu.Item
+      onPress={() => {
+        onDismiss();
+        onChangeEditPolicy('all');
+      }}
+      title="All Members"
+    />
+  </Menu>
+);
+
 const styles = StyleSheet.create({
   section: { paddingHorizontal: 16, paddingVertical: 10 },
+  title: { marginBottom: 8 },
 });

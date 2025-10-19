@@ -146,38 +146,17 @@ export default function MessageContextMenu({
                 styles.menuItem,
                 {
                   borderBottomColor: theme.colors.outline,
-                  borderBottomWidth: index < filteredMenuItems.length - 1 ? 0.5 : 0,
                 },
+                index < filteredMenuItems.length - 1 && styles.menuItemBorder,
               ]}
               onPress={() => handleAction(item.id)}
               // Enable actionable items including info
               disabled={!(item.id === 'delete' || item.id === 'copy' || item.id === 'star' || item.id === 'unstar' || item.id === 'info')}
             >
-              <Icon
-                name={item.icon as any}
-                size={20}
-                color={
-                  item.id === 'delete'
-                    ? '#ef4444'
-                    : item.id === 'copy' || item.id === 'star' || item.id === 'unstar' || item.id === 'info' || item.id === 'translate'
-                    ? theme.colors.onSurface
-                    : theme.colors.outline // Fallback disabled color
-                }
+              <MenuItemContent 
+                item={item}
+                theme={theme}
               />
-              <Text
-                style={[
-                  styles.menuItemText,
-                  {
-                    color: item.id === 'delete'
-                      ? '#ef4444'
-                      : item.id === 'copy' || item.id === 'star' || item.id === 'unstar' || item.id === 'info' || item.id === 'translate'
-                      ? theme.colors.onSurface
-                      : theme.colors.outline, // Disabled items are grayed out
-                  },
-                ]}
-              >
-                {item.label}
-              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -185,6 +164,37 @@ export default function MessageContextMenu({
     </Modal>
   );
 }
+
+const getItemColor = (itemId: string, theme: any) => {
+  if (itemId === 'delete') {
+    return '#ef4444';
+  }
+  if (['copy', 'star', 'unstar', 'info', 'translate'].includes(itemId)) {
+    return theme.colors.onSurface;
+  }
+  return theme.colors.outline;
+};
+
+const MenuItemContent = ({ item, theme }: { item: any; theme: any }) => {
+  const color = getItemColor(item.id, theme);
+  return (
+    <>
+      <Icon
+        name={item.icon as any}
+        size={20}
+        color={color}
+      />
+      <Text
+        style={[
+          styles.menuItemText,
+          { color },
+        ]}
+      >
+        {item.label}
+      </Text>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
   overlay: {
@@ -211,6 +221,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     minHeight: 48,
+  },
+  menuItemBorder: {
+    borderBottomWidth: 0.5,
   },
   menuItemText: {
     marginLeft: 12,

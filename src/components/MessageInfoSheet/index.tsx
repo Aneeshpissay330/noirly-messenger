@@ -32,6 +32,10 @@ function formatTime(iso?: string) {
   }
 }
 
+const CloseButton = ({ onDismiss, ...props }: { onDismiss: () => void }) => (
+  <IconButton {...props} icon="close" onPress={onDismiss} />
+);
+
 export default function MessageInfoSheet({ visible, onDismiss, message,   _meUid, otherUid }: Props) {
   const theme = useTheme();
 
@@ -50,13 +54,15 @@ export default function MessageInfoSheet({ visible, onDismiss, message,   _meUid
     return formatTime(ts);
   }, [message, otherUid]);
 
+  const renderCloseButton = React.useCallback((props: any) => (
+    <CloseButton {...props} onDismiss={onDismiss} />
+  ), [onDismiss]);
+
   return (
     <Portal>
       <Modal visible={visible} onDismiss={onDismiss} contentContainerStyle={[styles.container, { backgroundColor: theme.colors.surface }]}>
         <Card style={{ backgroundColor: theme.colors.surface }}>
-          <Card.Title title="Message info" right={(props) => (
-            <IconButton {...props} icon="close" onPress={onDismiss} />
-          )} />
+          <Card.Title title="Message info" right={renderCloseButton} />
           <Divider />
           <Card.Content>
             <View style={styles.row}><Text variant="labelMedium">Sent</Text><Text>{sentAt}</Text></View>

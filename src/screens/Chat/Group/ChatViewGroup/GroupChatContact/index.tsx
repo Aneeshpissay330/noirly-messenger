@@ -62,7 +62,7 @@ export default function GroupChatProfileScreen() {
       <Divider />
 
       {/* Leave Group */}
-      <View style={{ padding: 16 }}>
+      <View style={styles.leaveGroupContainer}>
         <Button mode="outlined" textColor={theme.colors.error} onPress={() => {}}>
           Leave Group
         </Button>
@@ -73,4 +73,5 @@ export default function GroupChatProfileScreen() {
 
 const styles = StyleSheet.create({
   container: { paddingBottom: 24 },
+  leaveGroupContainer: { padding: 16 },
 });

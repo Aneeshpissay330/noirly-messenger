@@ -67,14 +67,24 @@ const MediaPreviewRow : React.FC<MediaPreviewRowProps> = ({ otherUid, userName }
     [msgs]
   );
 
+  const titleStyle = useMemo(() => ({ 
+    fontWeight: 'bold' as const, 
+    fontSize: 14, 
+    color: theme.colors.onSurface 
+  }), [theme.colors.onSurface]);
+
+  const renderRightIcon = React.useCallback((props: any) => (
+    <List.Icon {...props} icon="arrow-right" color={theme.colors.secondary} />
+  ), [theme.colors.secondary]);
+
   if (!otherUid) return null;
 
   return (
-    <View style={{ backgroundColor: theme.colors.background }}>
+    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <List.Item
         title="Media, links and docs"
-        titleStyle={{ fontWeight: 'bold', fontSize: 14, color: theme.colors.onSurface }}
-        right={p => <List.Icon {...p} icon="arrow-right" color={theme.colors.secondary} />}
+        titleStyle={titleStyle}
+        right={renderRightIcon}
         onPress={() => navigation.navigate('MediaTabsScreen', { id: otherUid, name: userName })}
       />
       <View style={styles.rowContainer}>
@@ -93,6 +103,9 @@ const MediaPreviewRow : React.FC<MediaPreviewRowProps> = ({ otherUid, userName }
 };
 
 const styles = StyleSheet.create({
+  container: {
+    // backgroundColor is applied dynamically from theme
+  },
   rowContainer: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -57,7 +57,7 @@ export default function Members() {
             value={search}
             onChangeText={setSearch}
             style={styles.searchbar}
-            inputStyle={{ fontSize: 14 }}
+            inputStyle={styles.searchbarInput}
           />
         </View>
         <IconButton
@@ -93,5 +93,8 @@ const styles = StyleSheet.create({
   searchbar: {
     elevation: 0,
     borderRadius: 8,
+  },
+  searchbarInput: {
+    fontSize: 14,
   },
 });
