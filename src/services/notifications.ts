@@ -1,9 +1,7 @@
 import notifee, { AndroidImportance, AuthorizationStatus, EventType } from '@notifee/react-native';
+import type { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 import { navigationRef } from '../navigation/navigationRef';
 import { shouldHandleNotificationNav } from '../utils/notificationNav';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-import type { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 
 // Ensure a default notifications channel exists on Android
 export async function ensureNotificationChannel() {

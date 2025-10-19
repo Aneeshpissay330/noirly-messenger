@@ -1,9 +1,9 @@
 // services/chat.ts
 
+import auth from '@react-native-firebase/auth';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
 import type { ChatRow } from '../utils/chat';
 import { uploadChatFile } from './media';
 
@@ -46,17 +46,6 @@ export type MessageDoc = {
   readAt?: Record<string, FirebaseFirestoreTypes.Timestamp>;
   deletedFor?: string[]; // users who have deleted this message for themselves
 };
-
-type UserDoc = {
-  uid?: string;
-  username?: string | null;
-  displayName?: string | null;
-  photoURL?: string | null;
-};
-
-function toISO(ts?: FirebaseFirestoreTypes.Timestamp | null) {
-  return ts?.toDate?.().toISOString?.() ?? new Date(0).toISOString();
-}
 
 const CHATS = firestore().collection('chats');
 const PRESENCE = firestore().collection('presence');
