@@ -1,0 +1,39 @@
+name: Get Configuration Files for Local Development
+
+on:
+  workflow_dispatch
+
+jobs:
+  export-config:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Create google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          echo "$GOOGLE_SERVICES_JSON" > google-services.json
+          echo "✅ Created google-services.json"
+          ls -la google-services.json
+          
+      - name: Upload google-services.json as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: google-services-json
+          path: google-services.json
+          retention-days: 1
+          
+      - name: Instructions
+        run: |
+          echo "🎉 Configuration file has been created!"
+          echo ""
+          echo "📥 To download:"
+          echo "1. Go to the Actions tab in GitHub"
+          echo "2. Click on this workflow run"
+          echo "3. Download the 'google-services-json' artifact"
+          echo "4. Extract and place google-services.json in android/app/"
+          echo ""
+          echo "⚠️  Note: Artifact will be deleted after 1 day for security"
