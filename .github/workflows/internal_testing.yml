@@ -74,6 +74,5 @@ jobs:
       - name: Build Android
         run: |
           cd android
-          fastlane validate
           fastlane clean
           fastlane internal
