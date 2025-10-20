@@ -28,4 +28,46 @@ platform :android do
       build_type: 'Release'
     )
   end
+
+  lane :verify_before_clean do
+    # Verify the build artifacts exist
+    UI.message("Verifying build artifacts before cleaning...")
+    
+    # Check if AAB file exists
+    aab_path = 'app/build/outputs/bundle/release/app-release.aab'
+    if File.exist?(aab_path)
+      UI.success("✅ AAB file found at: #{aab_path}")
+      file_size = File.size(aab_path)
+      UI.message("📁 File size: #{(file_size / 1024.0 / 1024.0).round(2)} MB")
+    else
+      UI.error("❌ AAB file not found at: #{aab_path}")
+      UI.user_error!("Build verification failed: AAB file missing")
+    end
+    
+    # Check if APK file exists (optional)
+    apk_path = 'app/build/outputs/apk/release/app-release.apk'
+    if File.exist?(apk_path)
+      UI.success("✅ APK file found at: #{apk_path}")
+    else
+      UI.message("ℹ️ APK file not found (this is normal for bundle builds)")
+    end
+    
+    # Verify keystore configuration
+    if File.exist?('keystore.properties')
+      UI.success("✅ Keystore configuration found")
+    else
+      UI.error("❌ Keystore configuration missing")
+      UI.user_error!("Build verification failed: keystore.properties missing")
+    end
+    
+    # Verify google-services.json
+    if File.exist?('app/google-services.json')
+      UI.success("✅ Google Services configuration found")
+    else
+      UI.error("❌ Google Services configuration missing")
+      UI.user_error!("Build verification failed: google-services.json missing")
+    end
+    
+    UI.success("🎉 All verification checks passed! Ready to clean.")
+  end
 end

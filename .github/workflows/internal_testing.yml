@@ -68,6 +68,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Create firelane.json from secret
+        env:
+          FIRELANE_JSON: ${{ secrets.FIRELANE_JSON }}
+        run: |
+          echo "$FIRELANE_JSON" | base64 --decode > android/firelane.json
+          chmod 600 android/firelane.json
+
       - name: Create google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
@@ -118,13 +125,15 @@ jobs:
           cat android/keystore.properties || echo "Could not read keystore.properties"
           ls -la android/app/noirly.keystore || echo "noirly.keystore not found"
           ls -la android/app/google-services.json || echo "google-services.json not found"
+          ls -la android/firelane.json || echo "firelane.json not found"
           echo "Current working directory:"
           pwd
           echo "Android directory structure:"
-          find android -name "*.keystore" -o -name "keystore.properties" 2>/dev/null || echo "No keystore files found"
+          find android -name "*.keystore" -o -name "keystore.properties" -o -name "firelane.json" 2>/dev/null || echo "No keystore/config files found"
 
       - name: Build Android
         working-directory: android
         run: |
           bundle exec fastlane clean
           bundle exec fastlane internal
+          bundle exec fastlane verify_before_clean
