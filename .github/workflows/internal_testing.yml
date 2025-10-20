@@ -104,7 +104,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           cat > android/keystore.properties <<EOF
-          storeFile=app/noirly.keystore
+          storeFile=noirly.keystore
           storePassword=$KEYSTORE_PASSWORD
           keyAlias=$KEY_ALIAS
           keyPassword=$KEY_PASSWORD
@@ -114,8 +114,14 @@ jobs:
         run: |
           echo "Checking keystore files..."
           ls -la android/keystore.properties || echo "keystore.properties not found"
+          echo "Contents of keystore.properties:"
+          cat android/keystore.properties || echo "Could not read keystore.properties"
           ls -la android/app/noirly.keystore || echo "noirly.keystore not found"
           ls -la android/app/google-services.json || echo "google-services.json not found"
+          echo "Current working directory:"
+          pwd
+          echo "Android directory structure:"
+          find android -name "*.keystore" -o -name "keystore.properties" 2>/dev/null || echo "No keystore files found"
 
       - name: Build Android
         working-directory: android
