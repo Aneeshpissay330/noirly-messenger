@@ -74,5 +74,9 @@ yarn-error.log
 
 *.apk
 *.aab
+
+# Firebase configuration (stored in GitHub secrets)
+android/app/google-services.json
+
 # react-native-config codegen
 ios/tmp.xcconfig
