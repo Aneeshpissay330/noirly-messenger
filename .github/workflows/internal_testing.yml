@@ -23,6 +23,14 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: npm install
 
@@ -48,6 +56,14 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm install
@@ -93,6 +109,13 @@ jobs:
           keyAlias=$KEY_ALIAS
           keyPassword=$KEY_PASSWORD
           EOF
+
+      - name: Verify build files
+        run: |
+          echo "Checking keystore files..."
+          ls -la android/keystore.properties || echo "keystore.properties not found"
+          ls -la android/app/noirly.keystore || echo "noirly.keystore not found"
+          ls -la android/app/google-services.json || echo "google-services.json not found"
 
       - name: Build Android
         working-directory: android
