@@ -95,12 +95,10 @@ android {
             keyPassword 'android'
         }
         release {
-            if (project.hasProperty('NOIRLY_MESSENGER_UPLOAD_STORE_FILE')) {
-                storeFile file(NOIRLY_MESSENGER_UPLOAD_STORE_FILE)
-                storePassword NOIRLY_MESSENGER_UPLOAD_STORE_PASSWORD
-                keyAlias NOIRLY_MESSENGER_UPLOAD_KEY_ALIAS
-                keyPassword NOIRLY_MESSENGER_UPLOAD_KEY_PASSWORD
-            }
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
     buildTypes {
