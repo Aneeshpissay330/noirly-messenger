@@ -27,6 +27,9 @@ platform :android do
       task: 'bundle',
       build_type: 'Release'
     )
-    upload_to_play_store_internal_app_sharing
+    upload_to_play_store(
+      track: 'internal',
+      release_status: 'draft'
+    )
   end
 end
