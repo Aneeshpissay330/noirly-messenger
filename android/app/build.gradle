@@ -108,12 +108,12 @@ android {
                 storeFile file(keystoreProperties['storeFile'])
                 storePassword keystoreProperties['storePassword']
             }
-            else if (project.hasProperty('NOIRLY_MESSENGER_UPLOAD_STORE_FILE')) {
-                storeFile file(NOIRLY_MESSENGER_UPLOAD_STORE_FILE)
-                storePassword NOIRLY_MESSENGER_UPLOAD_STORE_PASSWORD
-                keyAlias NOIRLY_MESSENGER_UPLOAD_KEY_ALIAS
-                keyPassword NOIRLY_MESSENGER_UPLOAD_KEY_PASSWORD
-            }
+            // else if (project.hasProperty('NOIRLY_MESSENGER_UPLOAD_STORE_FILE')) {
+            //     storeFile file(NOIRLY_MESSENGER_UPLOAD_STORE_FILE)
+            //     storePassword NOIRLY_MESSENGER_UPLOAD_STORE_PASSWORD
+            //     keyAlias NOIRLY_MESSENGER_UPLOAD_KEY_ALIAS
+            //     keyPassword NOIRLY_MESSENGER_UPLOAD_KEY_PASSWORD
+            // }
         }
     }
     buildTypes {
