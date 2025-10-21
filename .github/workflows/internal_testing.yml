@@ -72,8 +72,8 @@ jobs:
         env:
           FIRELANE_JSON: ${{ secrets.FIRELANE_JSON }}
         run: |
-          echo "$FIRELANE_JSON" | base64 --decode > android/firelane.json
-          chmod 600 android/firelane.json
+          echo "$FIRELANE_JSON" | base64 --decode > android/fastlane/playstore-credentials.json
+          chmod 600 android/fastlane/playstore-credentials.json
 
       - name: Create google-services.json
         env:
@@ -117,6 +117,15 @@ jobs:
           keyPassword=$KEY_PASSWORD
           EOF
 
+      - name: Secure all decoded artifacts
+        run: |
+          echo "Setting secure permissions for all decoded artifacts..."
+          chmod 600 android/fastlane/playstore-credentials.json || echo "playstore-credentials.json not found"
+          chmod 600 android/app/google-services.json || echo "google-services.json not found"
+          chmod 600 android/app/noirly.keystore || echo "noirly.keystore not found"
+          chmod 600 android/keystore.properties || echo "keystore.properties not found"
+          echo "All artifacts secured with 600 permissions (owner read/write only)"
+
       - name: Verify build files
         run: |
           echo "Checking keystore files..."
@@ -125,15 +134,37 @@ jobs:
           cat android/keystore.properties || echo "Could not read keystore.properties"
           ls -la android/app/noirly.keystore || echo "noirly.keystore not found"
           ls -la android/app/google-services.json || echo "google-services.json not found"
-          ls -la android/firelane.json || echo "firelane.json not found"
+          ls -la android/fastlane/playstore-credentials.json || echo "playstore-credentials.json not found"
           echo "Current working directory:"
           pwd
           echo "Android directory structure:"
-          find android -name "*.keystore" -o -name "keystore.properties" -o -name "firelane.json" 2>/dev/null || echo "No keystore/config files found"
+          find android -name "*.keystore" -o -name "keystore.properties" -o -name "playstore-credentials.json" 2>/dev/null || echo "No keystore/config files found"
 
       - name: Build Android
         working-directory: android
         run: |
           bundle exec fastlane clean
           bundle exec fastlane internal
-          bundle exec fastlane verify_before_clean
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-artifacts-${{ github.run_number }}
+          path: |
+            android/app/build/outputs/**/*.aab
+            android/fastlane/playstore-credentials.json
+            android/app/google-services.json
+            android/keystore.properties
+            android/app/noirly.keystore
+          retention-days: 30
+
+      - name: Upload build logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-logs-${{ github.run_number }}
+          path: |
+            android/fastlane/report.xml
+            android/app/build/reports/**/*
+          retention-days: 7

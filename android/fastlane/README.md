@@ -15,14 +15,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ## Android
 
-### android validate
-
-```sh
-[bundle exec] fastlane android validate
-```
-
-
-
 ### android clean
 
 ```sh
@@ -35,6 +27,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ```sh
 [bundle exec] fastlane android internal
+```
+
+
+
+### android verify_before_clean
+
+```sh
+[bundle exec] fastlane android verify_before_clean
 ```
 
 
