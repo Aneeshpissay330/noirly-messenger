@@ -1,0 +1,23 @@
+Noirly Messenger is a modern real-time messaging app designed for smooth, secure, and fast communication. It combines an elegant minimal design with essential messaging features that make staying connected simple and effortless.
+
+Features:
+
+💬 Instant Messaging — Chat in real time with friends and family.
+
+📞 Voice & Video Calls — Enjoy high-quality, low-latency communication anywhere.
+
+📸 Media Sharing — Send photos, videos, and files instantly.
+
+🔔 Notifications — Stay updated with instant message alerts and call notifications.
+
+🔒 Privacy & Security — Built with user data protection in mind. Your chats and media are stored securely.
+
+☁️ Cloud Sync — Access your messages from multiple devices seamlessly.
+
+🌓 Dark Minimal Design — A clean, distraction-free interface built for comfort.
+
+🌍 Multilingual Support — Communicate easily in your preferred language.
+
+⚙️ Modern Tech Stack — Powered by Firebase for real-time messaging and media handling.
+
+Noirly Messenger delivers a fast, reliable, and elegant messaging experience — designed for users who value simplicity, performance, and privacy.

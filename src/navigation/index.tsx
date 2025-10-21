@@ -34,9 +34,9 @@ const Navigation = () => {
     );
   }
 
-  if (!user?.phoneNumber) {
-    return <PhoneLoginScreen />;
-  }
+  // if (!user?.phoneNumber) {
+  //   return <PhoneLoginScreen />;
+  // }
 
   if (!user?.email) {
     return <GoogleLoginScreen />;
