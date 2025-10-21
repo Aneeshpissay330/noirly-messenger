@@ -72,8 +72,8 @@ jobs:
         env:
           FIRELANE_JSON: ${{ secrets.FIRELANE_JSON }}
         run: |
-          echo "$FIRELANE_JSON" | base64 --decode > android/fastlane/playstore-credentials.json
-          chmod 600 android/fastlane/playstore-credentials.json
+          echo "$FIRELANE_JSON" | base64 --decode > android/playstore-credentials.json
+          chmod 600 android/playstore-credentials.json
 
       - name: Create google-services.json
         env:
@@ -120,7 +120,7 @@ jobs:
       - name: Secure all decoded artifacts
         run: |
           echo "Setting secure permissions for all decoded artifacts..."
-          chmod 600 android/fastlane/playstore-credentials.json || echo "playstore-credentials.json not found"
+          chmod 600 android/playstore-credentials.json || echo "playstore-credentials.json not found"
           chmod 600 android/app/google-services.json || echo "google-services.json not found"
           chmod 600 android/app/noirly.keystore || echo "noirly.keystore not found"
           chmod 600 android/keystore.properties || echo "keystore.properties not found"
@@ -134,7 +134,7 @@ jobs:
           cat android/keystore.properties || echo "Could not read keystore.properties"
           ls -la android/app/noirly.keystore || echo "noirly.keystore not found"
           ls -la android/app/google-services.json || echo "google-services.json not found"
-          ls -la android/fastlane/playstore-credentials.json || echo "playstore-credentials.json not found"
+          ls -la android/playstore-credentials.json || echo "playstore-credentials.json not found"
           echo "Current working directory:"
           pwd
           echo "Android directory structure:"
@@ -153,7 +153,7 @@ jobs:
           name: build-artifacts-${{ github.run_number }}
           path: |
             android/app/build/outputs/**/*.aab
-            android/fastlane/playstore-credentials.json
+            android/playstore-credentials.json
             android/app/google-services.json
             android/keystore.properties
             android/app/noirly.keystore
