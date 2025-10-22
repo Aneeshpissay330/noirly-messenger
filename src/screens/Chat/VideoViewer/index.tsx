@@ -1,18 +1,15 @@
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   Alert,
   Modal,
+  StyleSheet,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { Menu, Snackbar, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets, SafeAreaView } from 'react-native-safe-area-context';
-import {
-  Gallery,
-  type GalleryRefType,
-} from 'react-native-zoom-toolkit';
 import auth from '@react-native-firebase/auth';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import DeleteMessageModal from '../../../components/DeleteMessageModal';
@@ -21,41 +18,32 @@ import {
   selectMessagesByOther,
 } from '../../../features/messages';
 import type { Message } from '../../../types/chat';
-import { useGalleryCallbacks } from '../../../hooks/useGalleryCallbacks';
 import { useHeaderConfig } from '../../../hooks/useHeaderConfig';
 import { useMediaViewer } from '../../../hooks/useMediaViewer';
-import { mediaViewerStyles } from '../../../styles/mediaViewerStyles';
-import GalleryImage from './GalleryImage';
-import GalleryVideo from './GalleryVideo';
-
-type MediaItem = { src: string; type: 'image' | 'video' };
+import GalleryVideo from '../MediaViewer/GalleryVideo';
 
 type RouteParams = {
-  MediaViewer: { 
-    items: MediaItem[]; 
-    initialIndex?: number; 
+  VideoViewer: { 
+    uri: string; 
     title?: string;
     chatId?: string;
     otherUid?: string;
-    messageIds?: string[];
+    messageId?: string;
   };
 };
 
-export default function MediaViewer() {
-  const route = useRoute<RouteProp<RouteParams, 'MediaViewer'>>();
+export default function VideoViewer() {
+  const route = useRoute<RouteProp<RouteParams, 'VideoViewer'>>();
   const navigation = useNavigation();
   const theme = useTheme();
   const insets = useSafeAreaInsets();
-  const galleryRef = useRef<GalleryRefType>(null);
   
   // Route params
-  const allItems = route.params?.items ?? [];
-  const items = allItems.filter(item => item.type === 'image'); // Only show images, not videos
-  const initial = route.params?.initialIndex ?? 0;
+  const uri = route.params?.uri ?? '';
   const title = route.params?.title ?? '';
   const chatId = route.params?.chatId;
   const otherUid = route.params?.otherUid;
-  const messageIds = route.params?.messageIds ?? [];
+  const messageId = route.params?.messageId;
   
   // Redux and auth
   const dispatch = useAppDispatch();
@@ -68,26 +56,11 @@ export default function MediaViewer() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [selectedMessageForDelete, setSelectedMessageForDelete] = useState<Message | null>(null);
   
-  console.log('MediaViewer params:', { allItems, items, initial, title });
+  console.log('VideoViewer params:', { uri, title });
 
-  const {
-    index,
-    menuVisible,
-    openMenu,
-    closeMenu,
-    handleShare,
-    handleDownload,
-    handleDelete: _handleDelete, // Ignore the default handler
-    onIndexChange,
-    onTap,
-    snackbarVisible,
-    snackbarMessage,
-    hideSnackbar,
-  } = useMediaViewer({ items, initialIndex: initial, title });
-
-  useHeaderConfig({ title, onMenuPress: openMenu });
-
-  const { keyExtractor, transition } = useGalleryCallbacks();
+  // Create a single video item for the useMediaViewer hook
+  const videoItem = { src: uri, type: 'video' as const };
+  const items = [videoItem];
 
   // Delete handlers
   const handleDeleteForMe = useCallback(async () => {
@@ -151,35 +124,24 @@ export default function MediaViewer() {
     setSelectedMessageForDelete(null);
   }, []);
 
+  const {
+    menuVisible,
+    openMenu,
+    closeMenu,
+    handleShare,
+    handleDownload,
+    handleDelete: _handleDelete, // Ignore the default handler
+    onTap,
+    snackbarVisible,
+    snackbarMessage,
+    hideSnackbar,
+  } = useMediaViewer({ items, initialIndex: 0, title });
+
   const handleDeletePress = useCallback(() => {
     closeMenu();
     
-    // Find the message corresponding to current media item
-    const currentItem = items[index];
-    if (!currentItem || messageIds.length === 0) {
-      Alert.alert('Error', 'Cannot delete this media');
-      return;
-    }
-    
-    // For images filtered from a larger list, find the corresponding message
-    const allMediaItems = allItems.map((item, idx) => ({ ...item, originalIndex: idx }));
-    const currentMediaIndex = items.findIndex(item => item.src === currentItem.src);
-    
-    let messageId: string | undefined;
-    if (messageIds.length > currentMediaIndex) {
-      // Use the messageId mapping if available
-      messageId = messageIds[currentMediaIndex];
-    } else {
-      // Fallback: try to find the message by matching the media URL
-      const matchingMessage = messages.find(msg => 
-        (msg.type === 'image' || msg.type === 'video') && 
-        (msg.localPath === currentItem.src || msg.url === currentItem.src)
-      );
-      messageId = matchingMessage?.id;
-    }
-    
     if (!messageId) {
-      Alert.alert('Error', 'Cannot find message to delete');
+      Alert.alert('Error', 'Cannot delete this video');
       return;
     }
     
@@ -191,45 +153,30 @@ export default function MediaViewer() {
     
     setSelectedMessageForDelete(messageToDelete);
     setDeleteModalVisible(true);
-  }, [closeMenu, items, index, messageIds, allItems, messages]);
+  }, [closeMenu, messageId, messages]);
 
-  // Optimized render item function
-  const renderItem = React.useCallback((item: MediaItem, itemIndex: number) => {
-    console.log('MediaViewer renderItem:', { item, itemIndex });
-    
-    if (item.type === 'image') {
-      return <GalleryImage uri={item.src} index={itemIndex} />;
-    }
-    return <GalleryVideo uri={item.src} index={itemIndex} />;
-  }, []);
+  useHeaderConfig({ title, onMenuPress: openMenu });
+
+  const containerStyle = [
+    styles.container, 
+    { backgroundColor: theme.colors.background }
+  ];
+
+  const handleTap = () => {
+    onTap(null, 0);
+  };
 
   return (
     <SafeAreaView 
-      style={[mediaViewerStyles.container, { backgroundColor: theme.colors.background }]}
+      style={containerStyle}
       edges={['bottom']}
     >
-      <View style={[mediaViewerStyles.container, { backgroundColor: theme.colors.background }]}>
-      <Gallery
-        ref={galleryRef}
-        data={items}
-        keyExtractor={keyExtractor}
-        renderItem={renderItem}
-        onTap={onTap}
-        onIndexChange={onIndexChange}
-        initialIndex={index}
-        customTransition={transition}
-      />
-
-      <View
-        style={[
-          mediaViewerStyles.paginationOverlay,
-          { bottom: Math.max(insets.bottom + 10, 30) },
-        ]}
-      >
-        <Text style={mediaViewerStyles.paginationText}>
-          {index + 1} of {items.length}
-        </Text>
-      </View>
+      <View style={containerStyle}>
+      <TouchableWithoutFeedback onPress={handleTap}>
+        <View style={styles.videoContainer}>
+          <GalleryVideo uri={uri} index={0} />
+        </View>
+      </TouchableWithoutFeedback>
 
       <Modal
         visible={menuVisible}
@@ -238,10 +185,10 @@ export default function MediaViewer() {
         onRequestClose={closeMenu}
       >
         <TouchableWithoutFeedback onPress={closeMenu}>
-          <View style={mediaViewerStyles.modalOverlay}>
+          <View style={styles.modalOverlay}>
             <View
               style={[
-                mediaViewerStyles.menuModal,
+                styles.menuModal,
                 { backgroundColor: theme.colors.surface },
               ]}
             >
@@ -286,4 +233,24 @@ export default function MediaViewer() {
       </View>
     </SafeAreaView>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  videoContainer: {
+    flex: 1,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  menuModal: {
+    borderRadius: 8,
+    padding: 8,
+    minWidth: 200,
+  },
+});

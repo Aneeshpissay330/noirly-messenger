@@ -29,6 +29,25 @@ export default function AttachmentSheet({
   onPickContact,
 }: Props) {
   const theme = useTheme();
+  
+  const handleDocumentPress = () => {
+    console.log('Document button pressed');
+    onDismiss();
+    onPickDocument();
+  };
+  
+  const handleGalleryPress = () => {
+    console.log('Gallery button pressed');
+    onDismiss();
+    onOpenGallery();
+  };
+  
+  const handleCameraPress = () => {
+    console.log('Camera button pressed');
+    onDismiss();
+    onOpenCamera();
+  };
+  
   return (
     <Portal>
       <Modal
@@ -43,17 +62,17 @@ export default function AttachmentSheet({
           <List.Item
             title="Camera"
             left={CameraIcon}
-            onPress={onOpenCamera}
+            onPress={handleCameraPress}
           />
           <List.Item
             title="Gallery"
             left={GalleryIcon}
-            onPress={onOpenGallery}
+            onPress={handleGalleryPress}
           />
           <List.Item
             title="Document"
             left={DocumentIcon}
-            onPress={onPickDocument}
+            onPress={handleDocumentPress}
           />
           {onShareLocation && (
             <>

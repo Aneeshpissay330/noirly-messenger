@@ -118,16 +118,19 @@ export default function ChatInput({
         visible={attachOpen}
         onDismiss={() => setAttachOpen(false)}
         onPickDocument={() => {
+          console.log('ChatInput: Document picker triggered');
           setAttachOpen(false);
-          onPickDocument();
+          setTimeout(() => onPickDocument(), 100); // Small delay to ensure modal closes
         }}
         onOpenCamera={() => {
+          console.log('ChatInput: Camera triggered');
           setAttachOpen(false);
-          onOpenCamera();
+          setTimeout(() => onOpenCamera(), 100); // Small delay to ensure modal closes
         }}
         onOpenGallery={() => {
+          console.log('ChatInput: Gallery triggered');
           setAttachOpen(false);
-          onOpenGallery();
+          setTimeout(() => onOpenGallery(), 100); // Small delay to ensure modal closes
         }}
       />
     </View>

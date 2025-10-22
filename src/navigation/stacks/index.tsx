@@ -6,6 +6,7 @@ import Gallery from '../../screens/Chat/Gallery';
 import ChatViewGroup from '../../screens/Chat/Group/ChatViewGroup';
 import GroupChatContact from '../../screens/Chat/Group/ChatViewGroup/GroupChatContact';
 import MediaViewer from '../../screens/Chat/MediaViewer';
+import VideoViewer from '../../screens/Chat/VideoViewer';
 import ChatView from '../../screens/Chat/Personal/ChatView';
 import PersonalChatContact from '../../screens/Chat/Personal/ChatView/PersonalChatContact';
 import StarredMessages from '../../screens/Chat/Personal/Starred';
@@ -57,6 +58,11 @@ function Stacks() {
       <Stack.Screen
         name="MediaViewer"
         component={MediaViewer}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="VideoViewer"
+        component={VideoViewer}
         options={{ headerShown: false }}
       />
       <Stack.Screen

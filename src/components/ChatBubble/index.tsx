@@ -180,6 +180,7 @@ export default function ChatBubble({
             isMe={isMe}
             theme={theme}
             isStarred={isStarred}
+            otherUid={otherUid}
           />
         </View>
       </View>

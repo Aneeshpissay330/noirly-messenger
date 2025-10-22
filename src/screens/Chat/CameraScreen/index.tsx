@@ -12,6 +12,7 @@ import React, {
   useState,
 } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import ImagePicker from 'react-native-image-crop-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -41,6 +42,7 @@ type ChatRouteParams = {
 };
 
 const CameraScreen: React.FC = () => {
+  const theme = useTheme();
   const [position, setPosition] = useState<'back' | 'front'>('back');
   const [mode, setMode] = useState<Mode>('photo');
   const navigation = useNavigation<NavigationProp<RootTabParamList>>();
@@ -175,7 +177,7 @@ const CameraScreen: React.FC = () => {
   const styles = useMemo(
     () =>
       StyleSheet.create({
-        container: { flex: 1, backgroundColor: 'black' },
+        container: { flex: 1, backgroundColor: theme.colors.background },
         camera: { ...StyleSheet.absoluteFillObject },
         topBar: {
           position: 'absolute',
@@ -193,7 +195,7 @@ const CameraScreen: React.FC = () => {
           paddingHorizontal: 16,
         },
       }),
-    [],
+    [theme.colors.background],
   );
 
   if (device == null || !hasCam) return null;

@@ -72,6 +72,8 @@ type ChatRouteParams = {
 type ChatPersonalNavigationParams = {
   CameraScreen: { id: string };
   PersonalChatContact: { id: string };
+  VideoViewer: { uri: string; title?: string; chatId?: string; otherUid?: string; messageId?: string };
+  MediaViewer: { items: any[]; initialIndex?: number; title?: string; chatId?: string; otherUid?: string; messageIds?: string[] };
 };
 
 export default function ChatView() {
@@ -114,9 +116,16 @@ export default function ChatView() {
 
   // Build a simple array of image/video items for the media viewer
   const mediaItems = useMemo(() => {
-    return messages
+    const items = messages
       .filter(m => m.type === 'image' || m.type === 'video')
-      .map(m => ({ src: m.localPath || m.url || '', type: m.type as 'image' | 'video', id: m.id }));
+      .map(m => ({ 
+        src: m.localPath || m.url || '', 
+        type: m.type as 'image' | 'video', 
+        id: m.id 
+      }));
+    
+    console.log('mediaItems created:', { messagesCount: messages.length, itemsCount: items.length, items });
+    return items;
   }, [messages]);
 
   // Delete message modal state
@@ -254,15 +263,51 @@ export default function ChatView() {
       const showAvatar = !isMe && (!prevMsg || prevMsg.userId !== message.userId);
 
       const onOpenMedia = (items: { src: string; type: 'image' | 'video' }[], idx: number) => {
+        console.log('onOpenMedia called with:', { items, idx, messageId: message.id });
+        
+        // Check if the clicked item is a video
+        const clickedItem = items[idx];
+        if (clickedItem && clickedItem.type === 'video') {
+          console.log('Opening VideoViewer for video:', { src: clickedItem.src, title: otherName });
+          (nav as any).navigate('VideoViewer', { 
+            uri: clickedItem.src, 
+            title: otherName,
+            chatId,
+            otherUid,
+            messageId: message.id
+          });
+          return;
+        }
+        
+        // For images, use the existing MediaViewer logic (which now filters to images only)
         // If the message exists in the larger mediaItems list, open full list at that index.
         const globalIndex = mediaItems.findIndex(mi => mi.id === message.id);
+        console.log('Global index search:', { globalIndex, mediaItems });
+        
         if (globalIndex >= 0) {
           const payload = mediaItems.map(mi => ({ src: mi.src, type: mi.type }));
-          (nav as any).navigate('MediaViewer', { items: payload, initialIndex: globalIndex, title: otherName });
+          const payloadMessageIds = mediaItems.map(mi => mi.id);
+          console.log('Opening MediaViewer with payload:', { payload, globalIndex, title: otherName });
+          (nav as any).navigate('MediaViewer', { 
+            items: payload, 
+            initialIndex: globalIndex, 
+            title: otherName,
+            chatId,
+            otherUid,
+            messageIds: payloadMessageIds
+          });
           return;
         }
         // fallback: open the small array passed directly
-        (nav as any).navigate('MediaViewer', { items, initialIndex: idx, title: otherName });
+        console.log('Opening MediaViewer with fallback items:', { items, idx, title: otherName });
+        (nav as any).navigate('MediaViewer', { 
+          items, 
+          initialIndex: idx, 
+          title: otherName,
+          chatId,
+          otherUid,
+          messageIds: [message.id] 
+        });
       };
 
       return (
@@ -470,10 +515,30 @@ export default function ChatView() {
 
   const onPickDocument = useCallback(async () => {
     try {
-      const [doc] = await pick({ mode: 'open' });
+      const result = await pick({ 
+        mode: 'open',
+        allowMultiSelection: false,
+        type: [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'text/plain',
+          'application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'application/vnd.ms-powerpoint',
+          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        ]
+      });
+      
+      if (!result || result.length === 0) return;
+      
+      const doc = result[0];
       if (!doc) return;
+      
       const id = chatIdRef.current;
       if (!id) return;
+
+      console.log('Document picked:', { uri: doc.uri, name: doc.name, type: doc.type, size: doc.size });
 
       // Normalize and ensure we have access to the file on Android.
       // Some providers return content:// URIs which later native readers (Firebase
@@ -500,7 +565,9 @@ export default function ChatView() {
           // @ts-ignore
           await RNFS.copyFile(doc.uri, dest);
           localPath = dest;
+          console.log('Document copied to cache:', dest);
         } catch (err) {
+          console.error('Copy file failed, trying base64 method:', err);
           // Fallback: try reading as base64 and writing out. Some RNFS
           // versions support readFile for content URIs.
           try {
@@ -509,7 +576,9 @@ export default function ChatView() {
             const data = await RNFS.readFile(doc.uri, 'base64');
             await RNFS.writeFile(dest, data, 'base64');
             localPath = dest;
+            console.log('Document written via base64:', dest);
           } catch (err2) {
+            console.error('Base64 copy also failed:', err2);
             // Failed to copy picked document to cache
             Alert.alert(
               'File access error',
@@ -520,17 +589,25 @@ export default function ChatView() {
         }
       }
 
+      // Ensure file:// prefix for consistent handling
+      const finalPath = localPath.startsWith('file://') ? localPath : `file://${localPath}`;
+      
+      console.log('Sending document:', { finalPath, mime: doc.type, size: doc.size, name: doc.name });
+
       await dispatch(
         sendFileNow({
           chatId: id,
-          localPath: `file://${localPath}`,
+          localPath: finalPath,
           mime: doc.type || 'application/octet-stream',
           size: doc.size || 0,
           name: doc.name || 'document',
         }),
       );
     } catch (error) {
-      // picker cancelled or failed
+      console.error('Document picker error:', error);
+      if (error && (error as any).message && !(error as any).message.includes('cancelled')) {
+        Alert.alert('Error', 'Failed to pick document. Please try again.');
+      }
     }
   }, [dispatch]);
 
@@ -540,31 +617,73 @@ export default function ChatView() {
 
   const onOpenGallery = useCallback(async () => {
     try {
+      console.log('Opening gallery...');
+      
+      // Check storage permissions first
+      const { handleStoragePermission } = await import('../../../../permission');
+      const permission = await handleStoragePermission('check');
+      
+      if (permission !== 'granted') {
+        console.log('Storage permission not granted, requesting...');
+        const requestResult = await handleStoragePermission('request');
+        if (requestResult !== 'granted') {
+          console.log('Storage permission denied');
+          Alert.alert('Permission Required', 'Please grant storage permission to access gallery');
+          return;
+        }
+      }
+
+      console.log('Opening image picker...');
       const media: any = await ImagePicker.openPicker({
         mediaType: 'any',
         cropping: false,
+        includeBase64: false,
+        includeExif: false,
+        maxFiles: 1,
       });
+      
+      console.log('Media selected:', { path: media?.path, mime: media?.mime, size: media?.size });
+      
       const id = chatIdRef.current;
-      if (!id || !media?.mime) return;
+      if (!id) {
+        console.error('No chat ID available');
+        return;
+      }
+      
+      if (!media?.mime || !media?.path) {
+        console.error('Invalid media selection');
+        return;
+      }
+
+      // Ensure proper file path format
+      let localPath = media.path;
+      if (!localPath.startsWith('file://')) {
+        localPath = `file://${localPath}`;
+      }
+
+      console.log('Sending media with localPath:', localPath);
 
       if (media.mime.startsWith('image/')) {
-        await dispatch(
+        console.log('Dispatching sendImageNow...');
+        const result = await dispatch(
           sendImageNow({
             chatId: id,
-            localPath: media.path,
+            localPath,
             mime: media.mime,
             width: media.width,
             height: media.height,
             size: media.size,
           }),
         );
+        console.log('Image send result:', result);
         return;
       }
       if (media.mime.startsWith('video/')) {
-        await dispatch(
+        console.log('Dispatching sendVideoNow...');
+        const result = await dispatch(
           sendVideoNow({
             chatId: id,
-            localPath: media.path,
+            localPath,
             mime: media.mime,
             width: media.width,
             height: media.height,
@@ -573,11 +692,16 @@ export default function ChatView() {
               typeof media.duration === 'number' ? media.duration : undefined,
           }),
         );
+        console.log('Video send result:', result);
         return;
       }
-      // unsupported type -> ignore silently
+      // unsupported type
+      console.warn('Unsupported media type:', media.mime);
     } catch (error) {
-      // gallery cancelled or failed
+      console.error('Gallery error:', error);
+      if (error && (error as any).code !== 'E_PICKER_CANCELLED') {
+        Alert.alert('Error', 'Failed to open gallery. Please try again.');
+      }
     }
   }, [dispatch]);
 

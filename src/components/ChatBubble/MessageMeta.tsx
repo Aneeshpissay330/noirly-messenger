@@ -10,6 +10,40 @@ type Props = {
   isMe: boolean;
   theme: any;
   isStarred?: boolean;
+  otherUid?: string;
+};
+
+// Helper function to determine message status
+const getMessageStatus = (message: Message, otherUid?: string): 'pending' | 'sent' | 'delivered' | 'read' => {
+  // If we have otherUid, check read/delivered status
+  if (otherUid) {
+    if (message.readAt?.[otherUid]) {
+      return 'read';
+    }
+    if (message.deliveredAt?.[otherUid]) {
+      return 'delivered';
+    }
+  }
+  
+  // For self messages, automatically show as delivered
+  // since they're successfully saved to Firebase/local state
+  return 'delivered';
+};
+
+// Helper function to get icon name and count based on status
+const getStatusIcon = (status: 'pending' | 'sent' | 'delivered' | 'read') => {
+  switch (status) {
+    case 'pending':
+      return { name: 'clock-outline' as const, count: 1 };
+    case 'sent':
+      return { name: 'check' as const, count: 1 };
+    case 'delivered':
+      return { name: 'check-all' as const, count: 1 }; // Using check-all for delivered
+    case 'read':
+      return { name: 'check-all' as const, count: 1 }; // Using check-all for read, but with different color
+    default:
+      return { name: 'clock-outline' as const, count: 1 };
+  }
 };
 
 export default function MessageMeta({
@@ -17,7 +51,11 @@ export default function MessageMeta({
   isMe,
   theme,
   isStarred,
+  otherUid,
 }: Props) {
+  const messageStatus = getMessageStatus(message, otherUid);
+  const statusIcon = getStatusIcon(messageStatus);
+  
   return (
     <View style={[styles.metaRow, styles.metaRowEnd]}>
       {isStarred ? (
@@ -57,7 +95,21 @@ export default function MessageMeta({
       </Text>
       {isMe ? (
         <View style={styles.checkContainer}>
-          <Text>✓✓</Text>
+          <MaterialCommunityIcons
+            name={statusIcon.name}
+            size={14}
+            color={
+              messageStatus === 'read'
+                ? theme.colors.primary // Different color for read messages
+                : messageStatus === 'pending'
+                ? theme.dark
+                  ? MONO.gray400
+                  : 'rgba(255,255,255,0.7)'
+                : theme.dark
+                ? MONO.gray300
+                : 'rgba(255,255,255,0.9)'
+            }
+          />
         </View>
       ) : null}
     </View>

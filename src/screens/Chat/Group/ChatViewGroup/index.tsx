@@ -79,6 +79,8 @@ type ChatRoute = RouteProp<RootStackParamList, 'ChatViewGroup'>;
 type ChatGroupNavigationParams = {
   CameraScreen: undefined;
   GroupChatContact: { id: string; };
+  VideoViewer: { uri: string; title?: string; chatId?: string; otherUid?: string; messageId?: string };
+  MediaViewer: { items: any[]; initialIndex?: number; title?: string; chatId?: string; otherUid?: string; messageIds?: string[] };
 };
 
 export default function ChatViewGroup() {
@@ -113,7 +115,7 @@ export default function ChatViewGroup() {
         <ChatBubble
           message={item}
           isMe={isMe}
-          showAvatar={showAvatar}
+          _showAvatar={showAvatar}
           showName={!isMe} // show sender name in group for non-me bubbles
         />
       );

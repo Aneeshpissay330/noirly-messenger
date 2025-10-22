@@ -5,12 +5,13 @@ import { ResumableZoom } from 'react-native-zoom-toolkit';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-const GalleryImage = ({ item, _index }: { item: any; _index: number }) => {
+const GalleryImage = ({ uri, index }: { uri: string; index: number }) => {
   const insets = useSafeAreaInsets();
-  const { uri } = item;
 
   // Calculate available height accounting for header (~56px) and safe areas
   const availableHeight = screenHeight - 56 - insets.top - insets.bottom;
+
+  console.log('GalleryImage rendering with uri:', uri);
 
   return (
     <ResumableZoom>
