@@ -13,6 +13,9 @@ const styles = StyleSheet.create({
     width: '70%',
     alignSelf: 'center',
   },
+  segmentedButtons: {
+    backgroundColor: 'transparent',
+  },
 });
 
 const ModeSwitcher: React.FC<Props> = ({ mode, onChangeMode }) => {
@@ -42,9 +45,7 @@ const ModeSwitcher: React.FC<Props> = ({ mode, onChangeMode }) => {
         onValueChange={(val) => onChangeMode(val as Mode)}
         buttons={buttons}
         density="regular"
-        style={{
-          backgroundColor: 'transparent',
-        }}
+        style={styles.segmentedButtons}
         theme={{
           ...theme,
           colors: {

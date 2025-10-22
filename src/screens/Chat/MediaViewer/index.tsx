@@ -49,13 +49,13 @@ export default function MediaViewer() {
   const galleryRef = useRef<GalleryRefType>(null);
   
   // Route params
-  const allItems = route.params?.items ?? [];
-  const items = allItems.filter(item => item.type === 'image'); // Only show images, not videos
+  const allItems = React.useMemo(() => route.params?.items ?? [], [route.params?.items]);
+  const items = React.useMemo(() => allItems.filter(item => item.type === 'image'), [allItems]); // Only show images, not videos
   const initial = route.params?.initialIndex ?? 0;
   const title = route.params?.title ?? '';
   const chatId = route.params?.chatId;
   const otherUid = route.params?.otherUid;
-  const messageIds = route.params?.messageIds ?? [];
+  const messageIds = React.useMemo(() => route.params?.messageIds ?? [], [route.params?.messageIds]);
   
   // Redux and auth
   const dispatch = useAppDispatch();
@@ -68,7 +68,7 @@ export default function MediaViewer() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [selectedMessageForDelete, setSelectedMessageForDelete] = useState<Message | null>(null);
   
-  console.log('MediaViewer params:', { allItems, items, initial, title });
+  console.log('MediaViewer params:', { items, initial, title });
 
   const {
     index,
@@ -77,7 +77,6 @@ export default function MediaViewer() {
     closeMenu,
     handleShare,
     handleDownload,
-    handleDelete: _handleDelete, // Ignore the default handler
     onIndexChange,
     onTap,
     snackbarVisible,
@@ -153,18 +152,13 @@ export default function MediaViewer() {
 
   const handleDeletePress = useCallback(() => {
     closeMenu();
-    
     // Find the message corresponding to current media item
     const currentItem = items[index];
     if (!currentItem || messageIds.length === 0) {
       Alert.alert('Error', 'Cannot delete this media');
       return;
     }
-    
-    // For images filtered from a larger list, find the corresponding message
-    const allMediaItems = allItems.map((item, idx) => ({ ...item, originalIndex: idx }));
     const currentMediaIndex = items.findIndex(item => item.src === currentItem.src);
-    
     let messageId: string | undefined;
     if (messageIds.length > currentMediaIndex) {
       // Use the messageId mapping if available
@@ -177,30 +171,26 @@ export default function MediaViewer() {
       );
       messageId = matchingMessage?.id;
     }
-    
     if (!messageId) {
       Alert.alert('Error', 'Cannot find message to delete');
       return;
     }
-    
     const messageToDelete = messages.find(msg => msg.id === messageId);
     if (!messageToDelete) {
       Alert.alert('Error', 'Message not found');
       return;
     }
-    
     setSelectedMessageForDelete(messageToDelete);
     setDeleteModalVisible(true);
-  }, [closeMenu, items, index, messageIds, allItems, messages]);
+  }, [closeMenu, items, index, messageIds, messages]);
 
   // Optimized render item function
   const renderItem = React.useCallback((item: MediaItem, itemIndex: number) => {
     console.log('MediaViewer renderItem:', { item, itemIndex });
-    
     if (item.type === 'image') {
-      return <GalleryImage uri={item.src} index={itemIndex} />;
+      return <GalleryImage uri={item.src} />;
     }
-    return <GalleryVideo uri={item.src} index={itemIndex} />;
+    return <GalleryVideo uri={item.src} />;
   }, []);
 
   return (

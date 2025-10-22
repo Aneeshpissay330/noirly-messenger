@@ -8,7 +8,8 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, {
+import React,
+  {
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -348,7 +349,7 @@ export default function ChatView() {
         />
       );
     },
-    [listData, me, isGroup, mediaItems, nav, otherName, isSelectionMode, selectedMessages, dispatch, isDateItem, otherUid, starredIds],
+    [listData, me, isGroup, mediaItems, nav, otherName, isSelectionMode, selectedMessages, dispatch, isDateItem, otherUid, starredIds, chatId],
   );
 
   const handleDeleteForMe = useCallback(async () => {
@@ -365,7 +366,7 @@ export default function ChatView() {
         // Use batch delete for multiple messages
         const messagesToDelete = messageIds.map(id => messages.find(m => m.id === id)).filter(Boolean) as Message[];
         await dispatch(batchDeleteMessagesNow({
-          chatId,
+          chatId: chatId,
           messageIds,
           otherUid,
           deleteForEveryone: false,
@@ -376,7 +377,7 @@ export default function ChatView() {
         const message = messages.find(m => m.id === messageIds[0]);
         if (message) {
           await dispatch(deleteMessageNow({
-            chatId,
+            chatId: chatId,
             messageId: messageIds[0],
             otherUid,
             deleteForEveryone: false,

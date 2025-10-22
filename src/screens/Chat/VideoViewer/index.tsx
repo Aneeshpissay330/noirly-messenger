@@ -4,7 +4,6 @@ import {
   Alert,
   Modal,
   StyleSheet,
-  Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
@@ -130,7 +129,6 @@ export default function VideoViewer() {
     closeMenu,
     handleShare,
     handleDownload,
-    handleDelete: _handleDelete, // Ignore the default handler
     onTap,
     snackbarVisible,
     snackbarMessage,
@@ -174,7 +172,7 @@ export default function VideoViewer() {
       <View style={containerStyle}>
       <TouchableWithoutFeedback onPress={handleTap}>
         <View style={styles.videoContainer}>
-          <GalleryVideo uri={uri} index={0} />
+          <GalleryVideo uri={uri} />
         </View>
       </TouchableWithoutFeedback>
 
